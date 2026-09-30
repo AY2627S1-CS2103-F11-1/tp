@@ -14,7 +14,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/minrui13.png" width="200px">
 
 [[github](https://github.com/minrui13)]
-[[portfolio](team/minrui.md)]
+
 
 * Role: Deliverables and deadlines
 
