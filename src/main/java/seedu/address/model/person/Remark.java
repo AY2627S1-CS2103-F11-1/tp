@@ -5,9 +5,9 @@ import static java.util.Objects.requireNonNull;
 public class Remark {
     public final String value;
 
-    public Remark(String address) {
-        requireNonNull(address);
-        value = address;
+    public Remark(String remark) {
+        requireNonNull(remark);
+        value = remark;
     }
 
     @Override
