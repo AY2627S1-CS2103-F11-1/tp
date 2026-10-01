@@ -17,7 +17,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: Project Direction
-* 
+
 ### Goh Min Rui
 
 <img src="images/minrui13.png" width="200px">
@@ -35,25 +35,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 - Role: Developer
 - Responsibilities: Documentation
 
-### Johnny Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
-
-- Role: Developer
-- Responsibilities: Data
-
-### Jean Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-- Role: Developer
-- Responsibilities: Dev Ops + Threading
-
 ### Arun Baskaran
 
 <img src="images/arun-bas.png" width="200px">
@@ -67,6 +48,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/indraarr.png" width="200px">
 
-[[github](http://github.com/indraarr)]
+[[github](https://github.com/indraarr)]
 
 - Role: Developer
