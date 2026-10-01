@@ -9,12 +9,20 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
+### Kevin Tan Shin Wei
+
+<img src="images/mizzfain.png" width="200px">
+
+[[github](https://github.com/mizzfain)]
+
+* Role: Developer
+* Responsibilities: Project Direction
+* 
 ### Goh Min Rui
 
 <img src="images/minrui13.png" width="200px">
 
 [[github](https://github.com/minrui13)]
-
 
 * Role: Developer
 
