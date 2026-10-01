@@ -17,16 +17,23 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: Project Direction
+* 
+### Goh Min Rui
 
-### Jane Doe
+<img src="images/minrui13.png" width="200px">
 
-<img src="images/johndoe.png" width="200px">
+[[github](https://github.com/minrui13)]
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+* Role: Developer
 
-* Role: Team Lead
-* Responsibilities: UI
+### Piyaphat Klanprayoon
+
+<img src="images/piyaphat38030.png" width="200px">
+
+[[github](https://github.com/piyaphat38030)]
+
+- Role: Developer
+- Responsibilities: Documentation
 
 ### Johnny Doe
 
@@ -34,8 +41,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Data
+- Role: Developer
+- Responsibilities: Data
 
 ### Jean Doe
 
@@ -44,8 +51,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
+- Role: Developer
+- Responsibilities: Dev Ops + Threading
 
 ### James Doe
 
@@ -54,5 +61,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: UI
+- Role: Developer
+- Responsibilities: UI
+
+### Indra Bachtiar
+
+<img src="images/indraarr.png" width="200px">
+
+[[github](http://github.com/indraarr)]
+
+- Role: Developer
