@@ -12,29 +12,116 @@ By centralising this information, the platform allows TAs to recall previous int
 
 ## User Stories
 
+Priorities: High (must have) - `***`, Medium (should have) - `**`, Low (could have) - `*`.
+
 ### Student Management
 
-- As a TA, I can view all students under my supervision, including their name, student ID, email address, tutorial class and notes, so that I can keep track of the students I manage.
+- `***` As a TA, I can view all students under my supervision, including their name, student ID, email address, tutorial class and notes, so that I can keep track of the students I manage.
 
-- As a TA, I can add a student with their name, student ID, email address, tutorial class and notes, so that I can maintain accurate student records.
+- `***` As a TA, I can add a student with their name, student ID, email address, tutorial class and notes, so that I can maintain accurate student records.
 
-- As a TA, I can search for a student by name or student ID, so that I can quickly retrieve the relevant student record.
+- `***` As a TA, I can search for a student by name or student ID, so that I can quickly retrieve the relevant student record.
 
-- As a TA, I can update a student’s name, student ID, email address, tutorial class or notes, so that I can keep the student’s information up to date.
+- `***` As a TA, I can update a student’s name, student ID, email address, tutorial class or notes, so that I can keep the student’s information up to date.
 
-- As a TA, I can delete a student who is no longer in my tutorial class, so that I only keep track of students I currently supervise.
+- `***` As a TA, I can delete a student who is no longer in my tutorial class, so that I only keep track of students I currently supervise.
 
 ### Deliverables Management
 
-- As a TA, I can initialise a course and its project deliverables for a particular semester, so that I can track students’ progress for that course.
+- `***` As a TA, I can initialise a course and its project deliverables for a particular semester, so that I can track students’ progress for that course.
 
-- As a TA, I can view students’ project deliverables for a selected course and semester, together with their completion status, so that I can understand and compare their progress across the project.
+- `***` As a TA, I can view students’ project deliverables for a selected course and semester, together with their completion status, so that I can understand and compare their progress across the project.
 
-- As a TA, I can mark a project deliverable as completed for a student, so that I can record the student’s progress.
+- `***` As a TA, I can mark a project deliverable as completed for a student, so that I can record the student’s progress.
 
-- As a TA, I can unmark a project deliverable as completed for a student, so that I can correct the student’s progress record when necessary.
+- `***` As a TA, I can unmark a project deliverable as completed for a student, so that I can correct the student’s progress record when necessary.
 
-- As a TA, I can add, edit and delete notes about a student’s project work, so that I can record observations and refer to the student’s project direction or implementation later.
+- `***` As a TA, I can add, edit and delete notes about a student’s project work, so that I can record observations and refer to the student’s project direction or implementation later.
+
+### Student Support Context
+
+- `**` As a TA, I can record a student's attendance and participation for a tutorial or lab session, so that I can identify participation patterns.
+
+- `**` As a TA, I can record interaction notes, technical difficulties and wellbeing concerns for a student, so that I can provide contextualised support in later interactions.
+
+- `**` As a TA, I can view a student's key project design decisions, so that I can understand the project's direction before offering technical guidance.
+
+- `**` As a TA, I can flag a student for follow-up and record the reason, so that I do not forget to provide timely support.
+
+- `*` As a TA, I can view common technical difficulties across a tutorial class, so that I can decide which topics need additional explanation.
+
+- `*` As a TA, I can retain previous students' project references, so that I can guide future students working on similar project directions.
+
+## Use Cases
+
+For all use cases below, the **System** is TAssist and the **Actor** is a TA, unless specified otherwise.
+
+### Use case: Initialise a course and its project deliverables
+
+**MSS**
+
+1. TA requests to initialise a course for a specified semester with a list of project deliverables.
+2. TAssist validates the course, semester and deliverable details.
+3. TAssist creates the course record and its project deliverables.
+4. TAssist displays a confirmation.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. One or more supplied details are invalid.
+
+    1. TAssist displays an error message.
+
+       Use case resumes at step 1.
+
+* 3a. A record for the same course and semester already exists.
+
+    1. TAssist displays an error message.
+
+       Use case ends.
+
+### Use case: Record a project-work note
+
+**Preconditions**: The student is recorded in TAssist.
+
+**MSS**
+
+1. TA requests to add a project-work note for a specific student.
+2. TAssist validates the student and note details.
+3. TAssist saves the note in the student's record.
+4. TAssist displays a confirmation.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The student cannot be found or the note is invalid.
+
+    1. TAssist displays an error message.
+
+       Use case resumes at step 1.
+
+### Use case: Mark a project deliverable as completed
+
+**Preconditions**: The course, its deliverables and the student are recorded in TAssist.
+
+**MSS**
+
+1. TA requests to mark a specified project deliverable as completed for a student.
+2. TAssist validates the student, course and deliverable details.
+3. TAssist records the deliverable as completed for the student.
+4. TAssist displays the updated completion status.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The student, course or deliverable cannot be found.
+
+    1. TAssist displays an error message.
+
+       Use case resumes at step 1.
 
 ## Non-Functional Requirements
 
