@@ -1,9 +1,30 @@
+
 ---
 layout: page
 title: Developer Guide
 ---
 * Table of Contents
-{:toc}
+1. [Acknowledgements (WIP)](#acknowledgements)
+2. [Setting up and getting started (WIP)](#setting-up-and-getting-started)
+3. [Product Scope](#product-scope)
+   - [Target User Profile](#target-user-profile)
+   - [Value Proposition](#value-proposition)
+   - [User Stories](#user-stories)
+   - [Use Cases (WIP)](#use-cases)
+   - [Non-Functional Requirements (WIP)](#non-functional-requirements)
+   - [Glossary (WIP)](#glossary)
+4. [Design (WIP)](#design)
+   - [Architecture](#architecture)
+   - [UI Component](#ui-component)
+   - [Logic Component](#logic-component)
+   - [Model Component](#model-component)
+   - [Storage Component](#storage-component)
+5. [Implementation (WIP)](#implementation)
+6. [Testing (WIP)](#testing)
+7. [DevOps (WIP)](#devops)
+8. [Documentation, logging and team contributions (WIP)](#documentation-logging-and-team-contributions)
+9. [Appendix (WIP)](#appendix)
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -261,56 +282,123 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefers desktop apps over other types of applications
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+The target users of TAssist are university teaching assistants who:
 
-**Value proposition**: Manage contacts faster than with a typical mouse-driven GUI application.
+* supervise a significant number of students across one or more tutorial classes
+* oversee at least one multi-week programming project
+* need to track student information and project progress over an extended period
+* frequently search for and update student records
+* prefer using a desktop application to manage their records
+* are comfortable typing commands and using keyboard-based interactions
+
+**Value proposition**:
+
+The platform helps TAs efficiently track students’ attendance, participation, weaknesses, stress levels and past interactions. It also helps TAs monitor students’ project progress and record their design decisions for programming assignments.
+
+By centralising this information, the platform allows TAs to recall previous interactions, monitor project progress and provide more contextualised support to students.
 
 
 ### User stories
 
-Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+Priorities: High (must have) - `***`, Medium (nice to have) - `**`,
+Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a … | I want to … | So that I can … |
+| -------- | ------ | ------------ | --------------- |
+| `***` | TA | view all students under my supervision | keep track of the students I manage |
+| `***` | TA | add a student with their name, student ID, email address and tutorial class | maintain accurate student records |
+| `***` | TA | search for a student by name or student ID | quickly retrieve the relevant student’s information |
+| `***` | TA | update a student’s details | keep student information up to date |
+| `***` | TA | delete a student who is no longer under my supervision | maintain an up-to-date student list |
+| `***` | TA | initialise a course and its project deliverables for a semester | begin tracking students’ progress for that course |
+| `***` | TA | view students’ project deliverables and completion statuses | understand and compare their progress |
+| `***` | TA | mark a student’s project deliverable as completed | record the student’s progress |
+| `***` | TA | unmark a completed project deliverable | correct the student’s progress record when necessary |
+| `**` | TA | add a note about a student’s project work | record observations about the student’s progress or implementation |
+| `**` | TA | view a student’s project-work notes | recall previous observations and interactions |
+| `**` | TA | edit a student’s project-work note | correct or update information when necessary |
+| `**` | TA | delete an outdated or incorrect project-work note | keep the student’s record accurate |
+| `**` | TA | record a student’s attendance | identify students who may require additional support |
+| `**` | TA | record a student’s participation | monitor the student’s engagement during tutorials |
+| `**` | TA | record a student’s weaknesses | provide more targeted guidance |
+| `**` | TA | record a student’s stress level | identify students who may need additional support |
+| `**` | TA | record my past interactions with a student | provide support based on previous discussions |
+| `*` | TA | record a student’s important project design decisions | understand the reasoning behind the student’s implementation |
+| `*` | TA | view a student’s project history | understand how the student’s project has developed over time |
+| `*` | student | view my own project progress | understand which deliverables I have completed |
+| `*` | student | update my own personal information | keep my information up to date |
+| `*` | TA | generate a report of student progress | review or share an overview of student performance |
+| `*` | TA | send notifications to students through the application | communicate important information conveniently |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+**Actor** is the `TA`, unless specified otherwise.
 
-**Use case: Delete a person**
+---
+
+**Use case: Add a student**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1. TA requests to add a student.
+2. TAssist prompts the TA for the student's name, student ID, email address, tutorial class and optional notes.
+3. TA enters the required student information.
+4. TAssist validates the entered information.
+5. TAssist adds the student record.
+6. TAssist displays a confirmation message and the updated student list.
 
-    Use case ends.
+   Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 3a. One or more required fields are missing.
 
-  Use case ends.
+  * 3a1. TAssist displays an error message.
 
-* 3a. The given index is invalid.
+  * 3a2. TA enters the missing information.
 
-    * 3a1. AddressBook shows an error message.
+    Use case resumes at step 4.
 
-      Use case resumes at step 2.
+* 4a. The student ID is already in use.
+
+  * 4a1. TAssist displays an error message.
+
+    Use case resumes at step 3.
+
+* 4b. The email address is invalid.
+
+  * 4b1. TAssist displays an error message.
+
+    Use case resumes at step 3.
+
+---
+
+**Use case: Search for a student**
+
+**MSS**
+
+1. TA requests to search for a student.
+2. TAssist prompts the TA for a student name or student ID.
+3. TA enters a search term.
+4. TAssist searches the student records.
+5. TAssist displays the matching student records.
+
+   Use case ends.
+
+**Extensions**
+
+* 4a. No matching student is found.
+
+  * 4a1. TAssist displays an appropriate message.
+
+    Use case ends.
+
+* 4b. Multiple students have the same name.
+
+  * 4b1. TAssist displays all matching students and their student IDs.
+
+    Use case ends.
+
 
 *{More to be added}*
 
