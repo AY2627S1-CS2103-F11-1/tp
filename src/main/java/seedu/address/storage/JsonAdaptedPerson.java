@@ -103,10 +103,9 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
-        if (remark == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Remark.class.getSimpleName()));
-        }
-        final Remark modelRemark = new Remark(remark);
+        // Remark was added after the original address book JSON format. Treat a missing
+        // field as an empty remark so existing save files remain loadable.
+        final Remark modelRemark = new Remark(remark == null ? "" : remark);
 
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark);
     }
