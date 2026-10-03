@@ -36,5 +36,5 @@ unmark /name John /task job1, job2
 ```
 
 ## Acknowledgements
-
+* This project is based on the `AddressBook Level 3` project created by the [SE-EDU initiative](https://se-education.org) and the code template can be found [here](https://github.com/se-edu/addressbook-level3)
 * This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.
