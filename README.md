@@ -27,7 +27,7 @@ search /name John Doe
 search /id A1234567Z
 add student /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class 7 /notes abc
 edit student /id A1234567Z /name John Tan /class T07
-delete /id A1245678Z 
+delete /id A1245678Z
 init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
 add context John Doe /note Used Task as Parent class of ToDo and Deadline
 view progress /course CS2103T /sem AY26/27-S1
