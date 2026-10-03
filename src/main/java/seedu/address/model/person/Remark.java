@@ -10,6 +10,7 @@ public class Remark {
 
     public final String value;
 
+    /** Creates a remark with the given text. */
     public Remark(String remark) {
         requireNonNull(remark);
         value = remark;
