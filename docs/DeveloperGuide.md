@@ -3,11 +3,11 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents 
+* Table of Contents
 1. [Acknowledgements (WIP)](#acknowledgements)
 2. [Setting up and getting started (WIP)](#setting-up-and-getting-started)
 3. [Product Scope](#product-scope)
-   - [Target User Profile](#target-user-profile) 
+   - [Target User Profile](#target-user-profile)
    - [Value Proposition](#value-proposition)
    - [User Stories](#user-stories)
    - [Use Cases (WIP)](#use-cases)
