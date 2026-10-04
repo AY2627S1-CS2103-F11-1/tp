@@ -497,8 +497,52 @@ Low (unlikely to have) - `*`
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, or macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Attendance record**: A record of whether a student attended a
+  particular tutorial session.
+
+* **Completion status**: Whether a student has completed a particular
+  project deliverable.
+
+* **Course**: A university course tracked in TAssist for a specified
+  semester.
+
+* **Follow-up**: A support action a TA intends to take for a student,
+  which can be marked as completed after it is addressed.
+
+* **Interaction note**: A record of a past discussion or interaction
+  between a TA and a student.
+
+* **Participation record**: A record of a student's engagement during a
+  tutorial session.
+
+* **Project design decision**: A recorded decision about how a student
+  chose to design or implement part of their project.
+
+* **Project deliverable**: A required part or milestone of a course
+  project that a student is expected to complete.
+
+* **Project history**: A chronological record of a student's progress,
+  notes, and relevant changes made during a course project.
+
+* **Project-work note**: A note recorded by a TA about a student's
+  project progress, implementation, or difficulties.
+
+* **Stress level**: A TA's recorded assessment of a student's apparent
+  level of stress. The team should later define the allowed levels.
+
+* **Student record**: The information TAssist stores for one student,
+  including their personal details, tutorial class, and tracked progress.
+
+* **TA**: A university teaching assistant who uses TAssist to manage
+  students and monitor their project progress.
+
+* **Technical strength**: A programming-related area in which a student
+  demonstrates competence.
+
+* **Technical weakness**: A programming-related area in which a student
+  needs additional support.
+
+* **Tutorial class**: A class group supervised by one or more TAs.
 
 --------------------------------------------------------------------------------------------------------------------
 
