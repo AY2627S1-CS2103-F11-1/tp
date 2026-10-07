@@ -22,6 +22,7 @@ public class Student {
     private final TutorialClass tutorialClass;
     private final Optional<Notes> notes;
 
+    /** Constructs a student without notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass) {
         requireAllNonNull(name, id, email, tutorialClass);
 
@@ -32,6 +33,7 @@ public class Student {
         this.notes = Optional.empty();
     }
 
+    /** Constructs a student with notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass, Notes notes) {
         requireAllNonNull(name, id, email, tutorialClass, notes);
 

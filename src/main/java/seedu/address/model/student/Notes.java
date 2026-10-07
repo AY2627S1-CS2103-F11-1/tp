@@ -3,6 +3,7 @@ package seedu.address.model.student;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+/** Represents optional notes recorded about a student. */
 public class Notes {
 
     public static final int MAX_LENGTH = 500;
@@ -11,6 +12,7 @@ public class Notes {
 
     private final String notes;
 
+    /** Constructs notes from a non-blank string of at most 500 characters. */
     public Notes(String notes) {
         requireNonNull(notes);
         checkArgument(isValidNotes(notes), MESSAGE_CONSTRAINTS);

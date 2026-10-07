@@ -3,14 +3,17 @@ package seedu.address.model.student;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+/** Represents a student's tutorial class. */
 public class TutorialClass {
 
-    public static final String MESSAGE_CONSTRAINTS = "Student class must be 1 to 5 alphanumeric characters (e.g. T07, F10, 7) without spaces.";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Student class must be 1 to 5 alphanumeric characters (e.g. T07, F10, 7) without spaces.";
 
     public static final String VALIDATION_REGEX = "[A-Za-z0-9]{1,5}";
 
     public final String tutorialClass;
 
+    /** Constructs a tutorial class from a valid class identifier. */
     public TutorialClass(String tutorialClass) {
         requireNonNull(tutorialClass);
         checkArgument(isValidClass(tutorialClass), MESSAGE_CONSTRAINTS);
@@ -21,7 +24,7 @@ public class TutorialClass {
         return test.matches(VALIDATION_REGEX);
     }
 
-    
+
     @Override
     public String toString() {
         return tutorialClass;
