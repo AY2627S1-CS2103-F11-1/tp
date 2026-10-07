@@ -1,5 +1,9 @@
 package seedu.address.model.student;
 
+
+
+
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -32,7 +36,7 @@ public class TutorialClassTest {
         assertTrue(TutorialClass.isValidClass("Blk 456, Den Road, #01-355"));
         assertTrue(TutorialClass.isValidClass("-")); // one character
         assertTrue(TutorialClass.isValidClass("Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long
-                                                                                                           // tutorialClass
+        // tutorialClass
     }
 
     @Test

@@ -1,12 +1,17 @@
 package seedu.address.model.student;
 
+
+
+
+
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
@@ -92,7 +97,8 @@ public class StudentTest {
     @Test
     public void toStringMethod() {
         String expected = Student.class.getCanonicalName() + "{name=" + ALICE.getName() + ", id=" + ALICE.getId()
-                + ", email=" + ALICE.getEmail() + ", tutorialClass=" + ALICE.getTutorialClass() + ", tags=" + ALICE.getNotes() + "}";
+                + ", email=" + ALICE.getEmail() + ", tutorialClass=" + ALICE.getTutorialClass()
+                + ", tags=" + ALICE.getNotes() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

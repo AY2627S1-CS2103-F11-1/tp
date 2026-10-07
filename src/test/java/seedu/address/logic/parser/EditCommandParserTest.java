@@ -1,25 +1,30 @@
 package seedu.address.logic.parser;
 
+
+
+
+
+
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_CLASS_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ID_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_NOTES_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ID_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ID_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_CLASS_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_ID_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_NOTES_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
@@ -38,11 +43,11 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
-import seedu.address.model.student.TutorialClass;
 import seedu.address.model.student.Email;
-import seedu.address.model.student.Name;
 import seedu.address.model.student.Id;
+import seedu.address.model.student.Name;
 import seedu.address.model.student.Notes;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.EditStudentDescriptorBuilder;
 
 public class EditCommandParserTest {
@@ -86,7 +91,8 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS); // invalid name
         assertParseFailure(parser, "1" + INVALID_ID_DESC, Id.MESSAGE_CONSTRAINTS); // invalid id
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_CLASS_DESC, TutorialClass.MESSAGE_CONSTRAINTS); // invalid tutorialClass
+        assertParseFailure(parser, "1" + INVALID_CLASS_DESC, TutorialClass.MESSAGE_CONSTRAINTS);
+        // invalid tutorialClass
         assertParseFailure(parser, "1" + INVALID_NOTES_DESC, Notes.MESSAGE_CONSTRAINTS); // invalid tag
 
         // invalid id followed by valid email

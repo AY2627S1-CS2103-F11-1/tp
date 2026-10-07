@@ -1,5 +1,11 @@
 package seedu.address.model.student;
 
+
+
+
+
+
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,7 +18,6 @@ import static seedu.address.testutil.TypicalStudents.BOB;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-
 
 import seedu.address.model.student.exceptions.DuplicateStudentException;
 import seedu.address.model.student.exceptions.StudentNotFoundException;
@@ -41,7 +46,8 @@ public class UniqueStudentListTest {
     @Test
     public void contains_studentWithSameIdentityFieldsInList_returnsTrue() {
         uniqueStudentList.add(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_HUSBAND)
+        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
+                .withNotes(VALID_NOTES_HUSBAND)
                 .build();
         assertTrue(uniqueStudentList.contains(editedAlice));
     }
@@ -84,7 +90,8 @@ public class UniqueStudentListTest {
     @Test
     public void setStudent_editedStudentHasSameIdentity_success() {
         uniqueStudentList.add(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_HUSBAND)
+        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
+                .withNotes(VALID_NOTES_HUSBAND)
                 .build();
         uniqueStudentList.setStudent(ALICE, editedAlice);
         UniqueStudentList expectedUniqueStudentList = new UniqueStudentList();
