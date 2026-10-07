@@ -176,6 +176,22 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Course initialisation feature
+
+The `init course` command creates the course and deliverable foundation used by later progress-tracking features.
+`InitCourseCommandParser` parses the course code, semester, and comma-separated deliverables, then creates an
+`InitCourseCommand`. Invalid, missing, or duplicate deliverable names are rejected before the command changes the
+model.
+
+`Course` is identified by its `CourseCode` and `Semester`, while its `Deliverable` objects represent the project
+milestones for that course. `UniqueCourseList` prevents duplicate course-semester pairs. The `Model` exposes
+`hasCourse` and `addCourse` so that `InitCourseCommand` can reject a duplicate without depending on
+`ModelManager`'s concrete implementation.
+
+Courses are kept alongside students in `AddressBook`. `JsonSerializableAddressBook` and `JsonAdaptedCourse` save and
+restore them with the existing JSON data file, so a successfully initialised course remains available after a normal
+application restart.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation

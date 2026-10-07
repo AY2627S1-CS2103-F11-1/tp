@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.course.Course;
 import seedu.address.model.person.Person;
 
 /**
@@ -20,15 +21,23 @@ import seedu.address.model.person.Person;
 class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
+    public static final String MESSAGE_DUPLICATE_COURSE = "Courses list contains duplicate course-semester pair(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
+    private final List<JsonAdaptedCourse> courses = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons) {
-        this.persons.addAll(persons);
+    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
+                                       @JsonProperty("courses") List<JsonAdaptedCourse> courses) {
+        if (persons != null) {
+            this.persons.addAll(persons);
+        }
+        if (courses != null) {
+            this.courses.addAll(courses);
+        }
     }
 
     /**
@@ -38,6 +47,7 @@ class JsonSerializableAddressBook {
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
         persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        courses.addAll(source.getCourseList().stream().map(JsonAdaptedCourse::new).collect(Collectors.toList()));
     }
 
     /**
@@ -53,6 +63,13 @@ class JsonSerializableAddressBook {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
             addressBook.addPerson(person);
+        }
+        for (JsonAdaptedCourse jsonAdaptedCourse : courses) {
+            Course course = jsonAdaptedCourse.toModelType();
+            if (addressBook.hasCourse(course)) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_COURSE);
+            }
+            addressBook.addCourse(course);
         }
         return addressBook;
     }
