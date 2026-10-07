@@ -1,60 +1,70 @@
 package seedu.address.model.util;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.student.Address;
 import seedu.address.model.student.Email;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Person;
-import seedu.address.model.student.Phone;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.student.Notes;
+import seedu.address.model.student.Student;
+import seedu.address.model.student.TutorialClass;
 
 /**
- * Contains utility methods for populating {@code AddressBook} with sample data.
+ * Contains utility methods for populating AddressBook with sample data.
  */
 public class SampleDataUtil {
-    public static Person[] getSamplePersons() {
-        return new Person[] {
-            new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                new Address("Blk 30 Geylang Street 29, #06-40"),
-                getTagSet("friends")),
-            new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
-                getTagSet("colleagues", "friends")),
-            new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
-                getTagSet("neighbours")),
-            new Person(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
-                getTagSet("family")),
-            new Person(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                new Address("Blk 47 Tampines Street 20, #17-35"),
-                getTagSet("classmates")),
-            new Person(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                new Address("Blk 45 Aljunied Street 85, #11-31"),
-                getTagSet("colleagues"))
+
+    public static Student[] getSampleStudents() {
+        return new Student[] {
+            new Student(
+                    new Name("Alex Yeoh"),
+                    new Id("A1234567B"),
+                    new Email("alexyeoh@u.nus.edu"),
+                    new TutorialClass("T07"),
+                    new Notes("Needs help with understanding inheritance.")),
+
+            new Student(
+                    new Name("Bernice Yu"),
+                    new Id("A2345678C"),
+                    new Email("berniceyu@u.nus.edu"),
+                    new TutorialClass("F10"),
+                    new Notes("Has been consistent with weekly deliverables.")),
+
+            new Student(
+                    new Name("Charlotte Oliveiro"),
+                    new Id("A3456789D"),
+                    new Email("charlotte@u.nus.edu"),
+                    new TutorialClass("L01")),
+
+            new Student(
+                    new Name("David Li"),
+                    new Id("A4567890E"),
+                    new Email("davidli@u.nus.edu"),
+                    new TutorialClass("T1B"),
+                    new Notes("Previously discussed project scope.")),
+
+            new Student(
+                    new Name("Irfan Ibrahim"),
+                    new Id("A5678901F"),
+                    new Email("irfanibrahim@u.nus.edu"),
+                    new TutorialClass("T02"),
+                    new Notes("Attendance has improved recently.")),
+
+            new Student(
+                    new Name("Roy Balakrishnan"),
+                    new Id("A6789012G"),
+                    new Email("royb@u.nus.edu"),
+                    new TutorialClass("F05"))
         };
     }
 
     public static ReadOnlyAddressBook getSampleAddressBook() {
-        AddressBook sampleAb = new AddressBook();
-        for (Person samplePerson : getSamplePersons()) {
-            sampleAb.addPerson(samplePerson);
+        AddressBook sampleAddressBook = new AddressBook();
+
+        for (Student sampleStudent : getSampleStudents()) {
+            sampleAddressBook.addStudent(sampleStudent);
         }
-        return sampleAb;
-    }
 
-    /**
-     * Returns a tag set containing the list of strings given.
-     */
-    public static Set<Tag> getTagSet(String... strings) {
-        return Arrays.stream(strings)
-                .map(Tag::new)
-                .collect(Collectors.toSet());
+        return sampleAddressBook;
     }
-
 }
