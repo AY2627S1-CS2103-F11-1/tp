@@ -1,11 +1,5 @@
 package seedu.address.model;
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,17 +16,26 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
+import seedu.address.model.course.Semester;
+import seedu.address.model.course.exceptions.DuplicateCourseException;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.exceptions.DuplicateStudentException;
 import seedu.address.testutil.StudentBuilder;
 
 public class AddressBookTest {
 
+    private static final Course CS2103 = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+            List.of(new Deliverable("v1.2"), new Deliverable("MVP")));
+
     private final AddressBook addressBook = new AddressBook();
 
     @Test
     public void constructor() {
         assertEquals(List.of(), addressBook.getStudentList());
+        assertEquals(List.of(), addressBook.getCourseList());
     }
 
     @Test
@@ -90,8 +93,46 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasCourse_nullCourse_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasCourse(null));
+    }
+
+    @Test
+    public void hasCourse_courseNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasCourse(CS2103));
+    }
+
+    @Test
+    public void hasCourse_courseInAddressBook_returnsTrue() {
+        addressBook.addCourse(CS2103);
+        assertTrue(addressBook.hasCourse(CS2103));
+    }
+
+    @Test
+    public void addCourse_duplicateCourseSemester_throwsDuplicateCourseException() {
+        addressBook.addCourse(CS2103);
+        Course sameCourseSemester = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                List.of(new Deliverable("PE")));
+        assertThrows(DuplicateCourseException.class, () -> addressBook.addCourse(sameCourseSemester));
+    }
+
+    @Test
+    public void addCourse_courseAndSemesterDifferOnlyByCase_throwsDuplicateCourseException() {
+        addressBook.addCourse(CS2103);
+        Course sameCourseSemester = new Course(new CourseCode("cs2103t"), new Semester("ay26/27-s1"),
+                List.of(new Deliverable("PE")));
+        assertThrows(DuplicateCourseException.class, () -> addressBook.addCourse(sameCourseSemester));
+    }
+
+    @Test
+    public void getCourseList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> addressBook.getCourseList().remove(0));
+    }
+
+    @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{students=" + addressBook.getStudentList() + "}";
+        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getStudentList()
+                + ", courses=" + addressBook.getCourseList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -109,6 +150,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Student> getStudentList() {
             return students;
+        }
+
+        @Override
+        public ObservableList<Course> getCourseList() {
+            return FXCollections.observableArrayList();
         }
     }
 

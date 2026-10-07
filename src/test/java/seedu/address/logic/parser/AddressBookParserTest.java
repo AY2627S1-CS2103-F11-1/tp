@@ -26,6 +26,7 @@ import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
@@ -85,6 +86,12 @@ public class AddressBookParserTest {
     public void parseCommand_help() throws Exception {
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
+    }
+
+    @Test
+    public void parseCommand_initCourse() throws Exception {
+        assertTrue(parser.parseCommand("init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP")
+                instanceof InitCourseCommand);
     }
 
     @Test

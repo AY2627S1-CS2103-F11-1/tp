@@ -176,6 +176,22 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Course initialisation feature
+
+The `init course` command creates the course and deliverable foundation used by later progress-tracking features.
+`InitCourseCommandParser` parses the course code, semester, and comma-separated deliverables, then creates an
+`InitCourseCommand`. Invalid, missing, or duplicate deliverable names are rejected before the command changes the
+model.
+
+`Course` is identified by its `CourseCode` and `Semester`, while its `Deliverable` objects represent the project
+milestones for that course. `UniqueCourseList` prevents duplicate course-semester pairs. The `Model` exposes
+`hasCourse` and `addCourse` so that `InitCourseCommand` can reject a duplicate without depending on
+`ModelManager`'s concrete implementation.
+
+Courses are kept alongside students in `AddressBook`. `JsonSerializableAddressBook` and `JsonAdaptedCourse` save and
+restore them with the existing JSON data file, so a successfully initialised course remains available after a normal
+application restart.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -321,8 +337,14 @@ Low (unlikely to have) - `*`
 | `**` | TA | record a student’s attendance | identify students who may require additional support |
 | `**` | TA | record a student’s participation | monitor the student’s engagement during tutorials |
 | `**` | TA | record a student’s weaknesses | provide more targeted guidance |
+| `**` | TA | record a student’s technical strengths | build on what the student already understands when offering guidance |
 | `**` | TA | record a student’s stress level | identify students who may need additional support |
 | `**` | TA | record my past interactions with a student | provide support based on previous discussions |
+| `**` | TA | view students in a selected tutorial class | prepare for a specific tutorial session |
+| `**` | TA | view a student’s attendance history | identify participation patterns over time |
+| `**` | TA | categorise interaction notes by programming topic | identify a student’s recurring technical difficulties more quickly |
+| `**` | TA | view all students flagged for follow-up | prioritise students who need additional support |
+| `**` | TA | mark a follow-up as completed | know which support actions no longer need attention |
 | `*` | TA | record a student’s important project design decisions | understand the reasoning behind the student’s implementation |
 | `*` | TA | view a student’s project history | understand how the student’s project has developed over time |
 | `*` | student | view my own project progress | understand which deliverables I have completed |
@@ -399,21 +421,144 @@ Low (unlikely to have) - `*`
 
     Use case ends.
 
+---
+
+**Use case: Initialise a course and its project deliverables**
+
+**MSS**
+
+1. TA requests to initialise a course for a specified semester with a list of project deliverables.
+2. TAssist validates the course, semester and deliverable details.
+3. TAssist creates the course record and its project deliverables.
+4. TAssist displays a confirmation.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. One or more supplied details are invalid.
+
+  * 2a1. TAssist displays an error message.
+
+    Use case resumes at step 1.
+
+* 3a. A record for the same course and semester already exists.
+
+  * 3a1. TAssist displays an error message.
+
+    Use case ends.
+
+---
+
+**Use case: Record a project-work note**
+
+**Preconditions**: The student is recorded in TAssist.
+
+**MSS**
+
+1. TA requests to add a project-work note for a specific student.
+2. TAssist validates the student and note details.
+3. TAssist saves the note in the student's record.
+4. TAssist displays a confirmation.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. The student cannot be found or the note is invalid.
+
+  * 2a1. TAssist displays an error message.
+
+    Use case resumes at step 1.
+
+---
+
+**Use case: Update a student's deliverable completion status**
+
+**Preconditions**: The course, its deliverables and the student are recorded in TAssist.
+
+**MSS**
+
+1. TA requests to mark or unmark a specified project deliverable for a student.
+2. TAssist validates the student, course and deliverable details.
+3. TAssist updates the deliverable's completion status for the student.
+4. TAssist displays the updated completion status.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. The student, course or deliverable cannot be found.
+
+  * 2a1. TAssist displays an error message.
+
+    Use case resumes at step 1.
+
+* 3a. The requested completion status is already recorded.
+
+  * 3a1. TAssist informs the TA that no change was made.
+
+    Use case ends.
 
 *{More to be added}*
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `25` or above installed.
-2.  Should be able to hold up to 1000 persons without noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+1.  TAssist should work on Windows, macOS and Linux, as long as Java `25` or above is installed.
+2.  TAssist should support up to 1,000 student records without noticeable sluggishness during typical usage.
+3.  For up to 1,000 student records, TAssist should display student search results and a selected course's deliverable completion statuses within two seconds.
+4.  A TA with above-average typing speed for regular English text should be able to accomplish frequent tasks faster using commands than using the mouse.
+5.  An invalid command should not modify existing student records, project-work notes or deliverable completion statuses.
+6.  Student records, project-work notes and deliverable completion statuses should be preserved after a normal application exit and restart.
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, or macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Attendance record**: A record of whether a student attended a
+  particular tutorial session.
+
+* **Completion status**: Whether a student has completed a particular
+  project deliverable.
+
+* **Course**: A university course tracked in TAssist for a specified
+  semester.
+
+* **Follow-up**: A support action a TA intends to take for a student,
+  which can be marked as completed after it is addressed.
+
+* **Interaction note**: A record of a past discussion or interaction
+  between a TA and a student.
+
+* **Participation record**: A record of a student's engagement during a
+  tutorial session.
+
+* **Project design decision**: A recorded decision about how a student
+  chose to design or implement part of their project.
+
+* **Project deliverable**: A required part or milestone of a course
+  project that a student is expected to complete.
+
+* **Project history**: A chronological record of a student's progress,
+  notes, and relevant changes made during a course project.
+
+* **Project-work note**: A note recorded by a TA about a student's
+  project progress, implementation, or difficulties.
+
+* **Stress level**: A TA's recorded assessment of a student's apparent
+  level of stress. The team should later define the allowed levels.
+
+* **Student record**: The information TAssist stores for one student,
+  including their personal details, tutorial class, and tracked progress.
+
+* **TA**: A university teaching assistant who uses TAssist to manage
+  students and monitor their project progress.
+
+* **Technical strength**: A programming-related area in which a student
+  demonstrates competence.
+
+* **Technical weakness**: A programming-related area in which a student
+  needs additional support.
+
+* **Tutorial class**: A class group supervised by one or more TAs.
 
 --------------------------------------------------------------------------------------------------------------------
 

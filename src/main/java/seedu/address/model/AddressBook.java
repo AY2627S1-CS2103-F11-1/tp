@@ -6,6 +6,8 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.course.Course;
+import seedu.address.model.course.UniqueCourseList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.UniqueStudentList;
 
@@ -16,6 +18,7 @@ import seedu.address.model.student.UniqueStudentList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniqueStudentList students = new UniqueStudentList();
+    private final UniqueCourseList courses = new UniqueCourseList();
 
     public AddressBook() {
     }
@@ -38,6 +41,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.students.setStudents(students);
     }
 
+
+    /**
+     * Replaces the contents of the course list with {@code courses}.
+     * {@code courses} must not contain duplicate course-semester pairs.
+     */
+    public void setCourses(List<Course> courses) {
+        this.courses.setCourses(courses);
+    }
+
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
@@ -45,6 +57,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setStudents(newData.getStudentList());
+        setCourses(newData.getCourseList());
     }
 
     //// student-level operations
@@ -87,18 +100,41 @@ public class AddressBook implements ReadOnlyAddressBook {
         students.remove(key);
     }
 
+    /**
+     * Returns true if a course with the same course code and semester exists.
+     */
+    public boolean hasCourse(Course course) {
+        requireNonNull(course);
+        return courses.contains(course);
+    }
+
+    /**
+     * Adds a course to the address book.
+     * The course must not already exist for the same semester.
+     */
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
     //// util methods
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("students", students)
+                .add("courses", courses)
                 .toString();
     }
 
     @Override
     public ObservableList<Student> getStudentList() {
         return students.asUnmodifiableObservableList();
+    }
+
+
+    @Override
+    public ObservableList<Course> getCourseList() {
+        return courses.asUnmodifiableObservableList();
     }
 
     @Override
@@ -112,11 +148,12 @@ public class AddressBook implements ReadOnlyAddressBook {
             return false;
         }
 
-        return students.equals(otherAddressBook.students);
+        return students.equals(otherAddressBook.students)
+                && courses.equals(otherAddressBook.courses);
     }
 
     @Override
     public int hashCode() {
-        return students.hashCode();
+        return java.util.Objects.hash(students, courses);
     }
 }

@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.course.Course;
 import seedu.address.model.student.Student;
 
 /**
@@ -61,6 +62,17 @@ public interface Model {
      * existing student in the address book.
      */
     void setStudent(Student target, Student editedStudent);
+
+    /**
+     * Returns true if a course for the same course code and semester exists.
+     */
+    boolean hasCourse(Course course);
+
+    /**
+     * Adds the given course and its deliverables.
+     * The course must not already exist for the same semester.
+     */
+    void addCourse(Course course);
 
     /** Returns an unmodifiable view of the filtered student list */
     ObservableList<Student> getFilteredStudentList();
