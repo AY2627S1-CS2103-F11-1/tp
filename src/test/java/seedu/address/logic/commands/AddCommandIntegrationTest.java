@@ -34,7 +34,8 @@ public class AddCommandIntegrationTest {
 
     @Test
     public void execute_newStudent_success() {
-        Student validStudent = new StudentBuilder().build();
+        Student validStudent = new StudentBuilder().withName("New Student")
+                .withId("A1122334M").withEmail("new.student@u.nus.edu").withTutorialClass("T08").build();
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addStudent(validStudent);

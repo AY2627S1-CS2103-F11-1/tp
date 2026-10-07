@@ -28,7 +28,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
@@ -62,18 +61,17 @@ public class AddCommandParserTest {
                 + CLASS_DESC_BOB + NOTES_DESC_FRIEND, new AddCommand(expectedStudent));
 
 
-        // multiple tags - all accepted
-        Student expectedStudentMultipleTags = new StudentBuilder(BOB).withNotes(VALID_NOTES_FRIEND, VALID_NOTES_HUSBAND)
-                .build();
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND,
-                new AddCommand(expectedStudentMultipleTags));
+        Student expectedStudentWithNotes = new StudentBuilder(BOB).withNotes(VALID_NOTES_FRIEND).build();
+        assertParseSuccess(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
+                + NOTES_DESC_FRIEND, new AddCommand(expectedStudentWithNotes));
+        assertParseSuccess(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
+                + NOTES_DESC_FRIEND, new AddCommand(expectedStudentWithNotes));
     }
 
     @Test
     public void parse_repeatedNonTagValue_failure() {
         String validExpectedStudentString = NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
-                + CLASS_DESC_BOB + NOTES_DESC_FRIEND;
+                + CLASS_DESC_BOB;
 
         // multiple names
         assertParseFailure(parser, NAME_DESC_AMY + validExpectedStudentString,
@@ -171,23 +169,23 @@ public class AddCommandParserTest {
     public void parse_invalidValue_failure() {
         // invalid name
         assertParseFailure(parser, INVALID_NAME_DESC + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND, Name.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_HUSBAND, Name.MESSAGE_CONSTRAINTS);
 
         // invalid id
         assertParseFailure(parser, NAME_DESC_BOB + INVALID_ID_DESC + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND, Id.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_HUSBAND, Id.MESSAGE_CONSTRAINTS);
 
         // invalid email
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + INVALID_EMAIL_DESC + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND, Email.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_HUSBAND, Email.MESSAGE_CONSTRAINTS);
 
         // invalid tutorialClass
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC
-                + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND, TutorialClass.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_HUSBAND, TutorialClass.MESSAGE_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + INVALID_NOTES_DESC + VALID_NOTES_FRIEND, Notes.MESSAGE_CONSTRAINTS);
+                + INVALID_NOTES_DESC, Notes.MESSAGE_CONSTRAINTS);
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_NAME_DESC + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC,
@@ -199,3 +197,4 @@ public class AddCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }
+

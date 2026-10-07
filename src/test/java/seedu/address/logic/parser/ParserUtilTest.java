@@ -20,13 +20,13 @@ import seedu.address.model.student.TutorialClass;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
-    private static final String INVALID_ADDRESS = " ";
+    private static final String INVALID_PHONE = "911a";
+    private static final String INVALID_ADDRESS = "T@7";
     private static final String INVALID_EMAIL = "example.com";
 
     private static final String VALID_NAME = "Rachel Walker";
-    private static final String VALID_PHONE = "123456";
-    private static final String VALID_ADDRESS = "123 Main Street #0505";
+    private static final String VALID_PHONE = "A1234567Y";
+    private static final String VALID_ADDRESS = "T07";
     private static final String VALID_EMAIL = "rachel@u.nus.edu";
 
     private static final String WHITESPACE = " \t\r\n";

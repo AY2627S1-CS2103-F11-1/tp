@@ -16,7 +16,6 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_CLASS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ID_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_NOTES_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_HUSBAND;
@@ -46,7 +45,6 @@ import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.EditStudentDescriptorBuilder;
 
@@ -93,16 +91,17 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
         assertParseFailure(parser, "1" + INVALID_CLASS_DESC, TutorialClass.MESSAGE_CONSTRAINTS);
         // invalid tutorialClass
-        assertParseFailure(parser, "1" + INVALID_NOTES_DESC, Notes.MESSAGE_CONSTRAINTS); // invalid tag
+        // An empty notes prefix resets the notes field.
 
         // invalid id followed by valid email
         assertParseFailure(parser, "1" + INVALID_ID_DESC + EMAIL_DESC_AMY, Id.MESSAGE_CONSTRAINTS);
 
         // while parsing {@code PREFIX_NOTES} alone will reset the tags of the {@code Student} being edited,
         // parsing it together with a valid tag results in error
-        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND + TAG_EMPTY, Notes.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + TAG_EMPTY + NOTES_DESC_HUSBAND, Notes.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TAG_EMPTY + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND, Notes.MESSAGE_CONSTRAINTS);
+        String duplicateNotesMessage = Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NOTES);
+        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND + TAG_EMPTY, duplicateNotesMessage);
+        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + TAG_EMPTY + NOTES_DESC_HUSBAND, duplicateNotesMessage);
+        assertParseFailure(parser, "1" + TAG_EMPTY + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND, duplicateNotesMessage);
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_CLASS_AMY + VALID_ID_AMY,
@@ -113,11 +112,11 @@ public class EditCommandParserTest {
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + ID_DESC_BOB + NOTES_DESC_HUSBAND
-                + EMAIL_DESC_AMY + CLASS_DESC_AMY + NAME_DESC_AMY + NOTES_DESC_FRIEND;
+                + EMAIL_DESC_AMY + CLASS_DESC_AMY + NAME_DESC_AMY;
 
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY)
-                .withNotes(VALID_NOTES_HUSBAND, VALID_NOTES_FRIEND).build();
+                .withNotes(VALID_NOTES_HUSBAND).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -191,7 +190,7 @@ public class EditCommandParserTest {
                 + ID_DESC_BOB + CLASS_DESC_BOB + EMAIL_DESC_BOB + NOTES_DESC_HUSBAND;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS, PREFIX_NOTES));
 
         // multiple invalid values
         userInput = targetIndex.getOneBased() + INVALID_ID_DESC + INVALID_CLASS_DESC + INVALID_EMAIL_DESC
@@ -212,3 +211,4 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 }
+

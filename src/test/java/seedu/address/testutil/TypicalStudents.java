@@ -17,11 +17,11 @@ public final class TypicalStudents {
             .withId("A1234567Y").withEmail("alice@u.nus.edu").withTutorialClass("T07")
             .withNotes("Needs help with testing").build();
     public static final Student BENSON = new StudentBuilder().withName("Benson Meier")
-            .withId("A2345678X").withEmail("benson@u.nus.edu").withTutorialClass("F10").build();
+            .withId("A2345678X").withEmail("benson@u.nus.edu").withTutorialClass("F10").withNotes().build();
     public static final Student CARL = new StudentBuilder().withName("Carl Kurz")
-            .withId("A3456789W").withEmail("carl@u.nus.edu").withTutorialClass("L01").build();
+            .withId("A3456789W").withEmail("carl@u.nus.edu").withTutorialClass("L01").withNotes().build();
     public static final Student DANIEL = new StudentBuilder().withName("Daniel Meier")
-            .withId("A4567890V").withEmail("daniel@u.nus.edu").withTutorialClass("T02").build();
+            .withId("A4567890V").withEmail("daniel@u.nus.edu").withTutorialClass("T02").withNotes().build();
     public static final Student ELLE = new StudentBuilder().withName("Elle Meyer")
             .withId("A5678901U").withEmail("elle@u.nus.edu").withTutorialClass("T03").build();
     public static final Student FIONA = new StudentBuilder().withName("Fiona Kunz")
@@ -31,9 +31,9 @@ public final class TypicalStudents {
     public static final Student IDA = new StudentBuilder().withName("Ida Mueller")
             .withId("A8901234R").withEmail("ida@u.nus.edu").withTutorialClass("F06").build();
     public static final Student AMY = new StudentBuilder().withName("Amy Bee")
-            .withId("A5678901U").withEmail("amy@u.nus.edu").withTutorialClass("T07").build();
+            .withId("A9012345Q").withEmail("amy@u.nus.edu").withTutorialClass("T07").build();
     public static final Student BOB = new StudentBuilder().withName("Bob Choo")
-            .withId("A6789012T").withEmail("bob@u.nus.edu").withTutorialClass("F05").build();
+            .withId("A0123456P").withEmail("bob@u.nus.edu").withTutorialClass("F10").build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier";
 

@@ -33,12 +33,10 @@ class JsonSerializableAddressBook {
     public JsonSerializableAddressBook(@JsonProperty("students") List<JsonAdaptedStudent> students,
             @JsonProperty("courses") List<JsonAdaptedCourse> courses) {
         if (students != null) {
-            if (students != null) {
-                this.students.addAll(students);
-            }
-            if (courses != null) {
-                this.courses.addAll(courses);
-            }
+            this.students.addAll(students);
+        }
+        if (courses != null) {
+            this.courses.addAll(courses);
         }
     }
 

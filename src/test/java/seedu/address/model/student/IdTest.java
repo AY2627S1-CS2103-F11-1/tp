@@ -37,17 +37,16 @@ public class IdTest {
         assertFalse(Id.isValidId("9312 1534")); // spaces within digits
 
         // valid id numbers
-        assertTrue(Id.isValidId("911")); // exactly 3 numbers
-        assertTrue(Id.isValidId("93121534"));
-        assertTrue(Id.isValidId("124293842033123")); // long id numbers
+        assertTrue(Id.isValidId("A1234567Y"));
+        assertTrue(Id.isValidId("A9312153Z"));
     }
 
     @Test
     public void equals() {
-        Id id = new Id("999");
+        Id id = new Id("A1234567Y");
 
         // same values -> returns true
-        assertTrue(id.equals(new Id("999")));
+        assertTrue(id.equals(new Id("A1234567Y")));
 
         // same object -> returns true
         assertTrue(id.equals(id));
@@ -59,6 +58,6 @@ public class IdTest {
         assertFalse(id.equals(5.0f));
 
         // different values -> returns false
-        assertFalse(id.equals(new Id("995")));
+        assertFalse(id.equals(new Id("A1234567Z")));
     }
 }

@@ -33,18 +33,17 @@ public class TutorialClassTest {
         assertFalse(TutorialClass.isValidClass(" ")); // spaces only
 
         // valid tutorialClasses
-        assertTrue(TutorialClass.isValidClass("Blk 456, Den Road, #01-355"));
-        assertTrue(TutorialClass.isValidClass("-")); // one character
-        assertTrue(TutorialClass.isValidClass("Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long
-        // tutorialClass
+        assertTrue(TutorialClass.isValidClass("T07"));
+        assertTrue(TutorialClass.isValidClass("F10"));
+        assertTrue(TutorialClass.isValidClass("7"));
     }
 
     @Test
     public void equals() {
-        TutorialClass tutorialClass = new TutorialClass("Valid TutorialClass");
+        TutorialClass tutorialClass = new TutorialClass("T07");
 
         // same values -> returns true
-        assertTrue(tutorialClass.equals(new TutorialClass("Valid TutorialClass")));
+        assertTrue(tutorialClass.equals(new TutorialClass("T07")));
 
         // same object -> returns true
         assertTrue(tutorialClass.equals(tutorialClass));
@@ -56,6 +55,6 @@ public class TutorialClassTest {
         assertFalse(tutorialClass.equals(5.0f));
 
         // different values -> returns false
-        assertFalse(tutorialClass.equals(new TutorialClass("Other Valid TutorialClass")));
+        assertFalse(tutorialClass.equals(new TutorialClass("F10")));
     }
 }

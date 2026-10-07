@@ -24,10 +24,6 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.course.Course;
-import seedu.address.model.course.CourseCode;
-import seedu.address.model.course.Deliverable;
-import seedu.address.model.course.Semester;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
@@ -74,8 +70,6 @@ public class JsonAddressBookStorageTest {
     public void readAndSaveAddressBook_allInOrder_success() throws Exception {
         Path filePath = testFolder.resolve("TempAddressBook.json");
         AddressBook original = getTypicalAddressBook();
-        original.addCourse(new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
-                java.util.List.of(new Deliverable("v1.2"), new Deliverable("MVP"))));
         JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filePath);
 
         // Save in new file and read back

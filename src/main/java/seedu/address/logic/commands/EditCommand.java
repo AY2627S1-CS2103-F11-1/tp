@@ -1,8 +1,11 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,16 +32,15 @@ public class EditCommand extends Command {
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+            + "by the index number used in the displayed student list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
-            // + "[" + PREFIX_PHONE + "PHONE] "
+            + "[" + PREFIX_ID + "ID] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            // + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            // + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_CLASS + "CLASS] "
+            + "[" + PREFIX_NOTES + "NOTES]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            // + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@u.nus.edu";
 
     public static final String MESSAGE_EDIT_STUDENT_SUCCESS = "Edited student: %1$s";
@@ -95,9 +97,8 @@ public class EditCommand extends Command {
         TutorialClass updatedTutorialClass = editStudentDescriptor.getTutorialClass()
                 .orElse(studentToEdit.getTutorialClass());
 
-        Optional<Notes> updatedNotes = editStudentDescriptor.getNotes().isPresent()
-                ? editStudentDescriptor.getNotes().get() == null ? Optional.empty()
-                        : Optional.of(editStudentDescriptor.getNotes().get())
+        Optional<Notes> updatedNotes = editStudentDescriptor.isNotesEdited()
+                ? Optional.ofNullable(editStudentDescriptor.getNotes().orElse(null))
                 : studentToEdit.getNotes();
         if (updatedNotes.isPresent()) {
             return new Student(updatedName, updatedId, updatedEmail, updatedTutorialClass, updatedNotes.get());
@@ -140,6 +141,7 @@ public class EditCommand extends Command {
         private Email email;
         private TutorialClass tutorialClass;
         private Notes notes;
+        private boolean notesEdited;
 
         public EditStudentDescriptor() {
         }
@@ -154,13 +156,14 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setTutorialClass(toCopy.tutorialClass);
             setNotes(toCopy.notes);
+            notesEdited = toCopy.notesEdited;
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, id, email, tutorialClass, notes);
+            return CollectionUtil.isAnyNonNull(name, id, email, tutorialClass, notes) || notesEdited;
         }
 
         public void setName(Name name) {
@@ -197,10 +200,16 @@ public class EditCommand extends Command {
 
         public void setNotes(Notes notes) {
             this.notes = notes;
+            this.notesEdited = true;
         }
 
         public Optional<Notes> getNotes() {
-            return Optional.ofNullable(notes); // Wraps it in Optional cleanly
+            return Optional.ofNullable(notes);
+        }
+
+        /** Returns whether the notes field was explicitly edited. */
+        public boolean isNotesEdited() {
+            return notesEdited;
         }
 
         @Override
@@ -218,7 +227,8 @@ public class EditCommand extends Command {
                     && Objects.equals(id, otherEditStudentDescriptor.id)
                     && Objects.equals(email, otherEditStudentDescriptor.email)
                     && Objects.equals(tutorialClass, otherEditStudentDescriptor.tutorialClass)
-                    && Objects.equals(notes, otherEditStudentDescriptor.notes);
+                    && Objects.equals(notes, otherEditStudentDescriptor.notes)
+                    && notesEdited == otherEditStudentDescriptor.notesEdited;
         }
 
         @Override
