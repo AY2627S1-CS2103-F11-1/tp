@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.course.Course;
 import seedu.address.model.person.Person;
 
 /**
@@ -59,6 +60,17 @@ public interface Model {
      * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
+
+    /**
+     * Returns true if a course for the same course code and semester exists.
+     */
+    boolean hasCourse(Course course);
+
+    /**
+     * Adds the given course and its deliverables.
+     * The course must not already exist for the same semester.
+     */
+    void addCourse(Course course);
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();

@@ -87,6 +87,16 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+### Initialising a course: `init course`
+
+Initialises one course for a semester and records its project deliverables. A course can be initialised only once
+per semester, regardless of letter case. Provide at least one unique deliverable and separate deliverable names with
+commas.
+
+Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`
+
+Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
+
 ### Listing all persons: `list`
 
 Shows a list of all persons in the address book.
@@ -195,4 +205,5 @@ Action | Format, Examples
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Help** | `help`

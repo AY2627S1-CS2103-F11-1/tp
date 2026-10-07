@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.course.Course;
 import seedu.address.model.person.Person;
 
 /**
@@ -91,6 +92,18 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+    }
+
+    @Override
+    public boolean hasCourse(Course course) {
+        requireNonNull(course);
+        return addressBook.hasCourse(course);
+    }
+
+    @Override
+    public void addCourse(Course course) {
+        requireNonNull(course);
+        addressBook.addCourse(course);
     }
 
     //=========== Filtered Person List Accessors =============================================================
