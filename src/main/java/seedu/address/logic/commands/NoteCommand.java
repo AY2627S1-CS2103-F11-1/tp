@@ -37,7 +37,6 @@ public class NoteCommand extends Command {
 
     private final Index index;
     private final Notes notes;
-    
 
     /**
      * @param index of the person in the filtered person list to edit the remark
