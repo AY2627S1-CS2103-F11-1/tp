@@ -10,7 +10,7 @@ public class Notes {
 
     public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty or exceed 500 characters.";
 
-    private final String notes;
+    public final String notes;
 
     /** Constructs notes from a non-blank string of at most 500 characters. */
     public Notes(String notes) {
