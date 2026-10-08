@@ -1,10 +1,5 @@
 package seedu.address.logic.parser;
 
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -20,13 +15,13 @@ import seedu.address.model.student.TutorialClass;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "911a";
-    private static final String INVALID_ADDRESS = "T@7";
+    private static final String INVALID_ID = "911a";
+    private static final String INVALID_CLASS = "T@7";
     private static final String INVALID_EMAIL = "example.com";
 
     private static final String VALID_NAME = "Rachel Walker";
-    private static final String VALID_PHONE = "A1234567Y";
-    private static final String VALID_ADDRESS = "T07";
+    private static final String VALID_ID = "A1234567Y";
+    private static final String VALID_CLASS = "T07";
     private static final String VALID_EMAIL = "rachel@u.nus.edu";
 
     private static final String WHITESPACE = " \t\r\n";
@@ -38,8 +33,8 @@ public class ParserUtilTest {
 
     @Test
     public void parseIndex_outOfRangeInput_throwsParseException() {
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, ()
-            -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
+        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, (
+            ) -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
     }
 
     @Test
@@ -81,19 +76,19 @@ public class ParserUtilTest {
 
     @Test
     public void parseId_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseId(INVALID_PHONE));
+        assertThrows(ParseException.class, () -> ParserUtil.parseId(INVALID_ID));
     }
 
     @Test
     public void parseId_validValueWithoutWhitespace_returnsId() throws Exception {
-        Id expectedId = new Id(VALID_PHONE);
-        assertEquals(expectedId, ParserUtil.parseId(VALID_PHONE));
+        Id expectedId = new Id(VALID_ID);
+        assertEquals(expectedId, ParserUtil.parseId(VALID_ID));
     }
 
     @Test
     public void parseId_validValueWithWhitespace_returnsTrimmedId() throws Exception {
-        String idWithWhitespace = WHITESPACE + VALID_PHONE + WHITESPACE;
-        Id expectedId = new Id(VALID_PHONE);
+        String idWithWhitespace = WHITESPACE + VALID_ID + WHITESPACE;
+        Id expectedId = new Id(VALID_ID);
         assertEquals(expectedId, ParserUtil.parseId(idWithWhitespace));
     }
 
@@ -104,19 +99,19 @@ public class ParserUtilTest {
 
     @Test
     public void parseTutorialClass_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseTutorialClass(INVALID_ADDRESS));
+        assertThrows(ParseException.class, () -> ParserUtil.parseTutorialClass(INVALID_CLASS));
     }
 
     @Test
     public void parseTutorialClass_validValueWithoutWhitespace_returnsTutorialClass() throws Exception {
-        TutorialClass expectedTutorialClass = new TutorialClass(VALID_ADDRESS);
-        assertEquals(expectedTutorialClass, ParserUtil.parseTutorialClass(VALID_ADDRESS));
+        TutorialClass expectedTutorialClass = new TutorialClass(VALID_CLASS);
+        assertEquals(expectedTutorialClass, ParserUtil.parseTutorialClass(VALID_CLASS));
     }
 
     @Test
     public void parseTutorialClass_validValueWithWhitespace_returnsTrimmedTutorialClass() throws Exception {
-        String tutorialClassWithWhitespace = WHITESPACE + VALID_ADDRESS + WHITESPACE;
-        TutorialClass expectedTutorialClass = new TutorialClass(VALID_ADDRESS);
+        String tutorialClassWithWhitespace = WHITESPACE + VALID_CLASS + WHITESPACE;
+        TutorialClass expectedTutorialClass = new TutorialClass(VALID_CLASS);
         assertEquals(expectedTutorialClass, ParserUtil.parseTutorialClass(tutorialClassWithWhitespace));
     }
 

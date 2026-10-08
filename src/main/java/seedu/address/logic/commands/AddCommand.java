@@ -76,7 +76,7 @@ public class AddCommand extends Command {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("toAdd", student)
+                .add("student", student)
                 .toString();
     }
 }

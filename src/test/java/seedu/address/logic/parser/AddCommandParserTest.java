@@ -1,10 +1,5 @@
 package seedu.address.logic.parser;
 
-
-
-
-
-
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_BOB;
@@ -19,15 +14,15 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NOTES_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_CONSULTATION;
+import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_PARTICIPATIVE;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_FRIEND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_CONSULTATION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
@@ -54,18 +49,17 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Student expectedStudent = new StudentBuilder(BOB).withNotes(VALID_NOTES_FRIEND).build();
+        Student expectedStudent = new StudentBuilder(BOB).withNotes(VALID_NOTES_CONSULTATION).build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
-                + CLASS_DESC_BOB + NOTES_DESC_FRIEND, new AddCommand(expectedStudent));
+                + CLASS_DESC_BOB + NOTES_DESC_CONSULTATION, new AddCommand(expectedStudent));
 
-
-        Student expectedStudentWithNotes = new StudentBuilder(BOB).withNotes(VALID_NOTES_FRIEND).build();
+        Student expectedStudentWithNotes = new StudentBuilder(BOB).withNotes(VALID_NOTES_CONSULTATION).build();
         assertParseSuccess(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_FRIEND, new AddCommand(expectedStudentWithNotes));
+                + NOTES_DESC_CONSULTATION, new AddCommand(expectedStudentWithNotes));
         assertParseSuccess(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_FRIEND, new AddCommand(expectedStudentWithNotes));
+                + NOTES_DESC_CONSULTATION, new AddCommand(expectedStudentWithNotes));
     }
 
     @Test
@@ -169,19 +163,19 @@ public class AddCommandParserTest {
     public void parse_invalidValue_failure() {
         // invalid name
         assertParseFailure(parser, INVALID_NAME_DESC + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND, Name.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_PARTICIPATIVE, Name.MESSAGE_CONSTRAINTS);
 
         // invalid id
         assertParseFailure(parser, NAME_DESC_BOB + INVALID_ID_DESC + EMAIL_DESC_BOB + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND, Id.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_PARTICIPATIVE, Id.MESSAGE_CONSTRAINTS);
 
         // invalid email
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + INVALID_EMAIL_DESC + CLASS_DESC_BOB
-                + NOTES_DESC_HUSBAND, Email.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_PARTICIPATIVE, Email.MESSAGE_CONSTRAINTS);
 
         // invalid tutorialClass
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC
-                + NOTES_DESC_HUSBAND, TutorialClass.MESSAGE_CONSTRAINTS);
+                + NOTES_DESC_PARTICIPATIVE, TutorialClass.MESSAGE_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB
@@ -193,8 +187,7 @@ public class AddCommandParserTest {
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
-                + CLASS_DESC_BOB + NOTES_DESC_HUSBAND + NOTES_DESC_FRIEND,
+                + CLASS_DESC_BOB + NOTES_DESC_PARTICIPATIVE + NOTES_DESC_CONSULTATION,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }
-

@@ -1,10 +1,5 @@
 package seedu.address.model.student;
 
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,7 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
 
@@ -38,7 +33,7 @@ public class StudentTest {
 
         // different identity fields -> returns false
         Student editedAlice = new StudentBuilder(ALICE).withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB)
-                .withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_HUSBAND).build();
+                .withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_PARTICIPATIVE).build();
         assertFalse(ALICE.isSameStudent(editedAlice));
 
         // different name, same identity fields -> returns true
@@ -90,7 +85,7 @@ public class StudentTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different tags -> returns false
-        editedAlice = new StudentBuilder(ALICE).withNotes(VALID_NOTES_HUSBAND).build();
+        editedAlice = new StudentBuilder(ALICE).withNotes(VALID_NOTES_PARTICIPATIVE).build();
         assertFalse(ALICE.equals(editedAlice));
     }
 

@@ -78,7 +78,7 @@ public interface Model {
     ObservableList<Student> getFilteredStudentList();
 
     /**
-     * Updates the filter of the filtered person list to filter by the given
+     * Updates the filter of the filtered student list to filter by the given
      * {@code predicate}.
      *
      * @throws NullPointerException if {@code predicate} is null.

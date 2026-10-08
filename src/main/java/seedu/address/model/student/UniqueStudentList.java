@@ -19,7 +19,7 @@ import seedu.address.model.student.exceptions.StudentNotFoundException;
  * students uses Student#isSameStudent(Student) for equality so as to ensure
  * that
  * the student being added or updated is
- * unique in terms of identity in the UniquePersonList. However, the removal of
+ * unique in terms of identity in the UniqueStudentList. However, the removal of
  * a person uses Student#equals(Object) so
  * as to ensure that the student with exactly the same fields will be removed.
  *

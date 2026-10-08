@@ -1,16 +1,10 @@
 package seedu.address.model.student;
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
@@ -47,7 +41,7 @@ public class UniqueStudentListTest {
     public void contains_studentWithSameIdentityFieldsInList_returnsTrue() {
         uniqueStudentList.add(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_HUSBAND)
+                .withNotes(VALID_NOTES_PARTICIPATIVE)
                 .build();
         assertTrue(uniqueStudentList.contains(editedAlice));
     }
@@ -91,7 +85,7 @@ public class UniqueStudentListTest {
     public void setStudent_editedStudentHasSameIdentity_success() {
         uniqueStudentList.add(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_HUSBAND)
+                .withNotes(VALID_NOTES_PARTICIPATIVE)
                 .build();
         uniqueStudentList.setStudent(ALICE, editedAlice);
         UniqueStudentList expectedUniqueStudentList = new UniqueStudentList();
@@ -170,8 +164,8 @@ public class UniqueStudentListTest {
 
     @Test
     public void asUnmodifiableObservableList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, ()
-            -> uniqueStudentList.asUnmodifiableObservableList().remove(0));
+        assertThrows(UnsupportedOperationException.class, (
+            ) -> uniqueStudentList.asUnmodifiableObservableList().remove(0));
     }
 
     @Test

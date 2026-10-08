@@ -1,10 +1,5 @@
 package seedu.address.logic.parser;
 
-
-
-
-
-
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_BOB;
@@ -17,15 +12,15 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ID_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_CONSULTATION;
+import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_PARTICIPATIVE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_CONSULTATION;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
@@ -52,8 +47,8 @@ public class EditCommandParserTest {
 
     private static final String TAG_EMPTY = " " + PREFIX_NOTES;
 
-    private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+    private static final String MESSAGE_INVALID_FORMAT = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+            EditCommand.MESSAGE_USAGE);
 
     private EditCommandParser parser = new EditCommandParser();
 
@@ -96,12 +91,16 @@ public class EditCommandParserTest {
         // invalid id followed by valid email
         assertParseFailure(parser, "1" + INVALID_ID_DESC + EMAIL_DESC_AMY, Id.MESSAGE_CONSTRAINTS);
 
-        // while parsing {@code PREFIX_NOTES} alone will reset the tags of the {@code Student} being edited,
+        // while parsing {@code PREFIX_NOTES} alone will reset the tags of the {@code
+        // Student} being edited,
         // parsing it together with a valid tag results in error
         String duplicateNotesMessage = Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NOTES);
-        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND + TAG_EMPTY, duplicateNotesMessage);
-        assertParseFailure(parser, "1" + NOTES_DESC_FRIEND + TAG_EMPTY + NOTES_DESC_HUSBAND, duplicateNotesMessage);
-        assertParseFailure(parser, "1" + TAG_EMPTY + NOTES_DESC_FRIEND + NOTES_DESC_HUSBAND, duplicateNotesMessage);
+        assertParseFailure(parser, "1" + NOTES_DESC_CONSULTATION + NOTES_DESC_PARTICIPATIVE + TAG_EMPTY,
+                duplicateNotesMessage);
+        assertParseFailure(parser, "1" + NOTES_DESC_CONSULTATION + TAG_EMPTY + NOTES_DESC_PARTICIPATIVE,
+                duplicateNotesMessage);
+        assertParseFailure(parser, "1" + TAG_EMPTY + NOTES_DESC_CONSULTATION + NOTES_DESC_PARTICIPATIVE,
+                duplicateNotesMessage);
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_CLASS_AMY + VALID_ID_AMY,
@@ -111,12 +110,12 @@ public class EditCommandParserTest {
     @Test
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;
-        String userInput = targetIndex.getOneBased() + ID_DESC_BOB + NOTES_DESC_HUSBAND
+        String userInput = targetIndex.getOneBased() + ID_DESC_BOB + NOTES_DESC_PARTICIPATIVE
                 + EMAIL_DESC_AMY + CLASS_DESC_AMY + NAME_DESC_AMY;
 
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY)
-                .withNotes(VALID_NOTES_HUSBAND).build();
+                .withNotes(VALID_NOTES_PARTICIPATIVE).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -162,8 +161,8 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // tags
-        userInput = targetIndex.getOneBased() + NOTES_DESC_FRIEND;
-        descriptor = new EditStudentDescriptorBuilder().withNotes(VALID_NOTES_FRIEND).build();
+        userInput = targetIndex.getOneBased() + NOTES_DESC_CONSULTATION;
+        descriptor = new EditStudentDescriptorBuilder().withNotes(VALID_NOTES_CONSULTATION).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -186,8 +185,9 @@ public class EditCommandParserTest {
 
         // multiple valid fields repeated
         userInput = targetIndex.getOneBased() + ID_DESC_AMY + CLASS_DESC_AMY + EMAIL_DESC_AMY
-                + NOTES_DESC_FRIEND + ID_DESC_AMY + CLASS_DESC_AMY + EMAIL_DESC_AMY + NOTES_DESC_FRIEND
-                + ID_DESC_BOB + CLASS_DESC_BOB + EMAIL_DESC_BOB + NOTES_DESC_HUSBAND;
+                + NOTES_DESC_CONSULTATION + ID_DESC_AMY + CLASS_DESC_AMY + EMAIL_DESC_AMY
+                + NOTES_DESC_CONSULTATION
+                + ID_DESC_BOB + CLASS_DESC_BOB + EMAIL_DESC_BOB + NOTES_DESC_PARTICIPATIVE;
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS, PREFIX_NOTES));
@@ -211,4 +211,3 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 }
-

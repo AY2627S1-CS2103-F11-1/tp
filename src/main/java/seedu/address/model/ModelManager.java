@@ -73,9 +73,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasStudent(Student person) {
-        requireNonNull(person);
-        return addressBook.hasStudent(person);
+    public boolean hasStudent(Student student) {
+        requireNonNull(student);
+        return addressBook.hasStudent(student);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void addStudent(Student person) {
-        addressBook.addStudent(person);
+    public void addStudent(Student student) {
+        addressBook.addStudent(student);
         updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
     }
 

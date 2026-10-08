@@ -1,10 +1,5 @@
 package seedu.address.logic.commands;
 
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,7 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +53,7 @@ public class EditStudentDescriptorTest {
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different tags -> returns false
-        editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withNotes(VALID_NOTES_HUSBAND).build();
+        editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withNotes(VALID_NOTES_PARTICIPATIVE).build();
         assertFalse(DESC_AMY.equals(editedAmy));
     }
 

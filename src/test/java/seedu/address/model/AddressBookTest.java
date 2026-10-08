@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
@@ -54,7 +54,7 @@ public class AddressBookTest {
     public void resetData_withDuplicateStudents_throwsDuplicateStudentException() {
         // Two students with the same identity fields
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_HUSBAND)
+                .withNotes(VALID_NOTES_PARTICIPATIVE)
                 .build();
         List<Student> newStudents = List.of(ALICE, editedAlice);
         AddressBookStub newData = new AddressBookStub(newStudents);
@@ -82,7 +82,7 @@ public class AddressBookTest {
     public void hasStudent_studentWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addStudent(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_HUSBAND)
+                .withNotes(VALID_NOTES_PARTICIPATIVE)
                 .build();
         assertTrue(addressBook.hasStudent(editedAlice));
     }
