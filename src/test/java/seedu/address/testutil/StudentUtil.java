@@ -32,7 +32,6 @@ public final class StudentUtil {
         builder.append(PREFIX_ID).append(student.getId()).append(" ");
         builder.append(PREFIX_EMAIL).append(student.getEmail()).append(" ");
         builder.append(PREFIX_CLASS).append(student.getTutorialClass()).append(" ");
-        student.getNotes().ifPresent(notes -> builder.append(PREFIX_NOTES).append(notes).append(" "));
         return builder.toString();
     }
 
