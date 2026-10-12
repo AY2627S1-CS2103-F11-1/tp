@@ -30,7 +30,7 @@ public class Student {
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = Optional.of(new Notes(""));
+        this.notes = Optional.empty();
     }
 
     /** Constructs a student with notes. */
