@@ -1,0 +1,5 @@
+{
+  "students" : [
+    { "name" : "Invalid! Student", "id" : "A1234567Y", "email" : "invalid@u.nus.edu", "class" : "T07" }
+  ]
+}

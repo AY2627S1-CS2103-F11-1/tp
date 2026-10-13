@@ -1,0 +1,8 @@
+{
+  "students" : [
+    { "name" : "Alice Pauline", "id" : "A1234567Y", "email" : "alice@u.nus.edu", "class" : "T07", "notes" : "Needs help with testing" },
+    { "name" : "Benson Meier", "id" : "A2345678X", "email" : "benson@u.nus.edu", "class" : "F10" },
+    { "name" : "Carl Kurz", "id" : "A3456789W", "email" : "carl@u.nus.edu", "class" : "L01" },
+    { "name" : "Daniel Meier", "id" : "A4567890V", "email" : "daniel@u.nus.edu", "class" : "T02" }
+  ]
+}
