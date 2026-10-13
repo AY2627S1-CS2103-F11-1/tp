@@ -31,8 +31,6 @@ public class StudentCard extends UiPart<Region> {
     @FXML
     private Label name;
     @FXML
-    private Label displayedIndex;
-    @FXML
     private Label studentId;
     @FXML
     private Label email;
@@ -45,10 +43,9 @@ public class StudentCard extends UiPart<Region> {
      * Creates a {@code StudentCard} with the given {@code Student} and index to
      * display.
      */
-    public StudentCard(Student student, int displayedIndex) {
+    public StudentCard(Student student) {
         super(FXML);
         this.student = student;
-        this.displayedIndex.setText(displayedIndex + ". ");
         name.setText(student.getName().fullName);
         studentId.setText(student.getId().id);
         email.setText(student.getEmail().email);

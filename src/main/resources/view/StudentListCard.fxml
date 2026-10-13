@@ -2,10 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox id="cardPane" fx:id="cardPane"
@@ -30,32 +31,51 @@
                         left="15" />
             </padding>
 
-            <HBox spacing="5"
-                  alignment="CENTER_LEFT">
-
-                <Label fx:id="displayedIndex"
-                       styleClass="cell_big_label">
-                    <minWidth>
-                        <Region fx:constant="USE_PREF_SIZE" />
-                    </minWidth>
-                </Label>
-
+            <HBox spacing="5" alignment="CENTER_LEFT">
                 <Label fx:id="name"
                        styleClass="cell_big_label" />
             </HBox>
 
-            <Label fx:id="studentId"
-                   styleClass="cell_small_label" />
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <ImageView fitWidth="16"
+                           fitHeight="16"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@../images/id-card.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="studentId"
+                       styleClass="cell_small_label" />
+            </HBox>
 
-            <Label fx:id="email"
-                   styleClass="cell_small_label" />
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <ImageView fitWidth="16"
+                           fitHeight="16"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@../images/mail.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="email"
+                       styleClass="cell_small_label" />
+            </HBox>
 
-            <Label fx:id="tutorialClass"
-                   styleClass="cell_small_label" />
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <ImageView fitWidth="16"
+                           fitHeight="16"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@../images/users.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="tutorialClass"
+                       styleClass="cell_small_label" />
+            </HBox>
 
             <Label fx:id="notes"
                    styleClass="cell_small_label"
                    wrapText="true" />
+
         </VBox>
     </GridPane>
 </HBox>
