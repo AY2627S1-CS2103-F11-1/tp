@@ -56,6 +56,8 @@ public class SearchCommandTest {
 
         assertTrue(nameCommand.equals(nameCommand));
         assertTrue(nameCommand.equals(new SearchCommand(new StudentMatchesQueryPredicate("Alice"))));
+        assertEquals(nameCommand.hashCode(),
+                new SearchCommand(new StudentMatchesQueryPredicate("Alice")).hashCode());
         assertFalse(nameCommand.equals(idCommand));
         assertFalse(nameCommand.equals(null));
     }
