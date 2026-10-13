@@ -136,6 +136,20 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
+### Searching students by name or ID: `search`
+
+Searches student records by a case-insensitive name fragment or an exact student ID.
+
+Format: `search /name NAME` or `search /id ID`
+
+Examples:
+
+* `search /name John Doe` shows students whose names contain `John Doe`.
+* `search /id A1234567Z` shows the student with ID `A1234567Z`.
+
+Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
+Student ID matching is case-insensitive.
+
 ### Deleting a student: `delete`
 
 Deletes a student from TAssist.
@@ -204,6 +218,7 @@ Action | Format, Examples
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@u.nus.edu`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Help** | `help`
