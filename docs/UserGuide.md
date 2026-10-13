@@ -77,11 +77,11 @@ Format: `help`
 
 Adds a student to the address book.
 
-Format: `add student /name NAME /id ID /email EMAIL /class CLASS​`
+Format: `add /name NAME /id ID /email EMAIL /class CLASS​`
 
 
 Examples:
-* `add student /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07`
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07`
 
 ### Initialising a course: `init course`
 
