@@ -40,6 +40,8 @@ public class SearchCommandParserTest {
         assertParseFailure(parser, " /class T07", SearchCommandParser.MESSAGE_UNKNOWN_PARAMETER);
         assertParseFailure(parser, " John /name John", SearchCommandParser.MESSAGE_UNEXPECTED_TEXT);
         assertParseFailure(parser, " John", String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " student/search",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
     }
 
     @Test
