@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -11,10 +13,10 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 public class SearchCommand extends Command {
     public static final String COMMAND_WORD = "search";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Searches students by name or student ID.\n"
-            + "Parameters: /name NAME or /id ID\n"
+            + "Parameters: " + PREFIX_NAME + " NAME or " + PREFIX_ID + " ID\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " /name John Doe\n"
-            + "  " + COMMAND_WORD + " /id A1234567Z";
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z";
     public static final String MESSAGE_NO_STUDENTS = "No student records found. Add students before searching.";
     public static final String MESSAGE_SUCCESS = "Found %1$d matching student(s).";
 
