@@ -150,6 +150,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ObservableList<Student> getFilteredStudentList() {
             throw new AssertionError("This method should not be called.");
         }

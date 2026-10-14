@@ -81,6 +81,9 @@ public interface Model {
      */
     void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses);
 
+    /** Replaces an existing student-course progress record. */
+    void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress);
+
     /** Returns an unmodifiable view of the filtered student list */
     ObservableList<Student> getFilteredStudentList();
 
