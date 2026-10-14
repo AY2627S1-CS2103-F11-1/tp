@@ -52,7 +52,11 @@ public class AddCommand extends Command {
         }
 
         model.addStudent(student);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(student)));
+        model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(student)),
+                false,
+                false,
+                student.getId());
     }
 
     @Override

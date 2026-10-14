@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
 /**
@@ -43,4 +44,18 @@ public class StudentListPanel extends UiPart<Region> {
         }
     }
 
+    /**
+     * Scrolls to and selects the student with the specified ID.
+     */
+    public void scrollToStudentId(Id id) {
+        ObservableList<Student> students = studentListView.getItems();
+
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getId().equals(id)) {
+                studentListView.scrollTo(i);
+                studentListView.getSelectionModel().select(i);
+                return;
+            }
+        }
+    }
 }

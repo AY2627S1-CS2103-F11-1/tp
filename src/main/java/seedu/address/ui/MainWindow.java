@@ -184,6 +184,10 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
+            commandResult.getstudentIdToFocus().ifPresent(id -> {
+                studentListPanel.scrollToStudentId(id);
+            });
+
             if (commandResult.isShowHelp()) {
                 handleHelp();
             }
