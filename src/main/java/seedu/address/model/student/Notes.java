@@ -26,11 +26,18 @@ public class Notes {
 
     /**
      * Checks if Notes is valid.
-     * Accepts empty String as notes. Only returns false if only contains whitespaces or exceeds 500 characters.
+     * Accepts empty String as notes. Returns false if only contains whitespaces or exceeds 500 characters.
      * @param test
      */
     public static boolean isValidNotes(String test) {
         return (test.isEmpty() || !test.isBlank()) && test.length() <= MAX_LENGTH;
+    }
+
+    /**
+     * Checks if Notes is empty.
+     */
+    public boolean isEmpty() {
+        return notes.isEmpty();
     }
 
     @Override
