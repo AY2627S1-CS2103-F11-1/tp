@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
 import java.util.List;
@@ -24,13 +25,13 @@ public class NoteCommand extends Command {
             + "by the index number used in the last person listing. "
             + "Existing notes will be overwritten by the input.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "/notes [NOTES]\n"
+            + PREFIX_NOTES + " [COMMAND_WORD]\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "/notes Used Task as Parent class of ToDo and Deadline";
+            + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Notes: %2$s";
-    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Person: %1$s";
-    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed notes from Person: %1$s";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Student: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed notes from Student: %1$s";
 
     private final Index index;
     private final Notes notes;
