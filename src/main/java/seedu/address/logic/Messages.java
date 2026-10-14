@@ -44,7 +44,7 @@ public class Messages {
                 .append("; Class: ")
                 .append(student.getTutorialClass())
                 .append("; Notes: ")
-                .append(student.getNotes().orElse(null));
+                .append(student.getNotes());
         return builder.toString();
     }
 

@@ -39,7 +39,7 @@ public class StudentBuilder {
         id = studentToCopy.getId();
         email = studentToCopy.getEmail();
         tutorialClass = studentToCopy.getTutorialClass();
-        notes = studentToCopy.getNotes().orElse(null);
+        notes = studentToCopy.getNotes();
     }
 
     /** Sets the student's name. */

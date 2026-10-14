@@ -97,14 +97,8 @@ public class EditCommand extends Command {
         TutorialClass updatedTutorialClass = editStudentDescriptor.getTutorialClass()
                 .orElse(studentToEdit.getTutorialClass());
 
-        Optional<Notes> updatedNotes = editStudentDescriptor.isNotesEdited()
-                ? Optional.ofNullable(editStudentDescriptor.getNotes().orElse(null))
-                : studentToEdit.getNotes();
-        if (updatedNotes.isPresent()) {
-            return new Student(updatedName, updatedId, updatedEmail, updatedTutorialClass, updatedNotes.get());
-        } else {
-            return new Student(updatedName, updatedId, updatedEmail, updatedTutorialClass);
-        }
+        Notes updatedNotes = editStudentDescriptor.getNotes().orElse(studentToEdit.getNotes());
+        return new Student(updatedName, updatedId, updatedEmail, updatedTutorialClass, updatedNotes);
     }
 
     @Override
