@@ -25,8 +25,9 @@ import seedu.address.model.student.TutorialClass;
 public class AddCommandParser implements Parser<AddCommand> {
 
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
-    public static final String MESSAGE_UNKNOWN_PARAMETER =
-            "Unknown parameter. Parameters allowed: /name, /id, /email, /class";
+    public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
+            "Unknown parameter. Parameters allowed: %s, %s, %s, %s",
+            PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS);
     public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
     public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
 
@@ -71,7 +72,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         StringJoiner missingParameters = new StringJoiner(", ");
         StringJoiner emptyParameters = new StringJoiner(", ");
         for (Prefix prefix : new Prefix[] {
-            PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS }) {
+                PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS }) {
             Optional<String> value = argMultimap.getValue(prefix);
 
             if (value.isEmpty()) {
@@ -105,8 +106,9 @@ public class AddCommandParser implements Parser<AddCommand> {
         Matcher matcher = PARAMETER_PATTERN.matcher(args);
         while (matcher.find()) {
             String parameter = matcher.group(2);
-            if (!parameter.startsWith("name") && !parameter.startsWith("id")
-                    && !parameter.startsWith("email") && !parameter.startsWith("class")) {
+            if (!parameter.startsWith(PREFIX_NAME.toString()) && !parameter.startsWith(PREFIX_ID.toString())
+                    && !parameter.startsWith(PREFIX_EMAIL.toString())
+                    && !parameter.startsWith(PREFIX_CLASS.toString())) {
                 throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
             }
         }
