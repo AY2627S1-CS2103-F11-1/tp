@@ -35,5 +35,4 @@ public class NoteCommandParser implements Parser<NoteCommand> {
 
         return new NoteCommand(index, notes);
     }
-
 }
