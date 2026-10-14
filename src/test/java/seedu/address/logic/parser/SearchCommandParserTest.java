@@ -1,6 +1,9 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.getErrorMessageForDuplicatePrefixes;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -47,9 +50,9 @@ public class SearchCommandParserTest {
     @Test
     public void parse_duplicateOrConflictingIdentifier_failure() {
         assertParseFailure(parser, " /name John /name Jane",
-                String.format(SearchCommandParser.MESSAGE_DUPLICATE_PARAMETER, "/name"));
+                getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
         assertParseFailure(parser, " /id A1234567Z /id A2345678X",
-                String.format(SearchCommandParser.MESSAGE_DUPLICATE_PARAMETER, "/id"));
+                getErrorMessageForDuplicatePrefixes(PREFIX_ID));
         assertParseFailure(parser, " /name John /id A1234567Z", SearchCommandParser.MESSAGE_BOTH_IDENTIFIERS);
     }
 }
