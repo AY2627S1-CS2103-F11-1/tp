@@ -73,19 +73,15 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a student: `add`
 
-Adds a person to the address book.
+Adds a student to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add /name NAME /id ID /email EMAIL /class CLASS​`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags, including zero.
-</div>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@u.nus.edu a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@u.nus.edu a/Newgate Prison p/1234567 t/criminal`
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07`
 
 ### Initialising a course: `init course`
 

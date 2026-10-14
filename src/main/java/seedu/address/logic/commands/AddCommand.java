@@ -5,7 +5,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -26,13 +25,11 @@ public class AddCommand extends Command {
             + PREFIX_ID + " ID "
             + PREFIX_EMAIL + " EMAIL "
             + PREFIX_CLASS + " CLASS "
-            + PREFIX_NOTES + " NOTES "
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + " John Doe "
             + PREFIX_ID + " A1234567Y "
             + PREFIX_EMAIL + " johnd@u.nus.edu "
-            + PREFIX_CLASS + " T07 "
-            + PREFIX_NOTES + " He is on track with his deliverables.";
+            + PREFIX_CLASS + " T07 ";
 
     public static final String MESSAGE_SUCCESS = "New student added: %1$s";
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
