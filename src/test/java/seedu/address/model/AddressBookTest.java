@@ -21,6 +21,7 @@ import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.course.exceptions.DuplicateCourseException;
+import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.exceptions.DuplicateStudentException;
 import seedu.address.testutil.StudentBuilder;
@@ -36,6 +37,7 @@ public class AddressBookTest {
     public void constructor() {
         assertEquals(List.of(), addressBook.getStudentList());
         assertEquals(List.of(), addressBook.getCourseList());
+        assertEquals(List.of(), addressBook.getStudentCourseProgressList());
     }
 
     @Test
@@ -125,6 +127,36 @@ public class AddressBookTest {
     }
 
     @Test
+    public void addStudent_existingCourse_initialisesProgress() {
+        addressBook.addCourse(CS2103);
+
+        addressBook.addStudent(ALICE);
+
+        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
+                addressBook.getStudentCourseProgressList());
+    }
+
+    @Test
+    public void addCourse_existingStudent_initialisesProgress() {
+        addressBook.addStudent(ALICE);
+
+        addressBook.addCourse(CS2103);
+
+        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
+                addressBook.getStudentCourseProgressList());
+    }
+
+    @Test
+    public void removeStudent_removesStudentProgress() {
+        addressBook.addStudent(ALICE);
+        addressBook.addCourse(CS2103);
+
+        addressBook.removeStudent(ALICE);
+
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
+    }
+
+    @Test
     public void getCourseList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getCourseList().remove(0));
     }
@@ -132,7 +164,8 @@ public class AddressBookTest {
     @Test
     public void toStringMethod() {
         String expected = AddressBook.class.getCanonicalName() + "{students=" + addressBook.getStudentList()
-                + ", courses=" + addressBook.getCourseList() + "}";
+                + ", courses=" + addressBook.getCourseList() + ", studentCourseProgresses="
+                + addressBook.getStudentCourseProgressList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -154,6 +187,11 @@ public class AddressBookTest {
 
         @Override
         public ObservableList<Course> getCourseList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
             return FXCollections.observableArrayList();
         }
     }
