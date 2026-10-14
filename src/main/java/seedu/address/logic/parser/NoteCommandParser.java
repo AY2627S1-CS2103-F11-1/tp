@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.student.Note;
+import seedu.address.model.student.Notes;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
@@ -23,9 +23,9 @@ public class NoteCommandParser implements Parser<NoteCommand> {
                     NoteCommand.MESSAGE_USAGE), pe);
         }
 
-        Notes remark = new Notes(argMultimap.getValue(PREFIX_NOTES).orElse(""));
+        Notes notes = new Notes(argMultimap.getValue(PREFIX_NOTES).orElse(""));
 
-        return new NoteCommand(index, remark);
+        return new NoteCommand(index, notes);
     }
 
 }
