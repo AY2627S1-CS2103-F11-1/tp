@@ -17,19 +17,16 @@ import seedu.address.model.student.Student;
  */
 public class NoteCommand extends Command {
 
-    public static final String COMMAND_WORD = "note";
+    public static final String COMMAND_WORD = "notes";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds notes to the person identified "
             + "by the index number used in the last person listing. "
             + "Existing notes will be overwritten by the input.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "notes/ [NOTES]\n"
+            + "/notes [NOTES]\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "notes/ Likes to swim.";
-
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET =
-            "Notes command not implemented yet";
+            + "/notes Likes to swim.";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Notes: %2$s";
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Person: %1$s";
