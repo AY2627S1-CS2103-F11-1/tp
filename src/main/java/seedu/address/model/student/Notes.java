@@ -8,7 +8,8 @@ public class Notes {
 
     public static final int MAX_LENGTH = 500;
 
-    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be only whitespaces and exceed 500 characters.";
+    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be only whitespaces"
+            + " and exceed 500 characters.";
 
     public final String notes;
 
