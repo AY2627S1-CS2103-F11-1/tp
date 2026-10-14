@@ -29,7 +29,7 @@ add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07
 edit student /id A1234567Z /name John Tan /class T07
 delete /id A1245678Z
 init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes INDEX /notes Used Task as Parent class of ToDo and Deadline
+notes [INDEX] /notes Used Task as Parent class of ToDo and Deadline
 view progress /course CS2103T /sem AY26/27-S1
 mark /id A1234567Z /task Milestone 1
 unmark /name John /task job1, job2

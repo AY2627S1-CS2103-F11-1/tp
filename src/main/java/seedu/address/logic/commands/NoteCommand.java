@@ -26,7 +26,7 @@ public class NoteCommand extends Command {
             + "Parameters: INDEX (must be a positive integer) "
             + "/notes [NOTES]\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "/notes Likes to swim.";
+            + "/notes Used Task as Parent class of ToDo and Deadline";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Notes: %2$s";
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Person: %1$s";
