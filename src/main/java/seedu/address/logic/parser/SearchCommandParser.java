@@ -15,14 +15,16 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 
 /** Parses input arguments and creates a {@code SearchCommand}. */
 public class SearchCommandParser implements Parser<SearchCommand> {
-    public static final String MESSAGE_MISSING_IDENTIFIER = "Missing required parameter: /name or /id";
+    public static final String MESSAGE_MISSING_IDENTIFIER = "Missing required parameter: "
+            + PREFIX_NAME + " or " + PREFIX_ID;
     public static final String MESSAGE_EMPTY_IDENTIFIER = "Search value cannot be empty.";
-    public static final String MESSAGE_BOTH_IDENTIFIERS = "Please search using either /name or /id, not both.";
+    public static final String MESSAGE_BOTH_IDENTIFIERS = "Please search using either "
+            + PREFIX_NAME + " or " + PREFIX_ID + ", not both.";
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
-    public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter. Parameters allowed: /name, /id";
-    public static final String MESSAGE_DUPLICATE_PARAMETER = "Parameter %s should only be specified once.";
+    public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter. Parameters allowed: " + PREFIX_NAME
+            + ", " + PREFIX_ID;
 
-    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)(/\\S+)");
 
     @Override
     public SearchCommand parse(String args) throws ParseException {
@@ -41,7 +43,7 @@ public class SearchCommandParser implements Parser<SearchCommand> {
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
-        rejectDuplicateParameters(argMultimap);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_ID);
         if (hasName && hasId) {
             throw new ParseException(MESSAGE_BOTH_IDENTIFIERS);
         }
@@ -66,18 +68,9 @@ public class SearchCommandParser implements Parser<SearchCommand> {
         Matcher matcher = PARAMETER_PATTERN.matcher(args);
         while (matcher.find()) {
             String parameter = matcher.group(2);
-            if (!parameter.equals("name") && !parameter.equals("id")) {
+            if (!parameter.equals(PREFIX_NAME.toString()) && !parameter.equals(PREFIX_ID.toString())) {
                 throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
             }
-        }
-    }
-
-    private void rejectDuplicateParameters(ArgumentMultimap argMultimap) throws ParseException {
-        if (argMultimap.getAllValues(PREFIX_NAME).size() > 1) {
-            throw new ParseException(String.format(MESSAGE_DUPLICATE_PARAMETER, PREFIX_NAME));
-        }
-        if (argMultimap.getAllValues(PREFIX_ID).size() > 1) {
-            throw new ParseException(String.format(MESSAGE_DUPLICATE_PARAMETER, PREFIX_ID));
         }
     }
 }
