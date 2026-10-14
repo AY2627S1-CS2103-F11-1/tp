@@ -10,6 +10,14 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 
 public class NoteCommandParser implements Parser<NoteCommand> {
+
+    /**
+     * Parses Note command.
+     * Accepted format: notes INDEX /notes NOTES
+     * @param args String containing index and notes.
+     * @return NoteCommand.
+     * @throws ParseException If
+     */
     public NoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,

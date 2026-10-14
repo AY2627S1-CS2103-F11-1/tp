@@ -45,6 +45,7 @@ public class NoteCommand extends Command {
         this.index = index;
         this.notes = notes;
     }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         List<Student> lastShownList = model.getFilteredStudentList();
