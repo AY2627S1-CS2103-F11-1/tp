@@ -72,7 +72,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         StringJoiner missingParameters = new StringJoiner(", ");
         StringJoiner emptyParameters = new StringJoiner(", ");
         for (Prefix prefix : new Prefix[] {
-                PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS }) {
+            PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL, PREFIX_CLASS }) {
             Optional<String> value = argMultimap.getValue(prefix);
 
             if (value.isEmpty()) {
@@ -104,11 +104,14 @@ public class AddCommandParser implements Parser<AddCommand> {
     /** Rejects parameters that are not supported by the add command. */
     private void rejectUnknownParameters(String args) throws ParseException {
         Matcher matcher = PARAMETER_PATTERN.matcher(args);
+
         while (matcher.find()) {
-            String parameter = matcher.group(2);
-            if (!parameter.startsWith(PREFIX_NAME.toString()) && !parameter.startsWith(PREFIX_ID.toString())
-                    && !parameter.startsWith(PREFIX_EMAIL.toString())
-                    && !parameter.startsWith(PREFIX_CLASS.toString())) {
+            String parameter = "/" + matcher.group(2);
+
+            if (!parameter.equals(PREFIX_NAME.toString())
+                    && !parameter.equals(PREFIX_ID.toString())
+                    && !parameter.equals(PREFIX_EMAIL.toString())
+                    && !parameter.equals(PREFIX_CLASS.toString())) {
                 throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
             }
         }
