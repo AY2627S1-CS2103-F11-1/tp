@@ -40,8 +40,7 @@ public class AddCommand extends Command {
      * Creates an AddCommand to add the specified {@code Student}
      */
     public AddCommand(Student student) {
-        requireNonNull(student);
-        this.student = student;
+        this.student = requireNonNull(student);
     }
 
     @Override
