@@ -190,6 +190,22 @@ Examples:
 * `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 * `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
 
+### Viewing a student's deliverable progress: `view`
+
+Shows every deliverable and its completion status for one student in a
+course-semester.
+
+Format: `view /id ID /course COURSE /sem SEMESTER` or
+`view /name NAME /course COURSE /sem SEMESTER`
+
+Examples:
+
+* `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
+* `view /name John Doe /course CS2103T /sem AY26/27-S1`
+
+Use `/id` when several students have the same name. The result lists each
+deliverable as `Done` or `Not Done` in the order it was initialised.
+
 ### Deleting a student: `delete`
 
 Deletes a student from TAssist.
@@ -261,6 +277,7 @@ Action | Format, Examples
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+**View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Help** | `help`
