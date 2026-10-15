@@ -9,6 +9,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.progress.exceptions.DuplicateStudentCourseProgressException;
+import seedu.address.model.progress.exceptions.StudentCourseProgressNotFoundException;
 import seedu.address.model.student.Id;
 
 /**
@@ -43,6 +44,20 @@ public class UniqueStudentCourseProgressList implements Iterable<StudentCoursePr
             throw new DuplicateStudentCourseProgressException();
         }
         internalList.setAll(progresses);
+    }
+
+    /** Replaces an existing progress record with an updated record for the same identity. */
+    public void set(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+        requireAllNonNull(target, updatedProgress);
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new StudentCourseProgressNotFoundException();
+        }
+        if (!target.isFor(updatedProgress.getStudentId(), updatedProgress.getCourseCode(),
+                updatedProgress.getSemester()) && contains(updatedProgress)) {
+            throw new DuplicateStudentCourseProgressException();
+        }
+        internalList.set(index, updatedProgress);
     }
 
     /** Removes every progress record that belongs to {@code studentId}. */

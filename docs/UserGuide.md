@@ -146,6 +146,34 @@ Examples:
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is case-insensitive.
 
+### Marking deliverables as complete: `mark`
+
+Marks one or more deliverables as complete for a student in a course-semester.
+
+Format: `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
+`mark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+
+Examples:
+
+* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+
+Use `/id` when several students have the same name. Every task must belong to
+the specified course-semester and must currently be Not Done.
+
+### Marking deliverables as incomplete: `unmark`
+
+Marks one or more completed deliverables as incomplete for a student in a
+course-semester.
+
+Format: `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
+`unmark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+
+Examples:
+
+* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+
 ### Deleting a student: `delete`
 
 Deletes a student from TAssist.
@@ -215,6 +243,8 @@ Action | Format, Examples
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@u.nus.edu`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
+**Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Help** | `help`
