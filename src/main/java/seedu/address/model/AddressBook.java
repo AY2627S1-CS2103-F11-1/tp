@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.course.Course;
 import seedu.address.model.course.UniqueCourseList;
+import seedu.address.model.progress.StudentCourseProgress;
+import seedu.address.model.progress.UniqueStudentCourseProgressList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.UniqueStudentList;
 
@@ -19,6 +21,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniqueStudentList students = new UniqueStudentList();
     private final UniqueCourseList courses = new UniqueCourseList();
+    private final UniqueStudentCourseProgressList studentCourseProgresses = new UniqueStudentCourseProgressList();
 
     public AddressBook() {
     }
@@ -39,6 +42,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setStudents(List<Student> students) {
         this.students.setStudents(students);
+        rebuildStudentCourseProgresses();
     }
 
 
@@ -48,6 +52,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setCourses(List<Course> courses) {
         this.courses.setCourses(courses);
+        rebuildStudentCourseProgresses();
     }
 
     /**
@@ -58,6 +63,9 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         setStudents(newData.getStudentList());
         setCourses(newData.getCourseList());
+        if (!newData.getStudentCourseProgressList().isEmpty()) {
+            setStudentCourseProgresses(newData.getStudentCourseProgressList());
+        }
     }
 
     //// student-level operations
@@ -77,6 +85,9 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addStudent(Student student) {
         students.add(student);
+        for (Course course : courses.asUnmodifiableObservableList()) {
+            studentCourseProgresses.add(new StudentCourseProgress(student.getId(), course));
+        }
     }
 
     /**
@@ -98,6 +109,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeStudent(Student key) {
         students.remove(key);
+        studentCourseProgresses.removeForStudent(key.getId());
     }
 
     /**
@@ -114,6 +126,16 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addCourse(Course course) {
         courses.add(course);
+        for (Student student : students.asUnmodifiableObservableList()) {
+            studentCourseProgresses.add(new StudentCourseProgress(student.getId(), course));
+        }
+    }
+
+    /**
+     * Replaces the progress records with the supplied unique records.
+     */
+    public void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses) {
+        this.studentCourseProgresses.setProgresses(studentCourseProgresses);
     }
 
     //// util methods
@@ -123,6 +145,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return new ToStringBuilder(this)
                 .add("students", students)
                 .add("courses", courses)
+                .add("studentCourseProgresses", studentCourseProgresses)
                 .toString();
     }
 
@@ -138,6 +161,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
+        return studentCourseProgresses.asUnmodifiableObservableList();
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -149,11 +177,21 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         return students.equals(otherAddressBook.students)
-                && courses.equals(otherAddressBook.courses);
+                && courses.equals(otherAddressBook.courses)
+                && studentCourseProgresses.equals(otherAddressBook.studentCourseProgresses);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(students, courses);
+        return java.util.Objects.hash(students, courses, studentCourseProgresses);
+    }
+
+    private void rebuildStudentCourseProgresses() {
+        studentCourseProgresses.setProgresses(List.of());
+        for (Student student : students.asUnmodifiableObservableList()) {
+            for (Course course : courses.asUnmodifiableObservableList()) {
+                studentCourseProgresses.add(new StudentCourseProgress(student.getId(), course));
+            }
+        }
     }
 }

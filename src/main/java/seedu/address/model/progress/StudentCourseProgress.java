@@ -51,6 +51,14 @@ public class StudentCourseProgress {
         this.deliverableStatuses = Collections.unmodifiableMap(new LinkedHashMap<>(deliverableStatuses));
     }
 
+    /**
+     * Restores a progress record from previously stored deliverable statuses.
+     */
+    public static StudentCourseProgress fromStatuses(Id studentId, CourseCode courseCode, Semester semester,
+                                                      Map<Deliverable, CompletionStatus> deliverableStatuses) {
+        return new StudentCourseProgress(studentId, courseCode, semester, deliverableStatuses);
+    }
+
     public Id getStudentId() {
         return studentId;
     }
