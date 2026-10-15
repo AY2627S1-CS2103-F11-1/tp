@@ -1,79 +1,52 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
-import java.util.List;
-
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 
-/**
- * Changes the remark of an existing person in the address book.
- */
+/** Adds or replaces the notes for an existing student. */
 public class NoteCommand extends Command {
 
     public static final String COMMAND_WORD = "notes";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Adds notes to the person identified "
-            + "by the index number used in the last person listing. "
+            + ": Adds or replaces notes for the student identified by their student ID. "
             + "Existing notes will be overwritten by the input.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_NOTES + " [COMMAND_WORD]\n"
-            + "Example: " + COMMAND_WORD + " 1 "
+            + "Parameters: " + PREFIX_ID + " ID " + PREFIX_NOTES + " NOTES\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z "
             + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline";
     public static final String INVALID_NOTES = "Notes cannot be blank";
 
-    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Student: %1$s";
-    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed notes from Student: %1$s";
+    public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";
 
-    private final Index index;
+    private final Id studentId;
     private final Notes notes;
 
-    /**
-     * @param index of the person in the filtered person list to edit the remark
-     * @param notes of the person to be updated to
-     */
-    public NoteCommand(Index index, Notes notes) {
-        requireAllNonNull(index, notes);
+    /** Creates a command to set a student's notes. */
+    public NoteCommand(Id studentId, Notes notes) {
+        requireAllNonNull(studentId, notes);
 
-        this.index = index;
+        this.studentId = studentId;
         this.notes = notes;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        List<Student> lastShownList = model.getFilteredStudentList();
-
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_DISPLAYED_INDEX);
-        }
-
-        Student studentToEdit = lastShownList.get(index.getZeroBased());
+        Student studentToEdit = StudentNotesCommandUtil.findStudentById(model, studentId);
         Student editedStudent = new Student(
                 studentToEdit.getName(), studentToEdit.getId(), studentToEdit.getEmail(),
                 studentToEdit.getTutorialClass(), notes);
 
         model.setStudent(studentToEdit, editedStudent);
-        model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
 
-        return new CommandResult(generateSuccessMessage(editedStudent));
-    }
-
-    /**
-     * Generates a command execution success message based on whether
-     * the notes is added to or removed from
-     * {@code personToEdit}.
-     */
-    private String generateSuccessMessage(Student personToEdit) {
-        String message = !notes.notes.isEmpty() ? MESSAGE_ADD_REMARK_SUCCESS : MESSAGE_DELETE_REMARK_SUCCESS;
-        return String.format(message, Messages.format(personToEdit));
+        return new CommandResult(String.format(MESSAGE_UPDATE_NOTES_SUCCESS,
+                editedStudent.getName(), editedStudent.getId()), false, false, editedStudent.getId());
     }
 
     @Override
@@ -82,13 +55,11 @@ public class NoteCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof NoteCommand)) {
+        if (!(other instanceof NoteCommand otherNoteCommand)) {
             return false;
         }
 
-        NoteCommand e = (NoteCommand) other;
-        return index.equals(e.index)
-                && notes.equals(e.notes);
+        return studentId.equals(otherNoteCommand.studentId)
+                && notes.equals(otherNoteCommand.notes);
     }
 }
