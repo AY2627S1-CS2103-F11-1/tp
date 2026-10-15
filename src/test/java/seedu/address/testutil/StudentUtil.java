@@ -1,14 +1,10 @@
 package seedu.address.testutil;
 
-
-
-
-
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_ID;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
@@ -38,12 +34,11 @@ public final class StudentUtil {
     /** Returns the command arguments represented by an edit descriptor. */
     public static String getEditStudentDescriptorDetails(EditStudentDescriptor descriptor) {
         StringBuilder builder = new StringBuilder();
-        descriptor.getName().ifPresent(name -> builder.append(PREFIX_NAME).append(name).append(" "));
-        descriptor.getId().ifPresent(id -> builder.append(PREFIX_ID).append(id).append(" "));
-        descriptor.getEmail().ifPresent(email -> builder.append(PREFIX_EMAIL).append(email).append(" "));
+        descriptor.getName().ifPresent(name -> builder.append(PREFIX_NAME).append(" ").append(name).append(" "));
+        descriptor.getId().ifPresent(id -> builder.append(PREFIX_NEW_ID).append(" ").append(id).append(" "));
+        descriptor.getEmail().ifPresent(email -> builder.append(PREFIX_EMAIL).append(" ").append(email).append(" "));
         descriptor.getTutorialClass()
-                .ifPresent(tutorialClass -> builder.append(PREFIX_CLASS).append(tutorialClass).append(" "));
-        descriptor.getNotes().ifPresent(notes -> builder.append(PREFIX_NOTES).append(notes).append(" "));
+                .ifPresent(tutorialClass -> builder.append(PREFIX_CLASS).append(" ").append(tutorialClass).append(" "));
         return builder.toString();
     }
 }

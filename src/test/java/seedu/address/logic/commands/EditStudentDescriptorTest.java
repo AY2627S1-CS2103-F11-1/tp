@@ -9,7 +9,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 
 import org.junit.jupiter.api.Test;
 
@@ -52,9 +51,6 @@ public class EditStudentDescriptorTest {
         editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withTutorialClass(VALID_CLASS_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
-        // different tags -> returns false
-        editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withNotes(VALID_NOTES_PARTICIPATIVE).build();
-        assertFalse(DESC_AMY.equals(editedAmy));
     }
 
     @Test
@@ -64,8 +60,7 @@ public class EditStudentDescriptorTest {
                 + editStudentDescriptor.getName().orElse(null) + ", id="
                 + editStudentDescriptor.getId().orElse(null) + ", email="
                 + editStudentDescriptor.getEmail().orElse(null) + ", tutorialClass="
-                + editStudentDescriptor.getTutorialClass().orElse(null) + ", notes="
-                + editStudentDescriptor.getNotes().orElse(null) + "}";
+                + editStudentDescriptor.getTutorialClass().orElse(null) + "}";
         assertEquals(expected, editStudentDescriptor.toString());
     }
 }
