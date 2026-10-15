@@ -26,13 +26,18 @@ list
 search /name John Doe
 search /id A1234567Z
 add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07
-edit /id A1234567Z /name John Tan /class T07
+edit /id A1234567Z /name John Tan /newid A1234567Y /email johntan@u.nus.edu /class T07
 delete /id A1245678Z
-init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes [INDEX] /notes Used Task as Parent class of ToDo and Deadline
-view progress /course CS2103T /sem AY26/27-S1
-mark /id A1234567Z /task Milestone 1
-unmark /name John /task job1, job2
+delete /name John Doe
+init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
+notes /id A1234567Z /notes Struggled with inheritance during consultation
+viewnotes /id A1234567Z
+deletenotes /id A1234567Z
+view progress /course CS2103 /sem AY26/27-S1
+mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
+mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
+view /id A1234567Z /course CS2103T /sem AY26/27-S1
+view /name John Doe /course CS2103T /sem AY26/27-S1
 ```
 
 ## Acknowledgements
