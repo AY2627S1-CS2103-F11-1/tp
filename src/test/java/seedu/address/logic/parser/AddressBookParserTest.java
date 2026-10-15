@@ -111,6 +111,9 @@ public class AddressBookParserTest {
     public void parseCommand_mark() throws Exception {
         assertTrue(parser.parseCommand("mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP")
                 instanceof MarkCommand);
+    }
+
+    @Test
     public void parseCommand_notes() throws Exception {
         assertEquals(new NoteCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")), parser.parseCommand(
                 NoteCommand.COMMAND_WORD + " /id A1234567Z /notes Discussed inheritance"));
