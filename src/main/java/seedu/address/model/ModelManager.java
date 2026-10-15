@@ -117,6 +117,11 @@ public class ModelManager implements Model {
         addressBook.setStudentCourseProgresses(studentCourseProgresses);
     }
 
+    @Override
+    public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+        addressBook.setStudentCourseProgress(target, updatedProgress);
+    }
+
     // =========== Filtered Student List Accessors
     // =============================================================
 

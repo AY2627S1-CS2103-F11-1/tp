@@ -138,6 +138,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.studentCourseProgresses.setProgresses(studentCourseProgresses);
     }
 
+    /** Replaces an existing student-course progress record. */
+    public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+        studentCourseProgresses.set(target, updatedProgress);
+    }
+
     //// util methods
 
     @Override
