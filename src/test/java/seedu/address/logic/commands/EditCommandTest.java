@@ -140,7 +140,8 @@ public class EditCommandTest {
             Model expectedModel, Student expectedStudent) {
         try {
             CommandResult result = command.execute(model);
-            assertEquals(new CommandResult(expectedMessage), result);
+            assertEquals(new CommandResult(expectedMessage, false, false,
+                    new Id("A1234567Y")), result);
             assertEquals(expectedModel.getAddressBook(), model.getAddressBook());
             assertTrue(model.getAddressBook().getStudentList().contains(expectedStudent));
         } catch (CommandException exception) {
