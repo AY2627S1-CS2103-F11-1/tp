@@ -35,7 +35,6 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Student;
-import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.StudentBuilder;
 
 public class AddCommandParserTest {
@@ -162,11 +161,11 @@ public class AddCommandParserTest {
 
         // invalid tutorialClass
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC,
-                TutorialClass.MESSAGE_CONSTRAINTS);
+                "Empty parameter value(s): /class");
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_NAME_DESC + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC,
-                Name.MESSAGE_CONSTRAINTS);
+                "Empty parameter value(s): /class");
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
@@ -199,7 +198,7 @@ public class AddCommandParserTest {
     public void parse_missingAndEmptyParameters_failure() {
         assertParseFailure(parser,
                 " /name /id A0123456X",
-                "Missing required parameter(s): /email, /class");
+                "Missing required parameter(s): /email, /class\nEmpty parameter value(s): /name");
     }
 
     @Test

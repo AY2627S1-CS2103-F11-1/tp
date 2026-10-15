@@ -77,7 +77,7 @@ public class AddCommandParser implements Parser<AddCommand> {
 
             if (value.isEmpty()) {
                 missingParameters.add(prefix.toString());
-            } else if (value.get().isBlank() && !prefix.equals(PREFIX_CLASS)) {
+            } else if (value.get().isBlank()) {
                 emptyParameters.add(prefix.toString());
             }
 
@@ -86,7 +86,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         StringJoiner errorMessages = new StringJoiner("\n");
 
         if (missingParameters.length() > 0) {
-            throw new ParseException(String.format(
+            errorMessages.add(String.format(
                     MESSAGE_MISSING_PARAMETERS, missingParameters));
         }
 
