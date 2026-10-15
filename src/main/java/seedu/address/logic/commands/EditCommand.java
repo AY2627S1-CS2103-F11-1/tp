@@ -109,7 +109,7 @@ public class EditCommand extends Command {
                     MESSAGE_UNCHANGED_FIELDS, unchangedFields);
         }
 
-        return new CommandResult(feedback, false, false, studentToEdit.getId());
+        return new CommandResult(feedback);
     }
 
     private static String formatChangedFields(Student original, Student edited) {
