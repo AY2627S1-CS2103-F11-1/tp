@@ -1,10 +1,12 @@
 package seedu.address.model;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.course.Course;
+import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 
 /**
@@ -74,8 +76,19 @@ public interface Model {
      */
     void addCourse(Course course);
 
+    /**
+     * Replaces all stored student-course progress records.
+     */
+    void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses);
+
+    /** Replaces an existing student-course progress record. */
+    void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress);
+
     /** Returns an unmodifiable view of the filtered student list */
     ObservableList<Student> getFilteredStudentList();
+
+    /** Returns an unmodifiable view of all student-course progress records. */
+    ObservableList<StudentCourseProgress> getStudentCourseProgressList();
 
     /**
      * Updates the filter of the filtered student list to filter by the given

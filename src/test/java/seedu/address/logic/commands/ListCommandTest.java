@@ -5,6 +5,7 @@ package seedu.address.logic.commands;
 
 
 
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showStudentAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -33,12 +34,22 @@ public class ListCommandTest {
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
-        assertCommandSuccess(new ListCommand(), model, ListCommand.MESSAGE_SUCCESS, expectedModel);
+        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS,
+                expectedModel.getFilteredStudentList().size());
+        assertCommandSuccess(new ListCommand(), model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_listIsFiltered_showsEverything() {
         showStudentAtIndex(model, INDEX_FIRST_PERSON);
-        assertCommandSuccess(new ListCommand(), model, ListCommand.MESSAGE_SUCCESS, expectedModel);
+        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS,
+                expectedModel.getFilteredStudentList().size());
+        assertCommandSuccess(new ListCommand(), model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_emptyAddressBook_throwsCommandException() {
+        Model emptyModel = new ModelManager();
+        assertCommandFailure(new ListCommand(), emptyModel, ListCommand.MESSAGE_NO_STUDENTS);
     }
 }

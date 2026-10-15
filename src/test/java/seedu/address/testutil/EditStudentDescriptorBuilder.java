@@ -35,7 +35,7 @@ public class EditStudentDescriptorBuilder {
         descriptor.setId(student.getId());
         descriptor.setEmail(student.getEmail());
         descriptor.setTutorialClass(student.getTutorialClass());
-        student.getNotes().ifPresent(descriptor::setNotes);
+        descriptor.setNotes(student.getNotes());
     }
 
     /**

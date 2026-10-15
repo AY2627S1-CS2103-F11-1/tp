@@ -17,11 +17,6 @@ import seedu.address.testutil.StudentBuilder;
 
 public class StudentTest {
 
-    @Test
-    public void notes_optionalValue_isPresent() {
-        Student student = new StudentBuilder().build();
-        assertTrue(student.getNotes().isPresent());
-    }
 
     @Test
     public void isSameStudent() {
