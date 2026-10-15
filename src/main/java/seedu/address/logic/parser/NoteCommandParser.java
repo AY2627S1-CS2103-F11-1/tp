@@ -2,7 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteCommand;
@@ -28,7 +28,9 @@ public class NoteCommandParser implements Parser<NoteCommand> {
 
         Index index;
         try {
+            argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NOTES);
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
+
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     NoteCommand.MESSAGE_USAGE), pe);
