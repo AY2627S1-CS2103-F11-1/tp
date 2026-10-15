@@ -99,21 +99,37 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
-### Editing a person: `edit`
+### Editing a student: `edit`
 
-Edits an existing person in the address book.
+Edits the details of an existing student identified by their current student ID.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, all of the person's existing tags are removed; adding tags is not cumulative.
-* To remove all of a person's tags, enter `t/` without a tag after it.
+* `/id CURRENT_ID` is **required** and identifies the student whose details are to be edited.
+
+* At least one of the optional fields (`/name`, `/newid`, `/email`, `/class`) must be provided.
+
+* Only the specified fields will be updated. All unspecified fields, including existing project notes, will remain unchanged.
+
+* `/newid` allows the student's ID to be updated, while `/id` identifies the existing student.
+
+* The updated student ID and email address must not conflict with those of another student.
+
+* If all provided values are identical to the student's existing details, no changes will be made and the user will be notified.
+
+* If some provided values are unchanged, the remaining valid changes will still be applied. The application will indicate which fields were changed and which were already up to date.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@u.nus.edu` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+* `edit /id A1234567Z /email johndoe@u.nus.edu` Updates the email address of the student with ID `A1234567Z` to `johndoe@u.nus.edu`.
+
+* `edit /id A1234567Z /name John Tan /class T07`
+Updates the student's name to `John Tan` and tutorial class to `T07`.
+
+* `edit /id A1234567Z /newid A7654321B`
+Changes the student's ID from `A1234567Z` to `A7654321B`.
+
+* `edit /id A1234567Z /newid A7654321B /email johntan@u.nus.edu`
+Updates both the student's ID and email address.
 
 ### Locating persons by name: `find`
 
