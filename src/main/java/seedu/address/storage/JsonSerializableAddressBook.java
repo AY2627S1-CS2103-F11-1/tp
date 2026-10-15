@@ -12,6 +12,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.course.Course;
+import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 
 /**
@@ -22,21 +23,29 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_STUDENT = "Students list contains duplicate student(s).";
     public static final String MESSAGE_DUPLICATE_COURSE = "Courses list contains duplicate course-semester pair(s).";
+    public static final String MESSAGE_DUPLICATE_PROGRESS =
+            "Student course progress list contains duplicate record(s).";
 
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
+    private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
      */
     @JsonCreator
     public JsonSerializableAddressBook(@JsonProperty("students") List<JsonAdaptedStudent> students,
-            @JsonProperty("courses") List<JsonAdaptedCourse> courses) {
+            @JsonProperty("courses") List<JsonAdaptedCourse> courses,
+            @JsonProperty("studentCourseProgresses")
+            List<JsonAdaptedStudentCourseProgress> studentCourseProgresses) {
         if (students != null) {
             this.students.addAll(students);
         }
         if (courses != null) {
             this.courses.addAll(courses);
+        }
+        if (studentCourseProgresses != null) {
+            this.studentCourseProgresses.addAll(studentCourseProgresses);
         }
     }
 
@@ -49,6 +58,8 @@ class JsonSerializableAddressBook {
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
         students.addAll(source.getStudentList().stream().map(JsonAdaptedStudent::new).collect(Collectors.toList()));
         courses.addAll(source.getCourseList().stream().map(JsonAdaptedCourse::new).collect(Collectors.toList()));
+        studentCourseProgresses.addAll(source.getStudentCourseProgressList().stream()
+                .map(JsonAdaptedStudentCourseProgress::new).collect(Collectors.toList()));
     }
 
     /**
@@ -72,12 +83,17 @@ class JsonSerializableAddressBook {
             }
             addressBook.addCourse(course);
         }
-        for (JsonAdaptedCourse jsonAdaptedCourse : courses) {
-            Course course = jsonAdaptedCourse.toModelType();
-            if (addressBook.hasCourse(course)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_COURSE);
+        List<StudentCourseProgress> modelProgresses = new ArrayList<>();
+        for (JsonAdaptedStudentCourseProgress jsonAdaptedProgress : studentCourseProgresses) {
+            StudentCourseProgress progress = jsonAdaptedProgress.toModelType();
+            if (modelProgresses.stream().anyMatch(existing -> existing.isFor(
+                    progress.getStudentId(), progress.getCourseCode(), progress.getSemester()))) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_PROGRESS);
             }
-            addressBook.addCourse(course);
+            modelProgresses.add(progress);
+        }
+        if (!modelProgresses.isEmpty()) {
+            addressBook.setStudentCourseProgresses(modelProgresses);
         }
         return addressBook;
     }

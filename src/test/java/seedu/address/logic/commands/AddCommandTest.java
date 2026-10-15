@@ -23,6 +23,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.course.Course;
+import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 import seedu.address.testutil.StudentBuilder;
@@ -151,7 +152,17 @@ public class AddCommandTest {
         }
 
         @Override
+        public void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ObservableList<Student> getFilteredStudentList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
             throw new AssertionError("This method should not be called.");
         }
 

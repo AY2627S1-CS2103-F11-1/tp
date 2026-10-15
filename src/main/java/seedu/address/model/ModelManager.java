@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.course.Course;
+import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
@@ -110,6 +112,11 @@ public class ModelManager implements Model {
         addressBook.addCourse(course);
     }
 
+    @Override
+    public void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses) {
+        addressBook.setStudentCourseProgresses(studentCourseProgresses);
+    }
+
     // =========== Filtered Student List Accessors
     // =============================================================
 
@@ -121,6 +128,11 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<Student> getFilteredStudentList() {
         return filteredStudents;
+    }
+
+    @Override
+    public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
+        return addressBook.getStudentCourseProgressList();
     }
 
     @Override
