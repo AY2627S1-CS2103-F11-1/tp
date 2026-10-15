@@ -22,7 +22,7 @@ With many students, potentially from different tutorial classes, TAs may not be 
 ## Example Commands
 
 ```text
-view students
+list
 search /name John Doe
 search /id A1234567Z
 add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07
