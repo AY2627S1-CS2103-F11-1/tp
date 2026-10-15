@@ -1,5 +1,11 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+
 import java.util.List;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -15,9 +21,11 @@ public class MarkCommand extends StudentProgressCommand {
     public static final String COMMAND_WORD = "mark";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Marks student deliverables as complete.\n"
-            + "Parameters: /id ID or /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...\n"
+            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME " + PREFIX_COURSE + " COURSE "
+            + PREFIX_SEMESTER + " SEMESTER " + PREFIX_TASK + " TASK[, TASK]...\n"
             + "Example: " + COMMAND_WORD
-            + " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP";
+            + " " + PREFIX_ID + " A1234567Z " + PREFIX_COURSE + " CS2103T "
+            + PREFIX_SEMESTER + " AY26/27-S1 " + PREFIX_TASK + " MVP";
     public static final String MESSAGE_SUCCESS = "Marked %s as completed for %s.";
     public static final String MESSAGE_ALREADY_COMPLETE = "%s is already marked as complete.";
 

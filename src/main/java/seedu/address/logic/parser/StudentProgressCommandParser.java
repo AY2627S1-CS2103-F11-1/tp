@@ -22,16 +22,16 @@ import seedu.address.model.student.Id;
  */
 abstract class StudentProgressCommandParser<T extends StudentProgressCommand> implements Parser<T> {
 
-    static final String MESSAGE_MISSING_STUDENT = "Missing required parameter: /id or /name";
-    static final String MESSAGE_MISSING_COURSE = "Missing required parameter: /course";
-    static final String MESSAGE_MISSING_SEMESTER = "Missing required parameter: /sem";
-    static final String MESSAGE_MISSING_TASK = "Missing required parameter: /task";
+    static final String MESSAGE_MISSING_STUDENT = "Missing required parameter: " + PREFIX_ID + " or " + PREFIX_NAME;
+    static final String MESSAGE_MISSING_COURSE = "Missing required parameter: " + PREFIX_COURSE;
+    static final String MESSAGE_MISSING_SEMESTER = "Missing required parameter: " + PREFIX_SEMESTER;
+    static final String MESSAGE_MISSING_TASK = "Missing required parameter: " + PREFIX_TASK;
     static final String MESSAGE_EMPTY_PARAMETER = "Parameters cannot be empty.";
     static final String MESSAGE_BOTH_IDENTIFIERS = "Please specify either /id or /name, not both.";
     static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
     static final String MESSAGE_UNKNOWN_PARAMETER =
-            "Unknown parameter. Parameters allowed: /id, /name, /course, /sem, /task";
-    static final String MESSAGE_DUPLICATE_PARAMETER = "Parameter %s should only be specified once.";
+            "Unknown parameter. Parameters allowed: " + PREFIX_ID + ", " + PREFIX_NAME + ", " + PREFIX_COURSE
+                    + ", " + PREFIX_SEMESTER + ", " + PREFIX_TASK;
 
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
@@ -59,7 +59,7 @@ abstract class StudentProgressCommandParser<T extends StudentProgressCommand> im
         if (!arguments.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
-        rejectDuplicateParameters(arguments);
+        arguments.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
         if (hasId && hasName) {
             throw new ParseException(MESSAGE_BOTH_IDENTIFIERS);
         }
@@ -97,14 +97,6 @@ abstract class StudentProgressCommandParser<T extends StudentProgressCommand> im
             if (!parameter.equals("id") && !parameter.equals("name") && !parameter.equals("course")
                     && !parameter.equals("sem") && !parameter.equals("task")) {
                 throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
-            }
-        }
-    }
-
-    private void rejectDuplicateParameters(ArgumentMultimap arguments) throws ParseException {
-        for (Prefix prefix : List.of(PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK)) {
-            if (arguments.getAllValues(prefix).size() > 1) {
-                throw new ParseException(String.format(MESSAGE_DUPLICATE_PARAMETER, prefix));
             }
         }
     }
