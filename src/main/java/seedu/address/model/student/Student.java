@@ -3,9 +3,11 @@ package seedu.address.model.student;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
+
+
+
 
 /**
  * Represents a student in TAssist.
@@ -20,7 +22,7 @@ public class Student {
     private final Id id;
     private final Email email;
     private final TutorialClass tutorialClass;
-    private final Optional<Notes> notes;
+    private final Notes notes;
 
     /** Constructs a student without notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass) {
@@ -30,7 +32,7 @@ public class Student {
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = Optional.empty();
+        this.notes = new Notes();
     }
 
     /** Constructs a student with notes. */
@@ -41,7 +43,7 @@ public class Student {
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = Optional.of(notes);
+        this.notes = notes;
     }
 
     public Name getName() {
@@ -60,7 +62,7 @@ public class Student {
         return tutorialClass;
     }
 
-    public Optional<Notes> getNotes() {
+    public Notes getNotes() {
         return notes;
     }
 

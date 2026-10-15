@@ -3,12 +3,14 @@ package seedu.address.model.student;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-/** Represents optional notes recorded about a student. */
+/** Represents notes recorded about a student. */
 public class Notes {
 
     public static final int MAX_LENGTH = 500;
 
-    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty or exceed 500 characters.";
+    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
+            + " or exceed 500 characters.";
+    public static final String DEFAULT_STARTING_NOTE = "";
 
     public final String notes;
 
@@ -20,8 +22,24 @@ public class Notes {
 
     }
 
+    public Notes() {
+        this.notes = DEFAULT_STARTING_NOTE;
+    }
+
+    /**
+     * Checks if Notes is valid.
+     * Returns false if only contains whitespaces or exceeds 500 characters.
+     * @param test
+     */
     public static boolean isValidNotes(String test) {
-        return !test.isBlank() && test.length() <= MAX_LENGTH;
+        return (!test.isBlank()) && test.length() <= MAX_LENGTH;
+    }
+
+    /**
+     * Checks if Notes is empty.
+     */
+    public boolean isEmpty() {
+        return notes.isEmpty();
     }
 
     @Override
