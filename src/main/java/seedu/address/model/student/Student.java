@@ -20,7 +20,7 @@ public class Student {
     private final Id id;
     private final Email email;
     private final TutorialClass tutorialClass;
-    private final Optional<Notes> notes;
+    private final Notes notes;
 
     /** Constructs a student without notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass) {
@@ -30,22 +30,13 @@ public class Student {
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = Optional.empty();
+        this.notes = new Notes();
     }
 
     /** Constructs a student with notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass, Notes notes) {
         requireAllNonNull(name, id, email, tutorialClass, notes);
 
-        this.name = name;
-        this.id = id;
-        this.email = email;
-        this.tutorialClass = tutorialClass;
-        this.notes = Optional.of(notes);
-    }
-
-    private Student(Name name, Id id, Email email, TutorialClass tutorialClass, Optional<Notes> notes) {
-        requireAllNonNull(name, id, email, tutorialClass, notes);
         this.name = name;
         this.id = id;
         this.email = email;
@@ -76,7 +67,7 @@ public class Student {
         return tutorialClass;
     }
 
-    public Optional<Notes> getNotes() {
+    public Notes getNotes() {
         return notes;
     }
 

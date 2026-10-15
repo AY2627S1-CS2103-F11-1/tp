@@ -39,7 +39,7 @@ class JsonAdaptedStudent {
         id = source.getId().toString();
         email = source.getEmail().toString();
         tutorialClass = source.getTutorialClass().toString();
-        notes = source.getNotes().map(Notes::toString).orElse(null);
+        notes = source.getNotes().toString();
     }
 
     /** Converts this Jackson-friendly representation into a {@link Student}. */
