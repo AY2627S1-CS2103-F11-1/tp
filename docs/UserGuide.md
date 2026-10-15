@@ -93,9 +93,9 @@ Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIV
 
 Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
 
-### Listing all persons: `list`
+### Listing all students: `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all students in the address book.
 
 Format: `list`
 
