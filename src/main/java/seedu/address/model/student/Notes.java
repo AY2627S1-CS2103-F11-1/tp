@@ -8,8 +8,9 @@ public class Notes {
 
     public static final int MAX_LENGTH = 500;
 
-    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be only whitespaces"
-            + " and exceed 500 characters.";
+    public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
+            + " or exceed 500 characters.";
+    public static final String DEFAULT_STARTING_NOTE = "";
 
     public final String notes;
 
@@ -22,16 +23,16 @@ public class Notes {
     }
 
     public Notes() {
-        this.notes = "";
+        this.notes = DEFAULT_STARTING_NOTE;
     }
 
     /**
      * Checks if Notes is valid.
-     * Accepts empty String as notes. Returns false if only contains whitespaces or exceeds 500 characters.
+     * Returns false if only contains whitespaces or exceeds 500 characters.
      * @param test
      */
     public static boolean isValidNotes(String test) {
-        return (test.isEmpty() || !test.isBlank()) && test.length() <= MAX_LENGTH;
+        return (!test.isBlank()) && test.length() <= MAX_LENGTH;
     }
 
     /**

@@ -28,8 +28,8 @@ public class NoteCommand extends Command {
             + PREFIX_NOTES + " [COMMAND_WORD]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline";
+    public static final String INVALID_NOTES = "Notes cannot be blank";
 
-    public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Notes: %2$s";
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added notes to Student: %1$s";
     public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed notes from Student: %1$s";
 
