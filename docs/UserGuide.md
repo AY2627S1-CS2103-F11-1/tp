@@ -225,10 +225,10 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@u.nus.edu a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add** | `add /name NAME /id ID /email EMAIL /class CLASS​` 
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@u.nus.edu`
+**Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **List** | `list`
