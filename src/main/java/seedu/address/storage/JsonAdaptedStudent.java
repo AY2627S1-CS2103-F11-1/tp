@@ -52,7 +52,7 @@ class JsonAdaptedStudent {
             Id modelId = new Id(id);
             Email modelEmail = new Email(email);
             TutorialClass modelClass = new TutorialClass(tutorialClass);
-            return notes == null
+            return notes == null || notes.isEmpty()
                     ? new Student(modelName, modelId, modelEmail, modelClass)
                     : new Student(modelName, modelId, modelEmail, modelClass, new Notes(notes));
         } catch (IllegalArgumentException exception) {

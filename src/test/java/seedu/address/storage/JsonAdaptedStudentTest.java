@@ -8,6 +8,7 @@ package seedu.address.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
+import static seedu.address.testutil.TypicalStudents.BENSON;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,12 @@ public class JsonAdaptedStudentTest {
     public void toModelType_validStudent_returnsStudent() throws Exception {
         JsonAdaptedStudent adaptedStudent = new JsonAdaptedStudent(ALICE);
         assertEquals(ALICE, adaptedStudent.toModelType());
+    }
+
+    @Test
+    public void toModelType_studentWithoutNotes_returnsStudentWithoutNotes() throws Exception {
+        JsonAdaptedStudent adaptedStudent = new JsonAdaptedStudent(BENSON);
+        assertEquals(BENSON, adaptedStudent.toModelType());
     }
 
     @Test
