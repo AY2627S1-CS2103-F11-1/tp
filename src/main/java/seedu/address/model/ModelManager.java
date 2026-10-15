@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.course.Course;
 import seedu.address.model.progress.StudentCourseProgress;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
 /**
@@ -142,6 +144,22 @@ public class ModelManager implements Model {
     public void updateFilteredStudentList(Predicate<Student> predicate) {
         requireNonNull(predicate);
         filteredStudents.setPredicate(predicate);
+    }
+
+    @Override
+    public Optional<Student> getStudentById(Id id) {
+        requireNonNull(id);
+        return addressBook.getStudentList().stream()
+                .filter(student -> student.getId().equals(id))
+                .findFirst();
+    }
+
+    @Override
+    public boolean hasDuplicateStudent(Student otherStudent, Student originalStudent) {
+        requireAllNonNull(otherStudent, originalStudent);
+        return addressBook.getStudentList().stream()
+                .filter(student -> !student.equals(originalStudent))
+                .anyMatch(student -> student.isSameStudent(otherStudent));
     }
 
     @Override

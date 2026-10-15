@@ -1,0 +1,52 @@
+package seedu.address.logic.parser;
+
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.commands.NoteCommand;
+import seedu.address.model.student.Id;
+import seedu.address.model.student.Notes;
+
+/** Tests for {@code NoteCommandParser}. */
+public class NoteCommandParserTest {
+
+    private final NoteCommandParser parser = new NoteCommandParser();
+
+    @Test
+    public void parse_allFieldsPresent_success() {
+        assertParseSuccess(parser, " /id A1234567Z /notes Discussed inheritance",
+                new NoteCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")));
+    }
+
+    @Test
+    public void parse_missingRequiredField_failure() {
+        assertParseFailure(parser, " /id A1234567Z",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " /notes Discussed inheritance",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_blankNotes_failure() {
+        assertParseFailure(parser, " /id A1234567Z /notes ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        NoteCommand.INVALID_NOTES + '\n' + NoteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_noteExceedingMaximumLength_failure() {
+        String notesOverMaximumLength = "a".repeat(Notes.MAX_LENGTH + 1);
+
+        assertParseFailure(parser, " /id A1234567Z /notes " + notesOverMaximumLength,
+                Notes.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_duplicatePrefix_failure() {
+        assertParseFailure(parser, " /id A1234567Z /id A7654321Z /notes Discussed inheritance",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+    }
+}

@@ -39,7 +39,7 @@ class JsonAdaptedStudent {
         id = source.getId().toString();
         email = source.getEmail().toString();
         tutorialClass = source.getTutorialClass().toString();
-        notes = source.getNotes().toString();
+        notes = source.getNotes().isEmpty() ? null : source.getNotes().toString();
     }
 
     /** Converts this Jackson-friendly representation into a {@link Student}. */
@@ -52,7 +52,7 @@ class JsonAdaptedStudent {
             Id modelId = new Id(id);
             Email modelEmail = new Email(email);
             TutorialClass modelClass = new TutorialClass(tutorialClass);
-            return notes == null
+            return notes == null || notes.isEmpty()
                     ? new Student(modelName, modelId, modelEmail, modelClass)
                     : new Student(modelName, modelId, modelEmail, modelClass, new Notes(notes));
         } catch (IllegalArgumentException exception) {

@@ -5,100 +5,177 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_ID;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing student in the address book.
  */
 public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed student list. "
-            + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_NAME + "NAME] "
-            + "[" + PREFIX_ID + "ID] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_CLASS + "CLASS] "
-            + "[" + PREFIX_NOTES + "NOTES]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EMAIL + "johndoe@u.nus.edu";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Edits the details of a student identified by their current student ID.\n"
+            + "At least one field must be provided for updating.\n"
+            + "Parameters: "
+            + PREFIX_ID + "ID "
+            + "[" + PREFIX_NAME + "NEW_NAME] "
+            + "[" + PREFIX_NEW_ID + "NEW_ID] "
+            + "[" + PREFIX_EMAIL + "NEW_EMAIL] "
+            + "[" + PREFIX_CLASS + "NEW_CLASS]\n"
+            + "Example: " + COMMAND_WORD
+            + " " + PREFIX_ID + " A1234567Z"
+            + " " + PREFIX_NAME + " John Tan"
+            + " " + PREFIX_CLASS + " T07";
 
-    public static final String MESSAGE_EDIT_STUDENT_SUCCESS = "Edited student: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_EDIT_STUDENT_SUCCESS = "Student with id %s updated successfully."
+            + " \nChanged fields: %s";
+    public static final String MESSAGE_NOT_EDITED = String.format(
+            "At least one field to edit must be provided.\nAllowed fields: %s, %s, %s, %s",
+            PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL, PREFIX_CLASS);
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
+    public static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
+    public static final String MESSAGE_STUDENT_NOT_FOUND = "Student with ID %s was not found.";
+    public static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
+            + " to the existing student details.";
 
-    private final Index index;
-    private final EditStudentDescriptor editStudentDescriptor;
+    private final Id studentId;
+    private final EditStudentDescriptor descriptor;
 
     /**
-     * @param index                 of the person in the filtered person list to
-     *                              edit
-     * @param editStudentDescriptor details to edit the person with
+     * @param studentId  of the person in the filtered person list to
+     *                   edit
+     * @param descriptor details to edit the person with
      */
-    public EditCommand(Index index, EditStudentDescriptor editStudentDescriptor) {
-        requireNonNull(index);
-        requireNonNull(editStudentDescriptor);
+    public EditCommand(Id studentId, EditStudentDescriptor descriptor) {
+        requireNonNull(studentId);
+        requireNonNull(descriptor);
 
-        this.index = index;
-        this.editStudentDescriptor = new EditStudentDescriptor(editStudentDescriptor);
+        this.studentId = studentId;
+        this.descriptor = new EditStudentDescriptor(descriptor);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Student> lastShownList = model.getFilteredStudentList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_DISPLAYED_INDEX);
+        Student studentToEdit = model.getStudentById(studentId)
+                .orElseThrow(() -> new CommandException(
+                        String.format(MESSAGE_STUDENT_NOT_FOUND, studentId)));
+
+        Student editedStudent = createEditedStudent(studentToEdit, descriptor);
+
+        String changedFields = formatChangedFields(studentToEdit, editedStudent);
+        String unchangedFields = formatUnchangedFields(studentToEdit, descriptor);
+
+        if (changedFields.isEmpty()) {
+            throw new CommandException(MESSAGE_NO_CHANGES);
         }
 
-        Student personToEdit = lastShownList.get(index.getZeroBased());
-        Student editedPerson = createEditedStudent(personToEdit, editStudentDescriptor);
-
-        if (!personToEdit.isSameStudent(editedPerson) && model.hasStudent(editedPerson)) {
+        if (model.hasDuplicateStudent(editedStudent, studentToEdit)) {
             throw new CommandException(MESSAGE_DUPLICATE_STUDENT);
         }
 
-        model.setStudent(personToEdit, editedPerson);
+        model.setStudent(studentToEdit, editedStudent);
         model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
-        return new CommandResult(String.format(MESSAGE_EDIT_STUDENT_SUCCESS, Messages.format(editedPerson)));
+
+        return createSuccessResult(studentToEdit, changedFields, unchangedFields);
+    }
+
+    private static CommandResult createSuccessResult(
+            Student studentToEdit, String changedFields, String unchangedFields) {
+
+        String feedback = String.format(
+                MESSAGE_EDIT_STUDENT_SUCCESS,
+                studentToEdit.getId(),
+                changedFields);
+
+        if (!unchangedFields.isEmpty()) {
+            feedback += "\n" + String.format(
+                    MESSAGE_UNCHANGED_FIELDS, unchangedFields);
+        }
+
+        return new CommandResult(feedback);
+    }
+
+    private static String formatChangedFields(Student original, Student edited) {
+        StringJoiner changes = new StringJoiner("\n");
+
+        if (!original.getName().equals(edited.getName())) {
+            changes.add("Name: " + edited.getName());
+        }
+
+        if (!original.getId().equals(edited.getId())) {
+            changes.add("Student ID: " + edited.getId());
+        }
+
+        if (!original.getEmail().equals(edited.getEmail())) {
+            changes.add("Email: " + edited.getEmail());
+        }
+
+        if (!original.getTutorialClass().equals(edited.getTutorialClass())) {
+            changes.add("Tutorial class: " + edited.getTutorialClass());
+        }
+
+        return changes.toString();
+    }
+
+    private static String formatUnchangedFields(
+            Student originalStudent, EditStudentDescriptor descriptor) {
+
+        StringJoiner unchangedFields = new StringJoiner(", ");
+
+        descriptor.getName().ifPresent(name -> {
+            if (originalStudent.getName().equals(name)) {
+                unchangedFields.add("Name");
+            }
+        });
+        descriptor.getId().ifPresent(id -> {
+            if (originalStudent.getId().equals(id)) {
+                unchangedFields.add("Student ID");
+            }
+        });
+        descriptor.getEmail().ifPresent(email -> {
+            if (originalStudent.getEmail().equals(email)) {
+                unchangedFields.add("Email");
+            }
+        });
+        descriptor.getTutorialClass().ifPresent(tutorialClass -> {
+            if (originalStudent.getTutorialClass().equals(tutorialClass)) {
+                unchangedFields.add("Tutorial class");
+            }
+        });
+
+        return unchangedFields.toString();
+
     }
 
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editStudentDescriptor}.
+     * edited with {@code descriptor}.
      */
-    private static Student createEditedStudent(Student studentToEdit, EditStudentDescriptor editStudentDescriptor) {
-        assert studentToEdit != null;
+    private static Student createEditedStudent(Student original, EditStudentDescriptor descriptor) {
+        assert original != null;
 
-        Name updatedName = editStudentDescriptor.getName().orElse(studentToEdit.getName());
-        Id updatedId = editStudentDescriptor.getId().orElse(studentToEdit.getId());
-        Email updatedEmail = editStudentDescriptor.getEmail().orElse(studentToEdit.getEmail());
-        TutorialClass updatedTutorialClass = editStudentDescriptor.getTutorialClass()
-                .orElse(studentToEdit.getTutorialClass());
-
-        Notes updatedNotes = editStudentDescriptor.getNotes().orElse(studentToEdit.getNotes());
-        return new Student(updatedName, updatedId, updatedEmail, updatedTutorialClass, updatedNotes);
+        return original.copyWith(
+                descriptor.getName().orElse(original.getName()),
+                descriptor.getId().orElse(original.getId()),
+                descriptor.getEmail().orElse(original.getEmail()),
+                descriptor.getTutorialClass().orElse(original.getTutorialClass()));
     }
 
     @Override
@@ -112,15 +189,15 @@ public class EditCommand extends Command {
             return false;
         }
 
-        return index.equals(otherEditCommand.index)
-                && editStudentDescriptor.equals(otherEditCommand.editStudentDescriptor);
+        return studentId.equals(otherEditCommand.studentId)
+                && descriptor.equals(otherEditCommand.descriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
-                .add("editStudentDescriptor", editStudentDescriptor)
+                .add("studentId", studentId)
+                .add("descriptor", descriptor)
                 .toString();
     }
 
@@ -134,8 +211,6 @@ public class EditCommand extends Command {
         private Id id;
         private Email email;
         private TutorialClass tutorialClass;
-        private Notes notes;
-        private boolean notesEdited;
 
         public EditStudentDescriptor() {
         }
@@ -149,15 +224,13 @@ public class EditCommand extends Command {
             setId(toCopy.id);
             setEmail(toCopy.email);
             setTutorialClass(toCopy.tutorialClass);
-            setNotes(toCopy.notes);
-            notesEdited = toCopy.notesEdited;
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, id, email, tutorialClass, notes) || notesEdited;
+            return CollectionUtil.isAnyNonNull(name, id, email, tutorialClass);
         }
 
         public void setName(Name name) {
@@ -192,20 +265,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(tutorialClass);
         }
 
-        public void setNotes(Notes notes) {
-            this.notes = notes;
-            this.notesEdited = true;
-        }
-
-        public Optional<Notes> getNotes() {
-            return Optional.ofNullable(notes);
-        }
-
-        /** Returns whether the notes field was explicitly edited. */
-        public boolean isNotesEdited() {
-            return notesEdited;
-        }
-
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -220,9 +279,7 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditStudentDescriptor.name)
                     && Objects.equals(id, otherEditStudentDescriptor.id)
                     && Objects.equals(email, otherEditStudentDescriptor.email)
-                    && Objects.equals(tutorialClass, otherEditStudentDescriptor.tutorialClass)
-                    && Objects.equals(notes, otherEditStudentDescriptor.notes)
-                    && notesEdited == otherEditStudentDescriptor.notesEdited;
+                    && Objects.equals(tutorialClass, otherEditStudentDescriptor.tutorialClass);
         }
 
         @Override
@@ -232,7 +289,6 @@ public class EditCommand extends Command {
                     .add("id", id)
                     .add("email", email)
                     .add("tutorialClass", tutorialClass)
-                    .add("notes", notes)
                     .toString();
         }
     }

@@ -6,9 +6,6 @@ import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
 
-
-
-
 /**
  * Represents a student in TAssist.
  * Guarantees: details are present and not null, field values are validated,
@@ -44,6 +41,13 @@ public class Student {
         this.email = email;
         this.tutorialClass = tutorialClass;
         this.notes = notes;
+    }
+
+    /**
+     * Returns a copy with the given core fields; notes are carried over unchanged.
+     */
+    public Student copyWith(Name name, Id id, Email email, TutorialClass tutorialClass) {
+        return new Student(name, id, email, tutorialClass, notes);
     }
 
     public Name getName() {

@@ -1,12 +1,14 @@
 package seedu.address.model;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.course.Course;
 import seedu.address.model.progress.StudentCourseProgress;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
 /**
@@ -97,4 +99,13 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredStudentList(Predicate<Student> predicate);
+
+    /** Returns the student with the given id, if present. */
+    Optional<Student> getStudentById(Id id);
+
+    /**
+     * Returns true if {@code candidate} clashes with any student other than
+     * {@code original}.
+     */
+    boolean hasDuplicateStudent(Student otherStudent, Student currentStudent);
 }
