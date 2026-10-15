@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +26,13 @@ public class ViewProgressCommand extends Command {
     public static final String COMMAND_WORD = "view";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Displays a student's deliverable progress for a "
             + "course-semester.\n"
-            + "Parameters: /id ID or /name NAME /course COURSE /sem SEMESTER\n"
+            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME " + PREFIX_COURSE + " COURSE "
+            + PREFIX_SEMESTER + " SEMESTER\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1\n"
-            + "  " + COMMAND_WORD + " /name John Doe /course CS2103T /sem AY26/27-S1";
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z " + PREFIX_COURSE + " CS2103T "
+            + PREFIX_SEMESTER + " AY26/27-S1\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe " + PREFIX_COURSE + " CS2103T "
+            + PREFIX_SEMESTER + " AY26/27-S1";
 
     private final Optional<Id> studentId;
     private final Optional<String> studentName;

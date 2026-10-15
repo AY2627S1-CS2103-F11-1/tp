@@ -5,7 +5,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,15 +16,16 @@ import seedu.address.model.course.Semester;
 /** Parses arguments for {@code ViewProgressCommand}. */
 public class ViewProgressCommandParser implements Parser<ViewProgressCommand> {
 
-    public static final String MESSAGE_MISSING_STUDENT = "Missing required parameter: /id or /name";
-    public static final String MESSAGE_MISSING_COURSE = "Missing required parameter: /course";
-    public static final String MESSAGE_MISSING_SEMESTER = "Missing required parameter: /sem";
+    public static final String MESSAGE_MISSING_STUDENT = "Missing required parameter: " + PREFIX_ID + " or "
+            + PREFIX_NAME;
+    public static final String MESSAGE_MISSING_COURSE = "Missing required parameter: " + PREFIX_COURSE;
+    public static final String MESSAGE_MISSING_SEMESTER = "Missing required parameter: " + PREFIX_SEMESTER;
     public static final String MESSAGE_EMPTY_PARAMETER = "Parameters cannot be empty.";
     public static final String MESSAGE_BOTH_IDENTIFIERS = "Please specify either /id or /name, not both.";
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
     public static final String MESSAGE_UNKNOWN_PARAMETER =
-            "Unknown parameter. Parameters allowed: /id, /name, /course, /sem";
-    public static final String MESSAGE_DUPLICATE_PARAMETER = "Parameter %s should only be specified once.";
+            "Unknown parameter. Parameters allowed: " + PREFIX_ID + ", " + PREFIX_NAME + ", " + PREFIX_COURSE
+                    + ", " + PREFIX_SEMESTER;
 
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
@@ -50,7 +50,7 @@ public class ViewProgressCommandParser implements Parser<ViewProgressCommand> {
         if (!arguments.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
-        rejectDuplicateParameters(arguments);
+        arguments.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER);
         if (hasId && hasName) {
             throw new ParseException(MESSAGE_BOTH_IDENTIFIERS);
         }
@@ -89,11 +89,4 @@ public class ViewProgressCommandParser implements Parser<ViewProgressCommand> {
         }
     }
 
-    private void rejectDuplicateParameters(ArgumentMultimap arguments) throws ParseException {
-        for (Prefix prefix : List.of(PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER)) {
-            if (arguments.getAllValues(prefix).size() > 1) {
-                throw new ParseException(String.format(MESSAGE_DUPLICATE_PARAMETER, prefix));
-            }
-        }
-    }
 }
