@@ -44,6 +44,22 @@ public class Student {
         this.notes = Optional.of(notes);
     }
 
+    private Student(Name name, Id id, Email email, TutorialClass tutorialClass, Optional<Notes> notes) {
+        requireAllNonNull(name, id, email, tutorialClass, notes);
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.tutorialClass = tutorialClass;
+        this.notes = notes;
+    }
+
+    /**
+     * Returns a copy with the given core fields; notes are carried over unchanged.
+     */
+    public Student copyWith(Name name, Id id, Email email, TutorialClass tutorialClass) {
+        return new Student(name, id, email, tutorialClass, notes);
+    }
+
     public Name getName() {
         return name;
     }

@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalStudents.ALICE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.course.Course;
+import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 import seedu.address.testutil.StudentBuilder;
 
@@ -134,6 +136,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasDuplicateStudent(Student otherStudent, Student originalStudent) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasCourse(Course course) {
             throw new AssertionError("This method should not be called.");
         }
@@ -150,6 +157,11 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredStudentList(Predicate<Student> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Optional<Student> getStudentById(Id id) {
             throw new AssertionError("This method should not be called.");
         }
     }

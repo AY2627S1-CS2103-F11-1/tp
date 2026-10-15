@@ -6,7 +6,6 @@ import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
@@ -35,7 +34,6 @@ public class EditStudentDescriptorBuilder {
         descriptor.setId(student.getId());
         descriptor.setEmail(student.getEmail());
         descriptor.setTutorialClass(student.getTutorialClass());
-        student.getNotes().ifPresent(descriptor::setNotes);
     }
 
     /**
@@ -71,16 +69,6 @@ public class EditStudentDescriptorBuilder {
      */
     public EditStudentDescriptorBuilder withTutorialClass(String tutorialClass) {
         descriptor.setTutorialClass(new TutorialClass(tutorialClass));
-        return this;
-    }
-
-    /**
-     * Parses the {@code notes} into a {@code Notes} object and sets it to the
-     * {@code EditStudentDescriptor}
-     * that we are building.
-     */
-    public EditStudentDescriptorBuilder withNotes(String... notes) {
-        descriptor.setNotes(notes.length == 0 ? null : new Notes(String.join(", ", notes)));
         return this;
     }
 

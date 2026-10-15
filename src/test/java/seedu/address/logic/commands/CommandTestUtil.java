@@ -44,8 +44,8 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + " " + VALID_EMAIL_BOB;
     public static final String CLASS_DESC_AMY = " " + PREFIX_CLASS + " " + VALID_CLASS_AMY;
     public static final String CLASS_DESC_BOB = " " + PREFIX_CLASS + " " + VALID_CLASS_BOB;
-    public static final String NOTES_DESC_CONSULTATION = " " + PREFIX_NOTES + VALID_NOTES_CONSULTATION;
-    public static final String NOTES_DESC_PARTICIPATIVE = " " + PREFIX_NOTES + VALID_NOTES_PARTICIPATIVE;
+    public static final String NOTES_DESC_CONSULTATION = " " + PREFIX_NOTES + " " + VALID_NOTES_CONSULTATION;
+    public static final String NOTES_DESC_PARTICIPATIVE = " " + PREFIX_NOTES + " " + VALID_NOTES_PARTICIPATIVE;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + " James&"; // '&' not allowed in names
     public static final String INVALID_ID_DESC = " " + PREFIX_ID + " 911a"; // 'a' not allowed in ids
@@ -61,11 +61,9 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY)
-                .withNotes(VALID_NOTES_CONSULTATION).build();
+                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY).build();
         DESC_BOB = new EditStudentDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_NOTES_CONSULTATION).build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass(VALID_CLASS_BOB).build();
     }
 
     /**
