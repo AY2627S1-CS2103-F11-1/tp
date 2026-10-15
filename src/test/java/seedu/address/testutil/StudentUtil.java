@@ -28,10 +28,10 @@ public final class StudentUtil {
     /** Returns the command arguments for {@code student}. */
     public static String getStudentDetails(Student student) {
         StringBuilder builder = new StringBuilder();
-        builder.append(PREFIX_NAME).append(student.getName()).append(" ");
-        builder.append(PREFIX_ID).append(student.getId()).append(" ");
-        builder.append(PREFIX_EMAIL).append(student.getEmail()).append(" ");
-        builder.append(PREFIX_CLASS).append(student.getTutorialClass()).append(" ");
+        builder.append(PREFIX_NAME).append(" ").append(student.getName()).append(" ");
+        builder.append(PREFIX_ID).append(" ").append(student.getId()).append(" ");
+        builder.append(PREFIX_EMAIL).append(" ").append(student.getEmail()).append(" ");
+        builder.append(PREFIX_CLASS).append(" ").append(student.getTutorialClass()).append(" ");
         return builder.toString();
     }
 

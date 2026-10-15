@@ -39,9 +39,12 @@ public class AddCommandIntegrationTest {
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addStudent(validStudent);
+        expectedModel.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
 
-        assertCommandSuccess(new AddCommand(validStudent), model,
+        CommandResult expectedResult = new CommandResult(
                 String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validStudent)),
+                false, false, validStudent.getId());
+        assertCommandSuccess(new AddCommand(validStudent), model, expectedResult,
                 expectedModel);
     }
 

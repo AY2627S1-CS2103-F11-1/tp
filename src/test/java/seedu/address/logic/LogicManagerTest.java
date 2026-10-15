@@ -182,6 +182,7 @@ public class LogicManagerTest {
         Student expectedStudent = new StudentBuilder(AMY).withNotes().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addStudent(expectedStudent);
+        expectedModel.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
 }

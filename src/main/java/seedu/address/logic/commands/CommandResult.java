@@ -3,9 +3,10 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
-
+import seedu.address.model.student.Id;
 /**
  * Represents the result of a command execution.
  */
@@ -19,18 +20,28 @@ public class CommandResult {
     /** The application should exit. */
     private final boolean exit;
 
+    private final Id studentIdToFocus;
+
     /**
-     * Constructs a {@code CommandResult} with the specified fields.
+     * Constructs a CommandResult with an optional added student ID.
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
+    public CommandResult(String feedbackToUser, boolean showHelp,
+            boolean exit, Id studentIdToFocus) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
+        this.studentIdToFocus = studentIdToFocus;
     }
 
     /**
-     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser},
-     * and other fields set to their default value.
+     * Constructs a CommandResult without an added student ID.
+     */
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
+        this(feedbackToUser, showHelp, exit, null);
+    }
+
+    /**
+     * Constructs a CommandResult with only feedback.
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false);
@@ -48,6 +59,10 @@ public class CommandResult {
         return exit;
     }
 
+    public Optional<Id> getstudentIdToFocus() {
+        return Optional.ofNullable(studentIdToFocus);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -61,12 +76,13 @@ public class CommandResult {
 
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && showHelp == otherCommandResult.showHelp
-                && exit == otherCommandResult.exit;
+                && exit == otherCommandResult.exit
+                && Objects.equals(studentIdToFocus, otherCommandResult.studentIdToFocus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit);
+        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus);
     }
 
     @Override
@@ -75,6 +91,7 @@ public class CommandResult {
                 .add("feedbackToUser", feedbackToUser)
                 .add("showHelp", showHelp)
                 .add("exit", exit)
+                .add("studentIdToFocus", studentIdToFocus)
                 .toString();
     }
 

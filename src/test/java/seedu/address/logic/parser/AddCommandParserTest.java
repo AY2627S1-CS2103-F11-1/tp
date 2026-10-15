@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -36,7 +35,6 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Student;
-import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.StudentBuilder;
 
 public class AddCommandParserTest {
@@ -126,27 +124,25 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
-
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB,
-                expectedMessage);
+                AddCommandParser.MESSAGE_UNEXPECTED_TEXT);
 
         // missing id prefix
         assertParseFailure(parser, NAME_DESC_BOB + VALID_ID_BOB + EMAIL_DESC_BOB + CLASS_DESC_BOB,
-                expectedMessage);
+                "Missing required parameter(s): /id");
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + VALID_EMAIL_BOB + CLASS_DESC_BOB,
-                expectedMessage);
+                "Missing required parameter(s): /email");
 
         // missing tutorialClass prefix
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + VALID_CLASS_BOB,
-                expectedMessage);
+                "Missing required parameter(s): /class");
 
         // all prefixes missing
         assertParseFailure(parser, VALID_NAME_BOB + VALID_ID_BOB + VALID_EMAIL_BOB + VALID_CLASS_BOB,
-                expectedMessage);
+                AddCommandParser.MESSAGE_UNEXPECTED_TEXT);
     }
 
     @Test
@@ -165,15 +161,58 @@ public class AddCommandParserTest {
 
         // invalid tutorialClass
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC,
-                TutorialClass.MESSAGE_CONSTRAINTS);
+                "Empty parameter value(s): /class");
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_NAME_DESC + ID_DESC_BOB + EMAIL_DESC_BOB + INVALID_CLASS_DESC,
-                Name.MESSAGE_CONSTRAINTS);
+                "Empty parameter value(s): /class");
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
                 + CLASS_DESC_BOB,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                AddCommandParser.MESSAGE_UNEXPECTED_TEXT);
     }
+
+    @Test
+    public void parse_missingParameters_failure() {
+        assertParseFailure(parser,
+                " /name Alice /id A0123456X",
+                "Missing required parameter(s): /email, /class");
+    }
+
+    @Test
+    public void parse_emptyEmail_failure() {
+        assertParseFailure(parser,
+                " /name Alice /id A0123456X /email /class T01",
+                "Empty parameter value(s): /email");
+    }
+
+    @Test
+    public void parse_allParametersMissing_failure() {
+        assertParseFailure(parser,
+                "",
+                "Missing required parameter(s): /name, /id, /email, /class");
+    }
+
+    @Test
+    public void parse_missingAndEmptyParameters_failure() {
+        assertParseFailure(parser,
+                " /name /id A0123456X",
+                "Missing required parameter(s): /email, /class\nEmpty parameter value(s): /name");
+    }
+
+    @Test
+    public void parse_multipleEmptyParameters_failure() {
+        assertParseFailure(parser,
+                " /name /id A0123456X /email /class T01",
+                "Empty parameter value(s): /name, /email");
+    }
+
+    @Test
+    public void parse_unknownParameter_failure() {
+        assertParseFailure(parser,
+                " /name Alice /id A0123456X /email alice@u.nus.edu /class T01 /phone 12345678",
+                AddCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+    }
+
 }

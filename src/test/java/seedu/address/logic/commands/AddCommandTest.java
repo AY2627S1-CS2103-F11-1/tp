@@ -207,6 +207,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void updateFilteredStudentList(Predicate<Student> predicate) {
+            requireNonNull(predicate);
+        }
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
         }
