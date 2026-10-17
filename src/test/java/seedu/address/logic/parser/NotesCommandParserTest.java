@@ -6,34 +6,34 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.NoteCommand;
+import seedu.address.logic.commands.NotesCommand;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
 
-/** Tests for {@code NoteCommandParser}. */
-public class NoteCommandParserTest {
+/** Tests for {@code NotesCommandParser}. */
+public class NotesCommandParserTest {
 
-    private final NoteCommandParser parser = new NoteCommandParser();
+    private final NotesCommandParser parser = new NotesCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
         assertParseSuccess(parser, " /id A1234567Z /notes Discussed inheritance",
-                new NoteCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")));
+                new NotesCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")));
     }
 
     @Test
     public void parse_missingRequiredField_failure() {
         assertParseFailure(parser, " /id A1234567Z",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
         assertParseFailure(parser, " /notes Discussed inheritance",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_blankNotes_failure() {
         assertParseFailure(parser, " /id A1234567Z /notes ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        NoteCommand.INVALID_NOTES + '\n' + NoteCommand.MESSAGE_USAGE));
+                        NotesCommand.INVALID_NOTES + '\n' + NotesCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -47,6 +47,6 @@ public class NoteCommandParserTest {
     @Test
     public void parse_duplicatePrefix_failure() {
         assertParseFailure(parser, " /id A1234567Z /id A7654321Z /notes Discussed inheritance",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
     }
 }
