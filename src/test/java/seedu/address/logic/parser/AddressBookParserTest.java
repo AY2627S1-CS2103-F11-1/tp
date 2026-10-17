@@ -1,11 +1,5 @@
 package seedu.address.logic.parser;
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
@@ -29,7 +23,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MarkCommand;
-import seedu.address.logic.commands.NoteCommand;
+import seedu.address.logic.commands.NotesCommand;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.ViewNotesCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -115,8 +109,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_notes() throws Exception {
-        assertEquals(new NoteCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")), parser.parseCommand(
-                NoteCommand.COMMAND_WORD + " /id A1234567Z /notes Discussed inheritance"));
+        assertEquals(new NotesCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")), parser.parseCommand(
+                NotesCommand.COMMAND_WORD + " /id A1234567Z /notes Discussed inheritance"));
         assertEquals(new ViewNotesCommand(new Id("A1234567Z")), parser.parseCommand(
                 ViewNotesCommand.COMMAND_WORD + " /id A1234567Z"));
         assertEquals(new DeleteNotesCommand(new Id("A1234567Z")), parser.parseCommand(
