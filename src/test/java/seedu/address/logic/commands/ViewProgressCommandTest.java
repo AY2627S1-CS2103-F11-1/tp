@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
@@ -26,6 +27,8 @@ public class ViewProgressCommandTest {
     private static final Course COURSE = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
             List.of(new Deliverable("v1.1"), new Deliverable("MVP")));
     private static final Deliverable MVP = new Deliverable("MVP");
+    private static final Course SECOND_COURSE = new Course(new CourseCode("CS2030S"),
+            new Semester("AY26/27-S1"), List.of(new Deliverable("Assignment 1")));
 
     @Test
     public void execute_validId_displaysProgress() {
@@ -37,7 +40,8 @@ public class ViewProgressCommandTest {
         String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
                 + "[Not Done] v1.1\n[Done] MVP", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, new CommandResult(expectedMessage,
+                createDeliverablesView(model)), expectedModel);
     }
 
     @Test
@@ -49,7 +53,8 @@ public class ViewProgressCommandTest {
         String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
                 + "[Not Done] v1.1\n[Not Done] MVP", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, new CommandResult(expectedMessage,
+                createDeliverablesView(model)), expectedModel);
     }
 
     @Test
@@ -59,6 +64,19 @@ public class ViewProgressCommandTest {
                 COURSE.getSemester());
 
         assertCommandFailure(command, model, "Course CS2030S AY26/27-S1 has not been initialised.");
+    }
+
+    @Test
+    public void execute_studentWithMultipleCourses_deliverablesViewContainsEveryCourse() throws Exception {
+        Model model = modelWithCourse();
+        model.addCourse(SECOND_COURSE);
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId(), COURSE.getCourseCode(),
+                COURSE.getSemester());
+
+        StudentDeliverablesView view = command.execute(model).getStudentDeliverablesView().orElseThrow();
+
+        assertEquals(List.of(COURSE.getCourseCode(), SECOND_COURSE.getCourseCode()),
+                view.getCourseProgresses().stream().map(StudentCourseProgress::getCourseCode).toList());
     }
 
     private Model modelWithCourse() {
@@ -73,5 +91,12 @@ public class ViewProgressCommandTest {
                 .findFirst()
                 .orElseThrow();
         model.setStudentCourseProgress(originalProgress, originalProgress.withStatus(MVP, CompletionStatus.DONE));
+    }
+
+    private StudentDeliverablesView createDeliverablesView(Model model) {
+        List<StudentCourseProgress> progresses = model.getStudentCourseProgressList().stream()
+                .filter(progress -> progress.getStudentId().equals(ALICE.getId()))
+                .toList();
+        return new StudentDeliverablesView(ALICE, progresses);
     }
 }

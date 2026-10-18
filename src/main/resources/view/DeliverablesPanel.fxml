@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           styleClass="deliverables-panel">
+  <padding>
+    <Insets top="16" right="16" bottom="16" left="16" />
+  </padding>
+
+  <Label fx:id="emptyState" text="Use view to display a student's deliverables."
+         wrapText="true" styleClass="deliverables-empty-state" />
+
+  <VBox fx:id="content" spacing="4">
+    <Label fx:id="studentName" wrapText="true" styleClass="deliverables-student-name" />
+    <Label fx:id="studentId" styleClass="deliverables-student-id" />
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                styleClass="deliverables-scroll-pane">
+      <content>
+        <VBox fx:id="courses" spacing="14">
+          <padding>
+            <Insets top="12" />
+          </padding>
+        </VBox>
+      </content>
+    </ScrollPane>
+  </VBox>
+</StackPane>

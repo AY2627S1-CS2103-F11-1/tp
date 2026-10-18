@@ -70,7 +70,12 @@ public class ViewProgressCommand extends Command {
                 .orElseThrow(() -> new CommandException(String.format(
                         StudentProgressCommand.MESSAGE_COURSE_NOT_FOUND, courseCode, semester)));
 
-        return new CommandResult(formatProgress(student, progress));
+        List<StudentCourseProgress> courseProgresses = model.getStudentCourseProgressList().stream()
+                .filter(candidate -> candidate.getStudentId().equals(student.getId()))
+                .toList();
+
+        return new CommandResult(formatProgress(student, progress),
+                new StudentDeliverablesView(student, courseProgresses));
     }
 
     private Student findStudent(Model model) throws CommandException {
