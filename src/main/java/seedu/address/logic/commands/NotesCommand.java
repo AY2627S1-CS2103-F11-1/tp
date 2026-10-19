@@ -11,7 +11,7 @@ import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 
 /** Adds or replaces the notes for an existing student. */
-public class NoteCommand extends Command {
+public class NotesCommand extends Command {
 
     public static final String COMMAND_WORD = "notes";
 
@@ -29,7 +29,7 @@ public class NoteCommand extends Command {
     private final Notes notes;
 
     /** Creates a command to set a student's notes. */
-    public NoteCommand(Id studentId, Notes notes) {
+    public NotesCommand(Id studentId, Notes notes) {
         requireAllNonNull(studentId, notes);
 
         this.studentId = studentId;
@@ -55,11 +55,11 @@ public class NoteCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof NoteCommand otherNoteCommand)) {
+        if (!(other instanceof NotesCommand otherNotesCommand)) {
             return false;
         }
 
-        return studentId.equals(otherNoteCommand.studentId)
-                && notes.equals(otherNoteCommand.notes);
+        return studentId.equals(otherNotesCommand.studentId)
+                && notes.equals(otherNotesCommand.notes);
     }
 }
