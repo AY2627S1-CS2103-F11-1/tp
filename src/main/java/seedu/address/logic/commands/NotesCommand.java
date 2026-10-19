@@ -41,7 +41,7 @@ public class NotesCommand extends Command {
         Student studentToEdit = StudentNotesCommandUtil.findStudentById(model, studentId);
         Student editedStudent = new Student(
                 studentToEdit.getName(), studentToEdit.getId(), studentToEdit.getEmail(),
-                studentToEdit.getTutorialClass(), notes);
+                studentToEdit.getTutorialClass(), studentToEdit.getNotes().add(notes));
 
         model.setStudent(studentToEdit, editedStudent);
 
