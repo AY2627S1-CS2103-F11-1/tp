@@ -79,6 +79,18 @@ public class ViewProgressCommandTest {
                 view.getCourseProgresses().stream().map(StudentCourseProgress::getCourseCode).toList());
     }
 
+    @Test
+    public void execute_studentExcludedByActiveFilter_restoresStudentList() throws Exception {
+        Model model = modelWithCourse();
+        model.updateFilteredStudentList(student -> !student.getId().equals(ALICE.getId()));
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId(), COURSE.getCourseCode(),
+                COURSE.getSemester());
+
+        command.execute(model);
+
+        assertEquals(model.getAddressBook().getStudentList(), model.getFilteredStudentList());
+    }
+
     private Model modelWithCourse() {
         AddressBook addressBook = getTypicalAddressBook();
         addressBook.addCourse(COURSE);
