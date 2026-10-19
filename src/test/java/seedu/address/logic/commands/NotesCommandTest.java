@@ -27,7 +27,8 @@ public class NotesCommandTest {
         expectedModel.setStudent(ALICE, new StudentBuilder(ALICE).withNotes(notes.toString()).build());
 
         assertCommandSuccess(command, model, new CommandResult(String.format(
-                NotesCommand.MESSAGE_UPDATE_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()), false, false, ALICE.getId()),
+                NotesCommand.MESSAGE_UPDATE_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()),
+                false, false, ALICE.getId()),
                 expectedModel);
     }
 
