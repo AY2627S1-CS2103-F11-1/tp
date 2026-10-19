@@ -1,9 +1,8 @@
 package seedu.address.model.student;
 
-import java.util.ArrayList;
-
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.AppUtil.checkArgument;
+
+import java.util.ArrayList;
 
 /** Stores a Student's Notes in a List */
 public class NotesList {
@@ -21,6 +20,7 @@ public class NotesList {
      * @param notesList
      */
     public NotesList(ArrayList<Notes> notesList) {
+        requireNonNull(notesList);
         this.notesList = notesList;
     }
 
