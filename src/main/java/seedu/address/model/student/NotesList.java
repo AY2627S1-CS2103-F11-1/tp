@@ -3,10 +3,11 @@ package seedu.address.model.student;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /** Stores a Student's Notes in a List */
 public class NotesList {
-    private ArrayList<Notes> notesList;
+    private final List<Notes> notesList;
 
     /**
      * Creates an empty NotesList.
@@ -20,10 +21,8 @@ public class NotesList {
      * @param notes Notes to be added into NotesList.
      */
     public NotesList(Notes notes) {
-        requireNonNull(notes);
-        ArrayList<Notes> notesList = new ArrayList<Notes>();
-        notesList.add(notes);
-        this.notesList = notesList;
+        this();
+        add(notes);
     }
 
     /**
@@ -31,6 +30,7 @@ public class NotesList {
      * @param notes
      */
     public NotesList add(Notes notes) {
+        requireNonNull(notes);
         notesList.add(notes);
         return this;
     }
