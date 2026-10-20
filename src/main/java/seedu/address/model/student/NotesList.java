@@ -3,7 +3,9 @@ package seedu.address.model.student;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /** Stores a Student's Notes in a List */
 public class NotesList {
@@ -23,6 +25,26 @@ public class NotesList {
     public NotesList(Notes notes) {
         this();
         add(notes);
+    }
+
+    /**
+     * Creates a NotesList given a List of Notes.
+     * @param notesList List of Notes to be converted into NotesList.
+     */
+    public NotesList(List<Notes> notesList) {
+        this.notesList = notesList;
+    }
+
+    /**
+     * Creates a NotesList from the String representation.
+     * @param notesListAsString NotesList String to be converted into NotesList.
+     */
+    public NotesList(String notesListAsString) {
+        String notesAsString = notesListAsString.substring(1, notesListAsString.length() - 1);
+        String[] notes = notesAsString.split(", ");
+        this.notesList = Arrays.stream(notes)
+                .map(Notes::new) // Calls the Notes(String) constructor
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**

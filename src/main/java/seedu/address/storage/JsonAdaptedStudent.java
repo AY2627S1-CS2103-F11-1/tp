@@ -55,7 +55,7 @@ class JsonAdaptedStudent {
             TutorialClass modelClass = new TutorialClass(tutorialClass);
             return notes == null || notes.isEmpty()
                     ? new Student(modelName, modelId, modelEmail, modelClass)
-                    : new Student(modelName, modelId, modelEmail, modelClass, new NotesList(new Notes(notes)));
+                    : new Student(modelName, modelId, modelEmail, modelClass, new NotesList(notes));
         } catch (IllegalArgumentException exception) {
             throw new IllegalValueException(exception.getMessage());
         }
