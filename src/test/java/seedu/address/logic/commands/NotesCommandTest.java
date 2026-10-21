@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
-import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +17,6 @@ import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
 import seedu.address.model.student.NotesList;
 import seedu.address.testutil.StudentBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /** Tests for {@code NoteCommand}. */
 public class NotesCommandTest {
