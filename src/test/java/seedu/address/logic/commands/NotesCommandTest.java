@@ -33,7 +33,8 @@ public class NotesCommandTest {
                 false, false, ALICE.getId()),
                 expectedModel);
 
-        new StudentBuilder(ALICE).withNotes("Needs help with testing").build(); // Resets ALICE's notes back to expected value for remaining tests
+        // Resets ALICE's notes back to expected value for remaining tests
+        new StudentBuilder(ALICE).withNotes("Needs help with testing").build();
     }
 
     @Test
