@@ -80,7 +80,9 @@ public class StudentTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different tags -> returns false
-        editedAlice = new StudentBuilder(ALICE).withNotes(VALID_NOTES_PARTICIPATIVE).build();
+        editedAlice = new StudentBuilder().withName("Alice Pauline")
+                .withId("A1234567Y").withEmail("alice@u.nus.edu").withTutorialClass("T07")
+                .withNotes(VALID_NOTES_PARTICIPATIVE).build();
         assertFalse(ALICE.equals(editedAlice));
     }
 

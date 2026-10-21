@@ -12,6 +12,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.testutil.StudentBuilder;
 
 /** Tests for {@code NoteCommand}. */
@@ -21,15 +22,18 @@ public class NotesCommandTest {
 
     @Test
     public void execute_validId_success() {
-        Notes notes = new Notes("Asked for help with inheritance");
+        Notes notes = new Notes("hello");
         NotesCommand command = new NotesCommand(ALICE.getId(), notes);
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setStudent(ALICE, new StudentBuilder(ALICE).withNotes(notes.toString()).build());
+        NotesList expectedNotesList = ALICE.getNotes().add(notes);
+        expectedModel.setStudent(ALICE, new StudentBuilder(ALICE).withNotes(expectedNotesList).build());
 
         assertCommandSuccess(command, model, new CommandResult(String.format(
                 NotesCommand.MESSAGE_UPDATE_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()),
                 false, false, ALICE.getId()),
                 expectedModel);
+
+        new StudentBuilder(ALICE).withNotes("Needs help with testing").build(); // Resets ALICE's notes back to expected value for remaining tests
     }
 
     @Test
