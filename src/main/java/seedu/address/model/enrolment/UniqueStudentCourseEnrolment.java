@@ -95,10 +95,10 @@ public class UniqueStudentCourseEnrolment implements Iterable<StudentCourseEnrol
     public void removeForStudentCourse(Id studentId, CourseCode courseCode, Semester semester) {
         requireAllNonNull(studentId, courseCode, semester);
 
-        boolean removed = internalList.removeIf(
+        boolean wasRemoved = internalList.removeIf(
                 enrolment -> enrolment.isFor(studentId, courseCode, semester));
 
-        if (!removed) {
+        if (!wasRemoved) {
             throw new StudentCourseEnrolmentNotFoundException();
         }
     }
@@ -160,7 +160,6 @@ public class UniqueStudentCourseEnrolment implements Iterable<StudentCourseEnrol
         }
 
         internalList.setAll(enrolments);
-
 
     }
 
