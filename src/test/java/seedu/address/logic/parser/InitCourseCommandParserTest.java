@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,6 +47,16 @@ public class InitCourseCommandParserTest {
     @Test
     public void parse_duplicateDeliverable_failure() {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, V1.2",
-                "A course must contain at least one unique deliverable.");
+                Course.MESSAGE_DELIVERABLES);
+    }
+
+    @Test
+    public void parse_moreThanTwentyDeliverables_failure() {
+        String deliverables = String.join(", ", IntStream.rangeClosed(1, Course.MAX_DELIVERABLES + 1)
+                .mapToObj(number -> "task" + number)
+                .toList());
+
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task " + deliverables,
+                Course.MESSAGE_DELIVERABLES);
     }
 }

@@ -134,6 +134,9 @@ public class ParserUtil {
         if (deliverableNames.isEmpty() || deliverableNames.stream().anyMatch(String::isBlank)) {
             throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
         }
+        if (deliverableNames.size() > Course.MAX_DELIVERABLES) {
+            throw new ParseException(Course.MESSAGE_DELIVERABLES);
+        }
         List<Deliverable> parsedDeliverables = deliverableNames.stream()
                 .map(String::trim)
                 .map(Deliverable::new)

@@ -14,7 +14,8 @@ import seedu.address.commons.util.ToStringBuilder;
  * Represents a course and the project deliverables tracked for one semester.
  */
 public class Course {
-    public static final String MESSAGE_DELIVERABLES = "A course must contain at least one unique deliverable.";
+    public static final int MAX_DELIVERABLES = 20;
+    public static final String MESSAGE_DELIVERABLES = "A course must contain between 1 and 20 unique deliverables.";
     private final CourseCode courseCode;
     private final Semester semester;
     private final List<Deliverable> deliverables;
@@ -25,7 +26,8 @@ public class Course {
     public Course(CourseCode courseCode, Semester semester, List<Deliverable> deliverables) {
         requireAllNonNull(courseCode, semester, deliverables);
         deliverables.forEach(Objects::requireNonNull);
-        checkArgument(!deliverables.isEmpty() && hasUniqueDeliverables(deliverables), MESSAGE_DELIVERABLES);
+        checkArgument(!deliverables.isEmpty() && deliverables.size() <= MAX_DELIVERABLES
+                && hasUniqueDeliverables(deliverables), MESSAGE_DELIVERABLES);
         this.courseCode = courseCode;
         this.semester = semester;
         this.deliverables = List.copyOf(deliverables);
