@@ -9,7 +9,7 @@ import java.util.Locale;
  * Represents one project deliverable belonging to a course.
  */
 public class Deliverable {
-    public static final String MESSAGE_CONSTRAINTS = "Deliverable name must not be blank.";
+    public static final String MESSAGE_CONSTRAINTS = "Deliverable name must not be blank or contain a colon.";
 
     public final String name;
 
@@ -26,7 +26,7 @@ public class Deliverable {
      * Returns whether the deliverable name is non-blank.
      */
     public static boolean isValidDeliverable(String test) {
-        return !test.isBlank();
+        return !test.isBlank() && !test.contains(":");
     }
 
     @Override
