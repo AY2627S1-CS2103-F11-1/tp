@@ -1,7 +1,5 @@
 package seedu.address.testutil;
 
-
-
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
@@ -73,8 +71,8 @@ public class StudentBuilder {
     }
 
     /** Sets the student's notes given a String of Notes to add. */
-    public StudentBuilder withNotes(String notes) {
-        this.notesList = new NotesList(new Notes(notes));
+    public StudentBuilder withNotes(String notes, String deliverable) {
+        this.notesList = new NotesList(new Notes(notes, deliverable));
         return this;
     }
 

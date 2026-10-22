@@ -2,13 +2,23 @@ package seedu.address.model.student;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /** Stores a Student's Notes in a List */
 public class NotesList {
+    public static final String NOT_JSON_ARRAY_ERROR_MESSAGE = "NotesList must be a JSON array.";
+    public static final String NOT_JSON_STRING_ERROR_MESSAGE = "Notes must be a JSON string.";
+    public static final String INVALID_JSON_ARRAY_ERROR_MESSAGE = "NotesList contains invalid JSON.";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private final List<Notes> notesList;
 
     /**
@@ -38,17 +48,34 @@ public class NotesList {
     }
 
     /**
-     * Creates a NotesList from the String representation.
-     * @param notesListAsString NotesList String to be converted into NotesList.
+     * Creates a NotesList from JSON String representation.
+     * @param notesListJsonString NotesList JSON String to be converted into NotesList.
      */
-    public NotesList(String notesListAsString) {
-        requireNonNull(notesListAsString);
+    public NotesList(String notesListJsonString) {
+        requireNonNull(notesListJsonString);
+        this.notesList = new ArrayList<>();
 
-        String notesAsString = notesListAsString.substring(1, notesListAsString.length() - 1);
-        String[] notes = notesAsString.split(", ");
-        this.notesList = Arrays.stream(notes)
-                .map(Notes::new) // Map from String to Notes
-                .collect(Collectors.toCollection(ArrayList::new));
+        if (notesListJsonString.isBlank()) {
+            return;
+        }
+
+        try {
+            JsonNode root = MAPPER.readTree(notesListJsonString);
+
+            if (root == null || !root.isArray()) {
+                throw new IllegalArgumentException(NOT_JSON_ARRAY_ERROR_MESSAGE);
+            }
+
+            for (JsonNode entry : root) {
+                if (!entry.isTextual()) {
+                    throw new IllegalArgumentException(NOT_JSON_STRING_ERROR_MESSAGE);
+                }
+
+                notesList.add(new Notes(entry.textValue()));
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException(INVALID_JSON_ARRAY_ERROR_MESSAGE, e);
+        }
     }
 
     /**
@@ -78,9 +105,43 @@ public class NotesList {
         return notesList.isEmpty();
     }
 
+    /**
+     * Displays the number of Notes.
+     * Used in {@code StudentCard}
+     */
+    public String displaySize() {
+        return "You have " + size() + " notes.";
+    }
+
+    /**
+     * Displays all the Notes.
+     * Used in {@code ViewNotesCommand}
+     */
+    public String viewNotes() {
+        String finalString = "";
+        int counter = 1;
+
+        for (Notes notes : notesList) {
+            finalString += counter + ". " + notes + "\n";
+            counter++;
+        }
+        return finalString;
+    }
+
+    /**
+     * Converts NotesList into JSON String.
+     */
     @Override
     public String toString() {
-        return notesList.toString();
+        List<String> notesAsStrings = notesList.stream()
+                .map(Notes::toString)
+                .collect(Collectors.toList());
+
+        try {
+            return MAPPER.writeValueAsString(notesAsStrings);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Unable to save notes list.", e);
+        }
     }
 
     @Override

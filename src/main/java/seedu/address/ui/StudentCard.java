@@ -49,6 +49,6 @@ public class StudentCard extends UiPart<Region> {
         studentId.setText(student.getId().id);
         email.setText(student.getEmail().email);
         tutorialClass.setText(student.getTutorialClass().tutorialClass);
-        notes.setText(student.getNotes().toString());
+        notes.setText(student.getNotes().displaySize());
     }
 }

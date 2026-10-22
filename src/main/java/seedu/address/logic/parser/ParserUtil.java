@@ -1,6 +1,8 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 
 import java.util.List;
 
@@ -76,14 +78,18 @@ public class ParserUtil {
         return new TutorialClass(trimmedClass);
     }
 
-    /** Parses optional student notes. */
-    public static Notes parseNotes(String notes) throws ParseException {
-        requireNonNull(notes);
+    /** Parses student notes. */
+    public static Notes parseNotes(String notes, String deliverable) throws ParseException {
+        requireAllNonNull(notes, deliverable);
         String trimmedNotes = notes.trim();
+        String trimmedDeliverable = deliverable.trim();
         if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Notes.MESSAGE_CONSTRAINTS));
         }
-        return new Notes(trimmedNotes);
+        if (!Deliverable.isValidDeliverable(trimmedDeliverable)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Deliverable.MESSAGE_CONSTRAINTS));
+        }
+        return new Notes(trimmedNotes, trimmedDeliverable);
     }
 
     /**

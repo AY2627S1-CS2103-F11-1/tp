@@ -30,7 +30,7 @@ edit /id A1234567Z /name John Tan /newid A1234567Y /email johntan@u.nus.edu /cla
 delete /id A1245678Z
 delete /name John Doe
 init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes /id A1234567Z /notes Struggled with inheritance during consultation
+notes /id A1234567Z /notes Did not use inheritance /task v1.1
 viewnotes /id A1234567Z
 deletenotes /id A1234567Z
 mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP

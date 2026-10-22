@@ -8,6 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TASK_PARTICIPATIVE;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
 
@@ -28,7 +29,8 @@ public class StudentTest {
 
         // different identity fields -> returns false
         Student editedAlice = new StudentBuilder(ALICE).withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB)
-                .withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_PARTICIPATIVE).build();
+                .withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_PARTICIPATIVE,
+                        VALID_TASK_PARTICIPATIVE).build();
         assertFalse(ALICE.isSameStudent(editedAlice));
 
         // different name, same identity fields -> returns true
@@ -82,7 +84,7 @@ public class StudentTest {
         // different tags -> returns false
         editedAlice = new StudentBuilder().withName("Alice Pauline")
                 .withId("A1234567Y").withEmail("alice@u.nus.edu").withTutorialClass("T07")
-                .withNotes(VALID_NOTES_PARTICIPATIVE).build();
+                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_TASK_PARTICIPATIVE).build();
         assertFalse(ALICE.equals(editedAlice));
     }
 

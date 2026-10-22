@@ -39,12 +39,12 @@ class JsonAdaptedStudent {
         id = source.getId().toString();
         email = source.getEmail().toString();
         tutorialClass = source.getTutorialClass().toString();
-        notes = source.getNotes().isEmpty() ? null : source.getNotes().toString();
+        notes = source.getNotes().toString();
     }
 
     /** Converts this Jackson-friendly representation into a {@link Student}. */
     public Student toModelType() throws IllegalValueException {
-        if (name == null || id == null || email == null || tutorialClass == null) {
+        if (name == null || id == null || email == null || tutorialClass == null || notes == null) {
             throw new IllegalValueException(MISSING_FIELD_MESSAGE_FORMAT);
         }
         try {
@@ -52,9 +52,7 @@ class JsonAdaptedStudent {
             Id modelId = new Id(id);
             Email modelEmail = new Email(email);
             TutorialClass modelClass = new TutorialClass(tutorialClass);
-            return notes == null || notes.isEmpty()
-                    ? new Student(modelName, modelId, modelEmail, modelClass)
-                    : new Student(modelName, modelId, modelEmail, modelClass, new NotesList(notes));
+            return new Student(modelName, modelId, modelEmail, modelClass, new NotesList(notes));
         } catch (IllegalArgumentException exception) {
             throw new IllegalValueException(exception.getMessage());
         }

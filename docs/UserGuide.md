@@ -164,17 +164,17 @@ Student ID matching is case-insensitive.
 
 ### Managing student notes: `notes`, `viewnotes`, `deletenotes`
 
-Add or replace, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
+Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
 Formats:
 
-* `notes /id ID /notes NOTES`
+* `notes /id ID /notes NOTES /task TASK`
 * `viewnotes /id ID`
 * `deletenotes /id ID`
 
 Examples:
 
-* `notes /id A1234567Z /notes Struggled with inheritance during consultation` adds or replaces the student's notes.
+* `notes /id A1234567Z /notes Implemented Customer queue as an ArrayList /task Level 1` adds to the student's notes.
 * `viewnotes /id A1234567Z` displays the notes currently recorded for the student.
 * `deletenotes /id A1234567Z` deletes all notes recorded for the student.
 
@@ -262,7 +262,7 @@ AddressBook automatically saves data after every command. You do not need to sav
 AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes make the data file invalid, AddressBook starts with an empty address book at the next run. The invalid file remains on disk until you run a command (AddressBook saves after every command). Still, we recommend backing up the file before editing it.<br>
+If your changes make the data file invalid, AddressBook starts with a sample address book at the next run. The invalid file remains on disk until you run a command (AddressBook saves after every command). Still, we recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
