@@ -49,7 +49,19 @@ public class AddressBookParser {
      *                        format
      */
     public Command parseCommand(String userInput) throws ParseException {
-        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
+        String trimmedInput = userInput.trim();
+        if (trimmedInput.equals(ViewNotesCommand.COMMAND_WORD)
+                || trimmedInput.startsWith(ViewNotesCommand.COMMAND_WORD + " ")) {
+            return new ViewNotesCommandParser().parse(
+                    trimmedInput.substring(ViewNotesCommand.COMMAND_WORD.length()));
+        }
+        if (trimmedInput.equals(DeleteNotesCommand.COMMAND_WORD)
+                || trimmedInput.startsWith(DeleteNotesCommand.COMMAND_WORD + " ")) {
+            return new DeleteNotesCommandParser().parse(
+                    trimmedInput.substring(DeleteNotesCommand.COMMAND_WORD.length()));
+        }
+
+        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(trimmedInput);
         if (!matcher.matches()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
@@ -80,8 +92,6 @@ public class AddressBookParser {
             case HelpCommand.COMMAND_WORD -> new HelpCommand();
             case InitCourseCommand.COMMAND_WORD -> new InitCourseCommandParser().parse(arguments);
             case NotesCommand.COMMAND_WORD -> new NotesCommandParser().parse(arguments);
-            case ViewNotesCommand.COMMAND_WORD -> new ViewNotesCommandParser().parse(arguments);
-            case DeleteNotesCommand.COMMAND_WORD -> new DeleteNotesCommandParser().parse(arguments);
             default -> {
                 logger.finer("This user input caused a ParseException: " + userInput);
                 throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

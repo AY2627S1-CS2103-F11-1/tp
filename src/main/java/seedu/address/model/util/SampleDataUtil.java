@@ -6,12 +6,12 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
-import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
@@ -57,7 +57,9 @@ public class SampleDataUtil {
 
     private static StudentCourseEnrolment enrolment(Student student, Course course,
             String tutorialClass, String notes) {
-        Notes enrolmentNotes = notes.isEmpty() ? new Notes() : new Notes(notes);
+        NotesList enrolmentNotes = notes.isEmpty()
+                ? new NotesList()
+                : new NotesList(new Notes(notes, "MVP"));
         return new StudentCourseEnrolment(student.getId(), course.getCourseCode(), course.getSemester(),
                 new TutorialClass(tutorialClass), enrolmentNotes);
     }

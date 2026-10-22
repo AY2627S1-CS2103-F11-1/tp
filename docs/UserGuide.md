@@ -191,21 +191,21 @@ Examples:
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is case-insensitive.
 
-### Managing student notes: `notes`, `viewnotes`, `deletenotes`
+### Managing student notes: `notes`, `view notes`, `delete notes`
 
 Add or replace, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
 Formats:
 
-* `notes /id ID /notes NOTES`
-* `viewnotes /id ID`
-* `deletenotes /id ID`
+* `notes /id ID /course COURSE /sem SEMESTER /task TASK /notes NOTES`
+* `view notes /id ID /course COURSE /sem SEMESTER`
+* `delete notes /id ID /course COURSE /sem SEMESTER`
 
 Examples:
 
-* `notes /id A1234567Z /notes Struggled with inheritance during consultation` adds or replaces the student's notes.
-* `viewnotes /id A1234567Z` displays the notes currently recorded for the student.
-* `deletenotes /id A1234567Z` deletes all notes recorded for the student.
+* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
+* `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
+* `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes notes for the selected enrolment.
 
 ### Marking deliverables as complete: `mark`
 

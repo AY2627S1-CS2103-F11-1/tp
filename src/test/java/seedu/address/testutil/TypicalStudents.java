@@ -12,8 +12,9 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
@@ -63,7 +64,8 @@ public final class TypicalStudents {
             String tutorialClass, String notes) {
         addressBook.addStudentWithEnrolment(student, new StudentCourseEnrolment(student.getId(),
                 course.getCourseCode(), course.getSemester(), new TutorialClass(tutorialClass),
-                notes.isEmpty() ? new Notes() : new Notes(notes)));
+                notes.isEmpty() ? new NotesList()
+                        : new NotesList(new Notes(notes, "MVP"))));
     }
 
     /** Returns the standard list of students used by tests. */

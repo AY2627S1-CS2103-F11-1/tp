@@ -1,4 +1,3 @@
-
 package seedu.address.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -7,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -84,7 +83,7 @@ class JsonAdaptedStudentCourseEnrolment {
         }
 
         try {
-            Notes modelNotes = notes.isEmpty() ? new Notes() : new Notes(notes);
+            NotesList modelNotes = new NotesList(notes);
 
             return new StudentCourseEnrolment(
                     new Id(studentId),

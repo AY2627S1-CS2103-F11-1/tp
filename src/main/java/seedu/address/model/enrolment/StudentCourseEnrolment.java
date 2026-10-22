@@ -9,7 +9,6 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -24,13 +23,13 @@ public class StudentCourseEnrolment {
     private final CourseCode courseCode;
     private final Semester semester;
     private final TutorialClass tutorialClass;
-    private final Notes notes;
+    private final NotesList notes;
 
     /**
      * Constructs a student-course enrolment with the given details.
      */
     public StudentCourseEnrolment(Id studentId, CourseCode courseCode,
-            Semester semester, TutorialClass tutorialClass, Notes notes) {
+            Semester semester, TutorialClass tutorialClass, NotesList notes) {
         requireAllNonNull(studentId, courseCode, semester, tutorialClass, notes);
 
         this.studentId = studentId;
@@ -86,7 +85,7 @@ public class StudentCourseEnrolment {
         return tutorialClass;
     }
 
-    public Notes getNotes() {
+    public NotesList getNotes() {
         return notes;
     }
 

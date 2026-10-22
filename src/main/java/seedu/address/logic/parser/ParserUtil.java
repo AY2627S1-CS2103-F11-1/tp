@@ -1,8 +1,18 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -11,10 +21,10 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -24,6 +34,8 @@ import seedu.address.model.student.TutorialClass;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer.";
+
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
@@ -76,14 +88,18 @@ public class ParserUtil {
         return new TutorialClass(trimmedClass);
     }
 
-    /** Parses optional student notes. */
-    public static Notes parseNotes(String notes) throws ParseException {
-        requireNonNull(notes);
+    /** Parses student notes. */
+    public static Notes parseNotes(String notes, String deliverable) throws ParseException {
+        requireAllNonNull(notes, deliverable);
         String trimmedNotes = notes.trim();
+        String trimmedDeliverable = deliverable.trim();
         if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Notes.MESSAGE_CONSTRAINTS));
         }
-        return new Notes(trimmedNotes);
+        if (!Deliverable.isValidDeliverable(trimmedDeliverable)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Deliverable.MESSAGE_CONSTRAINTS));
+        }
+        return new Notes(trimmedNotes, trimmedDeliverable);
     }
 
     /**
@@ -142,5 +158,73 @@ public class ParserUtil {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);
         }
         return parsedDeliverables;
+    }
+
+    /**
+     * Rejects parameters that are not included in {@code allowedPrefixes}.
+     *
+     * @throws ParseException if an unknown parameter is found.
+     */
+    public static void rejectUnknownParameters(
+            String args, Prefix... allowedPrefixes) throws ParseException {
+        requireNonNull(args);
+        requireNonNull(allowedPrefixes);
+
+        Set<String> allowed = Arrays.stream(allowedPrefixes)
+                .map(Objects::requireNonNull)
+                .map(Prefix::toString)
+                .collect(Collectors.toSet());
+
+        Matcher matcher = PARAMETER_PATTERN.matcher(args);
+
+        while (matcher.find()) {
+            String parameter = "/" + matcher.group(2);
+
+            if (!allowed.contains(parameter)) {
+                throw new ParseException(
+                        "Unknown parameter: " + parameter);
+            }
+        }
+    }
+
+    /**
+     * Validates that all required parameters are present and non-blank.
+     *
+     * @throws ParseException if any required parameter is missing or empty.
+     */
+    public static void validateRequiredParameters(
+            ArgumentMultimap argMultimap, Prefix... requiredPrefixes)
+            throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(requiredPrefixes);
+
+        StringJoiner missingParameters = new StringJoiner(", ");
+        StringJoiner emptyParameters = new StringJoiner(", ");
+
+        for (Prefix prefix : requiredPrefixes) {
+            requireNonNull(prefix);
+
+            Optional<String> value = argMultimap.getValue(prefix);
+
+            if (value.isEmpty()) {
+                missingParameters.add(prefix.toString());
+            } else if (value.orElseThrow().isBlank()) {
+                emptyParameters.add(prefix.toString());
+            }
+        }
+
+        StringJoiner errors = new StringJoiner("\n");
+
+        if (missingParameters.length() > 0) {
+            errors.add("Missing required parameter(s): " + missingParameters);
+        }
+
+        if (emptyParameters.length() > 0) {
+            errors.add("Empty parameter value(s): " + emptyParameters);
+        }
+
+        if (errors.length() > 0) {
+            throw new ParseException(errors.toString());
+        }
     }
 }

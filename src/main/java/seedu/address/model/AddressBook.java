@@ -38,8 +38,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     private static final String MESSAGE_PROGRESS_FOR_ENROLMENT_EXISTS =
             "Progress record already exists for this enrolment.";
     private static final String MESSAGE_NO_ENROLMENT = "A student must have at least one enrolment.";
-    private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH =
-            "Enrolment student ID does not match.";
+    private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH = "Enrolment student ID does not match.";
     private static final String MESSAGE_ENROLMENT_ID_CHANGE =
             "Enrolment identity cannot be changed through setEnrolment.";
 
@@ -325,13 +324,21 @@ public class AddressBook implements ReadOnlyAddressBook {
                 updatedProgresses.asUnmodifiableObservableList());
     }
 
-    /** Replaces an existing enrolment while preserving its progress record. */
-    public void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment) {
+    /**
+     * Replaces an enrolment while preserving its identity and progress record.
+     *
+     * @throws IllegalArgumentException if the enrolment identity changes.
+     */
+    public void setEnrolment(
+            StudentCourseEnrolment target,
+            StudentCourseEnrolment editedEnrolment) {
         requireAllNonNull(target, editedEnrolment);
+
         if (!target.isSameEnrolment(editedEnrolment)) {
             throw new IllegalArgumentException(
                     MESSAGE_ENROLMENT_ID_CHANGE);
         }
+
         enrolments.setEnrolment(target, editedEnrolment);
     }
 

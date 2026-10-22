@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.commands.CommandTestUtil.CLASS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
@@ -30,9 +29,10 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_missingParts_failure() {
-        assertParseFailure(parser, " /name " + VALID_NAME_AMY, EditCommandParser.MESSAGE_MISSING_ID);
+        assertParseFailure(parser, " /name " + VALID_NAME_AMY,
+                "Missing required parameter(s): /id");
         assertParseFailure(parser, " /id " + VALID_ID_AMY, EditCommand.MESSAGE_NOT_EDITED);
-        assertParseFailure(parser, "", EditCommandParser.MESSAGE_MISSING_ID);
+        assertParseFailure(parser, "", "Missing required parameter(s): /id");
     }
 
     @Test
@@ -50,13 +50,13 @@ public class EditCommandParserTest {
                 Id.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, " /id " + VALID_ID_AMY + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, " /id " + VALID_ID_AMY + " /class",
-                String.format(EditCommandParser.MESSAGE_EMPTY_PARAMETERS, "/class"));
+                "Unknown parameter: /class");
     }
 
     @Test
     public void parse_unknownParameter_failure() {
         assertParseFailure(parser, " /id " + VALID_ID_AMY + " /notes old note",
-                EditCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+                "Unknown parameter: /notes");
     }
 
     @Test
@@ -67,8 +67,7 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_allFieldsSpecified_success() throws ParseException {
-        String userInput = " /id " + VALID_ID_AMY + NAME_DESC_AMY + " /newid " + VALID_ID_BOB + EMAIL_DESC_AMY
-                + CLASS_DESC_AMY;
+        String userInput = " /id " + VALID_ID_AMY + NAME_DESC_AMY + " /newid " + VALID_ID_BOB + EMAIL_DESC_AMY;
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_AMY).build();
 
@@ -77,7 +76,7 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_someFieldsSpecified_success() throws ParseException {
-        String userInput = " /id " + VALID_ID_AMY + EMAIL_DESC_AMY + CLASS_DESC_AMY;
+        String userInput = " /id " + VALID_ID_AMY + EMAIL_DESC_AMY;
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
                 .withEmail(VALID_EMAIL_AMY).build();
 

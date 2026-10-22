@@ -31,8 +31,8 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 import seedu.address.storage.JsonAddressBookStorage;
@@ -194,7 +194,7 @@ public class LogicManagerTest {
         expectedModel.addCourse(course);
         expectedModel.addStudentWithEnrolment(expectedStudent, new StudentCourseEnrolment(
                 expectedStudent.getId(), course.getCourseCode(), course.getSemester(),
-                new TutorialClass("T07"), new Notes()));
+                new TutorialClass("T07"), new NotesList()));
         expectedModel.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }

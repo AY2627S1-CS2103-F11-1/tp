@@ -8,8 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_ID;
 
 import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
@@ -26,7 +24,6 @@ public class EditCommandParser implements Parser<EditCommand> {
             PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
     public static final String MESSAGE_MISSING_ID = String.format("Missing required parameter: %s", PREFIX_ID);
     public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
-    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
     /**
      * Parses the given {@code String} of arguments in the context of the
@@ -38,7 +35,8 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        rejectUnknownParameters(args);
+        ParserUtil.rejectUnknownParameters(
+                args, PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 args,
                 PREFIX_ID,
@@ -52,7 +50,8 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
 
-        validateParameters(argMultimap);
+        ParserUtil.validateRequiredParameters(argMultimap, PREFIX_ID);
+        validateOptionalParameters(argMultimap);
 
         Id currentId = ParserUtil.parseId(
                 argMultimap.getValue(PREFIX_ID).orElseThrow());
@@ -72,46 +71,30 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (!descriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
-
         return new EditCommand(currentId, descriptor);
     }
 
-    private void validateParameters(ArgumentMultimap argMultimap) throws ParseException {
+    /**
+     * Validates that supplied optional parameters are not blank.
+     *
+     * @throws ParseException if any supplied parameter is blank.
+     */
+    private void validateOptionalParameters(ArgumentMultimap argMultimap)
+            throws ParseException {
         StringJoiner emptyParameters = new StringJoiner(", ");
 
-        if (argMultimap.getValue(PREFIX_ID).isEmpty()) {
-            throw new ParseException(MESSAGE_MISSING_ID);
-        }
-
-        for (Prefix prefix : new Prefix[] { PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL }) {
+        for (Prefix prefix : new Prefix[] {
+            PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL }) {
             Optional<String> value = argMultimap.getValue(prefix);
+
             if (value.isPresent() && value.get().isBlank()) {
                 emptyParameters.add(prefix.toString());
             }
         }
+
         if (emptyParameters.length() > 0) {
             throw new ParseException(String.format(
                     MESSAGE_EMPTY_PARAMETERS, emptyParameters));
-        }
-    }
-
-    /**
-     * Rejects parameters that are not supported by the edit command.
-     *
-     * @throws ParseException if an unknown parameter is found.
-     */
-    private void rejectUnknownParameters(String args) throws ParseException {
-        Matcher matcher = PARAMETER_PATTERN.matcher(args);
-
-        while (matcher.find()) {
-            String parameter = "/" + matcher.group(2);
-
-            if (!parameter.equals(PREFIX_ID.toString())
-                    && !parameter.equals(PREFIX_NEW_ID.toString())
-                    && !parameter.equals(PREFIX_NAME.toString())
-                    && !parameter.equals(PREFIX_EMAIL.toString())) {
-                throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
-            }
         }
     }
 }

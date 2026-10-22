@@ -35,7 +35,7 @@ public class ViewProgressCommandTest {
                 COURSE.getSemester());
 
         String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
-                + "[Not Done] v1.1\n[Done] MVP", ALICE.getId());
+                + "[Done] MVP\n[Not Done] Final", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
@@ -47,7 +47,7 @@ public class ViewProgressCommandTest {
                 COURSE.getSemester());
 
         String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
-                + "[Not Done] v1.1\n[Not Done] MVP", ALICE.getId());
+                + "[Not Done] MVP\n[Not Done] Final", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }

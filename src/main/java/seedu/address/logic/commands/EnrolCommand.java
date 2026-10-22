@@ -15,9 +15,9 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -86,7 +86,7 @@ public class EnrolCommand extends Command {
         }
 
         StudentCourseEnrolment enrolment = new StudentCourseEnrolment(
-                studentId, courseCode, semester, tutorialClass, new Notes());
+                studentId, courseCode, semester, tutorialClass, new NotesList());
 
         if (model.hasEnrolment(enrolment)) {
             throw new CommandException(String.format(

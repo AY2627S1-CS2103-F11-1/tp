@@ -26,10 +26,10 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.StudentBuilder;
@@ -39,7 +39,7 @@ public class AddCommandTest {
     private static StudentCourseEnrolment enrolment(Student student) {
         Id id = student == null ? new Id("A1234567Y") : student.getId();
         return new StudentCourseEnrolment(id, new CourseCode("CS2103T"),
-                new Semester("AY26/27-S1"), new TutorialClass("T07"), new Notes());
+                new Semester("AY26/27-S1"), new TutorialClass("T07"), new NotesList());
     }
 
     @Test

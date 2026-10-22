@@ -32,9 +32,9 @@ delete /name John Doe
 enrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 unenrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes /id A1234567Z /notes Struggled with inheritance during consultation
-viewnotes /id A1234567Z
-deletenotes /id A1234567Z
+notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation
+view notes /id A1234567Z /course CS2103T /sem AY26/27-S1
+delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1
 mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
 mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
 view /id A1234567Z /course CS2103T /sem AY26/27-S1

@@ -140,8 +140,12 @@ public interface Model {
      */
     void addEnrolment(StudentCourseEnrolment enrolment);
 
-    /** Replaces an existing student-course enrolment. */
-    void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment);
+    /**
+     * Replaces an existing enrolment while preserving its identity.
+     */
+    void setEnrolment(
+            StudentCourseEnrolment target,
+            StudentCourseEnrolment editedEnrolment);
 
     /**
      * Removes a student's enrolment and its associated progress.

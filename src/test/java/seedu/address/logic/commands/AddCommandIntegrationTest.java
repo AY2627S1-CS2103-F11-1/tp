@@ -20,8 +20,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.StudentBuilder;
@@ -44,7 +44,7 @@ public class AddCommandIntegrationTest {
         Student validStudent = new StudentBuilder().withName("New Student")
                 .withId("A1122334M").withEmail("new.student@u.nus.edu").build();
         StudentCourseEnrolment enrolment = new StudentCourseEnrolment(validStudent.getId(),
-                new CourseCode("CS2103T"), new Semester("AY26/27-S1"), new TutorialClass("T08"), new Notes());
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1"), new TutorialClass("T08"), new NotesList());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addStudentWithEnrolment(validStudent, enrolment);
@@ -60,8 +60,9 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_duplicateStudent_throwsCommandException() {
         Student studentInList = model.getAddressBook().getStudentList().get(0);
-        assertCommandFailure(new AddCommand(studentInList, List.of(new StudentCourseEnrolment(studentInList.getId(),
-                new CourseCode("CS2103T"), new Semester("AY26/27-S1"), new TutorialClass("T07"), new Notes()))), model,
+        assertCommandFailure(new AddCommand(studentInList, List.of(new StudentCourseEnrolment(
+                studentInList.getId(), new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                new TutorialClass("T07"), new NotesList()))), model,
                 AddCommand.MESSAGE_DUPLICATE_STUDENT);
     }
 

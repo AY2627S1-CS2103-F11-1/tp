@@ -1,8 +1,24 @@
 {
   "students" : [
-    { "name" : "Alice Pauline", "id" : "A1234567Y", "email" : "alice@u.nus.edu", "class" : "T07", "notes" : "[Needs help with testing]" },
-    { "name" : "Benson Meier", "id" : "A2345678X", "email" : "benson@u.nus.edu", "class" : "F10" },
-    { "name" : "Carl Kurz", "id" : "A3456789W", "email" : "carl@u.nus.edu", "class" : "L01" },
-    { "name" : "Daniel Meier", "id" : "A4567890V", "email" : "daniel@u.nus.edu", "class" : "T02" }
+    { "name" : "Alice Pauline", "id" : "A1234567Y", "email" : "alice@u.nus.edu" },
+    { "name" : "Benson Meier", "id" : "A2345678X", "email" : "benson@u.nus.edu" },
+    { "name" : "Carl Kurz", "id" : "A3456789W", "email" : "carl@u.nus.edu" },
+    { "name" : "Daniel Meier", "id" : "A4567890V", "email" : "daniel@u.nus.edu" }
+  ],
+  "courses" : [ {
+    "courseCode" : "CS2103T", "semester" : "AY26/27-S1",
+    "deliverables" : [ "MVP", "Final" ]
+  } ],
+  "enrolments" : [
+    { "studentId" : "A1234567Y", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "tutorialClass" : "T07", "notes" : "[\"MVP: Needs help with testing\"]" },
+    { "studentId" : "A2345678X", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "tutorialClass" : "F10", "notes" : "[]" },
+    { "studentId" : "A3456789W", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "tutorialClass" : "L01", "notes" : "[]" },
+    { "studentId" : "A4567890V", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "tutorialClass" : "T02", "notes" : "[]" }
+  ],
+  "studentCourseProgresses" : [
+    { "studentId" : "A1234567Y", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "deliverableStatuses" : { "MVP" : "NOT_DONE", "Final" : "NOT_DONE" } },
+    { "studentId" : "A2345678X", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "deliverableStatuses" : { "MVP" : "NOT_DONE", "Final" : "NOT_DONE" } },
+    { "studentId" : "A3456789W", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "deliverableStatuses" : { "MVP" : "NOT_DONE", "Final" : "NOT_DONE" } },
+    { "studentId" : "A4567890V", "courseCode" : "CS2103T", "semester" : "AY26/27-S1", "deliverableStatuses" : { "MVP" : "NOT_DONE", "Final" : "NOT_DONE" } }
   ]
 }

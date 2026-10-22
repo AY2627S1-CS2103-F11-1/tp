@@ -43,6 +43,6 @@ public class ViewProgressCommandParserTest {
     @Test
     public void parse_unknownParameter_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP",
-                ViewProgressCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+                "Unknown parameter: /task");
     }
 }

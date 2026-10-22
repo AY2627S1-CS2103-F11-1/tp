@@ -132,8 +132,7 @@ public class AddressBookTest {
 
         addressBook.addStudent(ALICE);
 
-        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
-                addressBook.getStudentCourseProgressList());
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
     }
 
     @Test
@@ -142,8 +141,7 @@ public class AddressBookTest {
 
         addressBook.addCourse(CS2103);
 
-        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
-                addressBook.getStudentCourseProgressList());
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
     }
 
     @Test
@@ -164,7 +162,8 @@ public class AddressBookTest {
     @Test
     public void toStringMethod() {
         String expected = AddressBook.class.getCanonicalName() + "{students=" + addressBook.getStudentList()
-                + ", courses=" + addressBook.getCourseList() + ", studentCourseProgresses="
+                + ", courses=" + addressBook.getCourseList() + ", enrolments="
+                + addressBook.getEnrolmentList() + ", studentCourseProgresses="
                 + addressBook.getStudentCourseProgressList() + "}";
         assertEquals(expected, addressBook.toString());
     }
