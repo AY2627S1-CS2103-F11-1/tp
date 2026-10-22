@@ -25,6 +25,8 @@ public class Notes {
     public Notes(String notes, String deliverable) {
         requireAllNonNull(notes, deliverable);
         checkArgument(isValidNotes(notes), MESSAGE_CONSTRAINTS);
+        checkArgument(Deliverable.isValidDeliverable(deliverable), Deliverable.MESSAGE_CONSTRAINTS);
+
         this.notes = notes;
         this.deliverable = new Deliverable(deliverable);
     }
@@ -37,6 +39,10 @@ public class Notes {
     public Notes(String notesAsString) {
         requireNonNull(notesAsString);
         String[] parts = notesAsString.split(":\\s*", 2);
+
+        checkArgument(parts.length == 2, "Notes have been corrupted");
+        checkArgument(isValidNotes(parts[1]), MESSAGE_CONSTRAINTS);
+        checkArgument(Deliverable.isValidDeliverable(parts[0]), Deliverable.MESSAGE_CONSTRAINTS);
 
         this.deliverable = new Deliverable(parts[0]);
         this.notes = parts[1];

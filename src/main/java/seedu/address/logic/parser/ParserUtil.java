@@ -85,6 +85,9 @@ public class ParserUtil {
         if (!Notes.isValidNotes(trimmedNotes)) {
             throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
         }
+        if (!Deliverable.isValidDeliverable(trimmedDeliverable)) {
+            throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
+        }
         return new Notes(trimmedNotes, trimmedDeliverable);
     }
 

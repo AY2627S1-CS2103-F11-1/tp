@@ -31,15 +31,7 @@ public class NotesCommandParser implements Parser<NotesCommand> {
         }
 
         String notesString = argMultimap.getValue(PREFIX_NOTES).orElseThrow();
-        if (notesString.isBlank()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    NotesCommand.INVALID_NOTES + '\n' + NotesCommand.MESSAGE_USAGE));
-        }
         String taskString = argMultimap.getValue(PREFIX_TASK).orElseThrow();
-        if (taskString.isBlank()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    NotesCommand.INVALID_NOTES_TASK + '\n' + NotesCommand.MESSAGE_USAGE));
-        }
 
         Id studentId = ParserUtil.parseId(argMultimap.getValue(PREFIX_ID).orElseThrow());
         return new NotesCommand(studentId, ParserUtil.parseNotes(notesString, taskString));
