@@ -1,12 +1,14 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.NotesCommand;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
 
@@ -36,15 +38,15 @@ public class NotesCommandParserTest {
     @Test
     public void parse_blankNotes_failure() {
         assertParseFailure(parser, " /id A1234567Z /notes /task Level 1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        NotesCommand.INVALID_NOTES + '\n' + NotesCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_DATA_FORMAT,
+                        Notes.MESSAGE_CONSTRAINTS));
     }
 
     @Test
     public void parse_blankTask_failure() {
         assertParseFailure(parser, " /id A1234567Z /notes Used inheritance /task",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        NotesCommand.INVALID_NOTES_TASK + '\n' + NotesCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_DATA_FORMAT,
+                        Deliverable.MESSAGE_CONSTRAINTS));
     }
 
     @Test
@@ -52,7 +54,7 @@ public class NotesCommandParserTest {
         String notesOverMaximumLength = "a".repeat(Notes.MAX_LENGTH + 1);
 
         assertParseFailure(parser, " /id A1234567Z /notes " + notesOverMaximumLength
-                + " /task Level 1", Notes.MESSAGE_CONSTRAINTS);
+                + " /task Level 1", String.format(MESSAGE_INVALID_DATA_FORMAT, Notes.MESSAGE_CONSTRAINTS));
     }
 
     @Test
