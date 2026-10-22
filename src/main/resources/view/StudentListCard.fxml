@@ -60,21 +60,6 @@
                        styleClass="cell_small_label" />
             </HBox>
 
-            <HBox spacing="8" alignment="CENTER_LEFT">
-                <ImageView fitWidth="16"
-                           fitHeight="16"
-                           preserveRatio="true">
-                    <image>
-                        <Image url="@../images/users.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="tutorialClass"
-                       styleClass="cell_small_label" />
-            </HBox>
-
-            <Label fx:id="notes"
-                   styleClass="cell_small_label"
-                   wrapText="true" />
 
         </VBox>
     </GridPane>
