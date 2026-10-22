@@ -15,6 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class NotesList {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    public static final String NOT_JSON_ARRAY_ERROR_MESSAGE = "NotesList must be a JSON array.";
+    public static final String NOT_JSON_STRING_ERROR_MESSAGE = "Notes must be a JSON string.";
+    public static final String INVALID_JSON_ARRAY_ERROR_MESSAGE ="NotesList contains invalid JSON.";
+
     private final List<Notes> notesList;
 
     /**
@@ -59,21 +63,18 @@ public class NotesList {
             JsonNode root = MAPPER.readTree(notesListJsonString);
 
             if (root == null || !root.isArray()) {
-                throw new IllegalArgumentException(
-                        "NotesList must be a JSON array.");
+                throw new IllegalArgumentException(NOT_JSON_ARRAY_ERROR_MESSAGE);
             }
 
             for (JsonNode entry : root) {
                 if (!entry.isTextual()) {
-                    throw new IllegalArgumentException(
-                            "Notes must be a JSON string.");
+                    throw new IllegalArgumentException(NOT_JSON_STRING_ERROR_MESSAGE);
                 }
 
                 notesList.add(new Notes(entry.textValue()));
             }
         } catch (IOException e) {
-            throw new IllegalArgumentException(
-                    "NotesList contains invalid JSON.", e);
+            throw new IllegalArgumentException(INVALID_JSON_ARRAY_ERROR_MESSAGE, e);
         }
     }
 
