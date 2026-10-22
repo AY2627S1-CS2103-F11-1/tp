@@ -93,7 +93,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
+The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `StudentListPanel`, `DeliverablesPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
 The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
 
@@ -191,6 +191,37 @@ milestones for that course. `UniqueCourseList` prevents duplicate course-semeste
 Courses are kept alongside students in `AddressBook`. `JsonSerializableAddressBook` and `JsonAdaptedCourse` save and
 restore them with the existing JSON data file, so a successfully initialised course remains available after a normal
 application restart.
+
+### Viewing deliverables feature
+
+The `view` command displays all tracked deliverables for one student. The command accepts either a student ID or a
+name. `ViewProgressCommand` first identifies exactly one student, then filters the model's
+`StudentCourseProgress` records by that student's ID. This lets one command display progress from every course and
+semester associated with the student.
+
+The command returns two forms of output in one `CommandResult`:
+
+* a textual summary for `ResultDisplay`; and
+* an immutable `StudentDeliverablesView` containing the selected `Student` and their progress records.
+
+Using a structured view object keeps the UI independent of the wording and formatting of the textual feedback.
+`ViewProgressCommand` restores the full student list before returning. `MainWindow` can then focus the selected
+student's card and pass the view object to `DeliverablesPanel`. The panel creates one group per course-semester, shows
+the completed/total count, and renders each deliverable with a filled or empty status box.
+
+The following sequence diagram shows the successful `view /id A1234567B` flow. Parser interactions are omitted so
+the diagram can focus on how the command result reaches both sides of the split-screen UI.
+
+![Interactions for viewing a student's deliverables](images/ViewDeliverablesSequenceDiagram.png)
+
+#### Design consideration: passing UI data
+
+**Alternative 1: Parse the feedback string in the UI.** This avoids adding another result type, but couples
+`DeliverablesPanel` to presentation text and makes wording changes likely to break the panel.
+
+**Alternative 2 (current choice): Attach a structured payload to `CommandResult`.** This requires the small
+`StudentDeliverablesView` class, but preserves component boundaries and gives the UI strongly typed, immutable data.
+This approach was chosen because it is safer to extend and easier to test.
 
 ### \[Proposed\] Undo/redo feature
 
