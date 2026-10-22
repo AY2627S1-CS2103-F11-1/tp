@@ -32,7 +32,7 @@ public class NotesCommand extends Command {
             + PREFIX_SEMESTER + " SEMESTER "
             + PREFIX_TASK + " TASK "
             + PREFIX_NOTES + " NOTES\n"
-            + "Note: /notes must be the final parameter.\n"
+            + "Note: " + PREFIX_NOTES + " must be the final parameter.\n"
             + "Example: " + COMMAND_WORD
             + " " + PREFIX_ID + " A1234567Z"
             + " " + PREFIX_COURSE + " CS2103T"
@@ -44,6 +44,8 @@ public class NotesCommand extends Command {
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";
+    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
+            "The specified deliverable is not part of the course.";
 
     private final Id studentId;
     private final Notes notes;
@@ -73,8 +75,9 @@ public class NotesCommand extends Command {
                 model, studentId, courseCode, semester);
 
         Course course = model.getCourse(courseCode, semester).orElseThrow();
-        if (course.getDeliverables().stream().noneMatch(deliverable -> deliverable.equals(notes.deliverable))) {
-            throw new CommandException("The specified deliverable is not part of the course.");
+        if (course.getDeliverables().stream()
+                .noneMatch(deliverable -> deliverable.equals(notes.getDeliverable()))) {
+            throw new CommandException(MESSAGE_DELIVERABLE_NOT_IN_COURSE);
         }
 
         NotesList updatedNotes = enrolment.getNotes().add(notes);

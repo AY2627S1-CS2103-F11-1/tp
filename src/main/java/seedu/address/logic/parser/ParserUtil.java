@@ -34,6 +34,9 @@ import seedu.address.model.student.TutorialClass;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer.";
+    public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter: %s";
+    public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
+    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
 
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
@@ -181,8 +184,7 @@ public class ParserUtil {
             String parameter = "/" + matcher.group(2);
 
             if (!allowed.contains(parameter)) {
-                throw new ParseException(
-                        "Unknown parameter: " + parameter);
+                throw new ParseException(String.format(MESSAGE_UNKNOWN_PARAMETER, parameter));
             }
         }
     }
@@ -216,11 +218,11 @@ public class ParserUtil {
         StringJoiner errors = new StringJoiner("\n");
 
         if (missingParameters.length() > 0) {
-            errors.add("Missing required parameter(s): " + missingParameters);
+            errors.add(String.format(MESSAGE_MISSING_PARAMETERS, missingParameters));
         }
 
         if (emptyParameters.length() > 0) {
-            errors.add("Empty parameter value(s): " + emptyParameters);
+            errors.add(String.format(MESSAGE_EMPTY_PARAMETERS, emptyParameters));
         }
 
         if (errors.length() > 0) {
