@@ -19,7 +19,7 @@ public class Student {
     private final Id id;
     private final Email email;
     private final TutorialClass tutorialClass;
-    private final Notes notes;
+    private final NotesList notesList;
 
     /** Constructs a student without notes. */
     public Student(Name name, Id id, Email email, TutorialClass tutorialClass) {
@@ -29,25 +29,25 @@ public class Student {
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = new Notes();
+        this.notesList = new NotesList();
     }
 
     /** Constructs a student with notes. */
-    public Student(Name name, Id id, Email email, TutorialClass tutorialClass, Notes notes) {
-        requireAllNonNull(name, id, email, tutorialClass, notes);
+    public Student(Name name, Id id, Email email, TutorialClass tutorialClass, NotesList notesList) {
+        requireAllNonNull(name, id, email, tutorialClass, notesList);
 
         this.name = name;
         this.id = id;
         this.email = email;
         this.tutorialClass = tutorialClass;
-        this.notes = notes;
+        this.notesList = notesList;
     }
 
     /**
-     * Returns a copy with the given core fields; notes are carried over unchanged.
+     * Returns a copy with the given core fields; notesList is carried over unchanged.
      */
     public Student copyWith(Name name, Id id, Email email, TutorialClass tutorialClass) {
-        return new Student(name, id, email, tutorialClass, notes);
+        return new Student(name, id, email, tutorialClass, notesList);
     }
 
     public Name getName() {
@@ -66,8 +66,8 @@ public class Student {
         return tutorialClass;
     }
 
-    public Notes getNotes() {
-        return notes;
+    public NotesList getNotes() {
+        return notesList;
     }
 
     /**
@@ -102,13 +102,13 @@ public class Student {
                 && id.equals(otherStudent.id)
                 && email.equals(otherStudent.email)
                 && tutorialClass.equals(otherStudent.tutorialClass)
-                && notes.equals(otherStudent.notes);
+                && notesList.equals(otherStudent.notesList);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, id, email, tutorialClass, notes);
+        return Objects.hash(name, id, email, tutorialClass, notesList);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class Student {
                 .add("id", id)
                 .add("email", email)
                 .add("class", tutorialClass)
-                .add("notes", notes)
+                .add("notes", notesList)
                 .toString();
     }
 

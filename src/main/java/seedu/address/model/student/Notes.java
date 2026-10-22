@@ -29,10 +29,10 @@ public class Notes {
     /**
      * Checks if Notes is valid.
      * Returns false if only contains whitespaces or exceeds 500 characters.
-     * @param test
+     * @param notes Notes to be validated.
      */
-    public static boolean isValidNotes(String test) {
-        return (!test.isBlank()) && test.length() <= MAX_LENGTH;
+    public static boolean isValidNotes(String notes) {
+        return (!notes.isBlank()) && notes.length() <= MAX_LENGTH;
     }
 
     /**

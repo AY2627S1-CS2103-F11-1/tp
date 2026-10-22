@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 
 /** Deletes notes recorded for a student. */
@@ -37,7 +37,7 @@ public class DeleteNotesCommand extends Command {
 
         Student editedStudent = new Student(
                 studentToEdit.getName(), studentToEdit.getId(), studentToEdit.getEmail(),
-                studentToEdit.getTutorialClass(), new Notes());
+                studentToEdit.getTutorialClass(), new NotesList());
         model.setStudent(studentToEdit, editedStudent);
 
         return new CommandResult(String.format(MESSAGE_DELETE_NOTES_SUCCESS,

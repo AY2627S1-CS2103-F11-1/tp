@@ -208,20 +208,19 @@ Examples:
 
 ### Viewing a student's deliverable progress: `view`
 
-Shows every deliverable and its completion status for one student in a
-course-semester. After a successful command, TAssist highlights the selected
-student in the student list and displays their tracked courses in a compact
-panel on the right. Each course heading shows the number of completed
+Shows every deliverable and its completion status for one student across all
+initialised course-semesters. After a successful command, TAssist highlights
+the selected student in the student list and displays their tracked courses in
+a compact panel on the right. Each course heading shows the number of completed
 deliverables, while a filled box marks a completed deliverable and an empty box
 marks an incomplete deliverable.
 
-Format: `view /id ID /course COURSE /sem SEMESTER` or
-`view /name NAME /course COURSE /sem SEMESTER`
+Format: `view /id ID` or `view /name NAME`
 
 Examples:
 
-* `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
-* `view /name John Doe /course CS2103T /sem AY26/27-S1`
+* `view /id A1234567Z`
+* `view /name John Doe`
 
 Use `/id` when several students have the same name. The result lists each
 deliverable in the order it was initialised. The right-hand panel groups the
@@ -291,7 +290,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add /name NAME /id ID /email EMAIL /class CLASS​` 
+**Add** | `add /name NAME /id ID /email EMAIL /class CLASS​`
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
@@ -299,7 +298,7 @@ Action | Format, Examples
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Help** | `help`
