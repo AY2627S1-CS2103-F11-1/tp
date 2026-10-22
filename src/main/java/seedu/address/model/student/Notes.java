@@ -1,7 +1,9 @@
 package seedu.address.model.student;
 
-import static java.util.Objects.requireNonNull;
+//import seedu.address.model.course.Deliverable;
+
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 /** Represents notes recorded about a student. */
 public class Notes {
@@ -10,20 +12,17 @@ public class Notes {
 
     public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
             + " or exceed 500 characters.";
-    public static final String DEFAULT_STARTING_NOTE = "";
 
     public final String notes;
+    //public final Deliverable deliverable;
 
     /** Constructs notes from a non-blank string of at most 500 characters. */
     public Notes(String notes) {
-        requireNonNull(notes);
+        requireAllNonNull(notes);
         checkArgument(isValidNotes(notes), MESSAGE_CONSTRAINTS);
         this.notes = notes;
+        //this.deliverable = deliverable;
 
-    }
-
-    public Notes() {
-        this.notes = DEFAULT_STARTING_NOTE;
     }
 
     /**
