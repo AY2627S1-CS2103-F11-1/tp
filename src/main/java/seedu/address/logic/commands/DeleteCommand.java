@@ -22,7 +22,7 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a student from TAssist.\n"
-            + "Parameters:" + PREFIX_ID + "ID or " + PREFIX_NAME + "NAME\n"
+            + "Parameters :" + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME\n"
             + "Examples: " + COMMAND_WORD + " /id A1234567Z\n"
             + "          " + COMMAND_WORD + " /name John Doe";
 
