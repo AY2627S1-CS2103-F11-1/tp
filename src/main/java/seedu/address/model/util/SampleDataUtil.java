@@ -11,6 +11,7 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 

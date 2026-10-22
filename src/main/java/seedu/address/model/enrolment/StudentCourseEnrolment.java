@@ -63,7 +63,7 @@ public class StudentCourseEnrolment {
     /**
      * Returns a copy with updated project notes, preserving all other details.
      */
-    public StudentCourseEnrolment withNotes(Notes newNotes) {
+    public StudentCourseEnrolment withNotes(NotesList newNotes) {
         requireAllNonNull(newNotes);
 
         return new StudentCourseEnrolment(

@@ -7,7 +7,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 
 /** Deletes notes recorded for a student. */
@@ -37,7 +37,7 @@ public class DeleteNotesCommand extends Command {
             throw new CommandException(MESSAGE_NO_NOTES);
         }
 
-        model.setEnrolment(enrolment, enrolment.withNotes(new Notes()));
+        model.setEnrolment(enrolment, enrolment.withNotes(new NotesList()));
 
         return new CommandResult(String.format(MESSAGE_DELETE_NOTES_SUCCESS,
                 studentToEdit.getName(), studentToEdit.getId()), false, false, studentToEdit.getId());
