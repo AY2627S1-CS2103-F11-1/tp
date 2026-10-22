@@ -23,7 +23,7 @@ public class ViewNotesCommandTest {
         ViewNotesCommand command = new ViewNotesCommand(ALICE.getId());
 
         CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                ALICE.getName(), ALICE.getId(), ALICE.getNotes()), false, false, ALICE.getId());
+                ALICE.getName(), ALICE.getId(), ALICE.getNotes().viewNotes()), false, false, ALICE.getId());
 
         assertCommandSuccess(command, model, expectedResult, model);
     }
