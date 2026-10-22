@@ -35,8 +35,8 @@ viewnotes /id A1234567Z
 deletenotes /id A1234567Z
 mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
 mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
-view /id A1234567Z /course CS2103T /sem AY26/27-S1
-view /name John Doe /course CS2103T /sem AY26/27-S1
+view /id A1234567Z
+view /name John Doe
 ```
 
 ## Acknowledgements
