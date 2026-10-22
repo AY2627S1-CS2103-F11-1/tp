@@ -16,7 +16,7 @@ object "progresses:UniqueStudentCourseProgressList" as Progresses MODEL_COLOR_T1
 object "alex:Student" as Alex {
   id = A1234567B
   name = Alex Yeoh
-  email = alex@example.com
+  email = alexyeoh@u.nus.edu
 }
 
 object "cs2103:Course" as Cs2103 {

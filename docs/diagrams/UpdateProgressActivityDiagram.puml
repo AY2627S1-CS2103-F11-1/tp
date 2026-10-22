@@ -18,7 +18,7 @@ start
 :Validate every requested deliverable;
 :Find the student's progress record;
 
-if (Can every requested status be changed?) then ([yes])
+if (Did all lookups and validations succeed?) then ([yes])
   :Copy the immutable progress record;
   repeat
     :Set one requested deliverable's status
