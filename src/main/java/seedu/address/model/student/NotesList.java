@@ -23,8 +23,9 @@ public class NotesList {
      * @param notes Notes to be added into NotesList.
      */
     public NotesList(Notes notes) {
-        this();
-        add(notes);
+        requireNonNull(notes);
+        this.notesList = new ArrayList<>();
+        this.notesList.add(notes);
     }
 
     /**
@@ -32,7 +33,8 @@ public class NotesList {
      * @param notesList List of Notes to be converted into NotesList.
      */
     public NotesList(List<Notes> notesList) {
-        this.notesList = notesList;
+        requireNonNull(notesList);
+        this.notesList = new ArrayList<>(notesList);
     }
 
     /**
@@ -40,10 +42,12 @@ public class NotesList {
      * @param notesListAsString NotesList String to be converted into NotesList.
      */
     public NotesList(String notesListAsString) {
+        requireNonNull(notesListAsString);
+
         String notesAsString = notesListAsString.substring(1, notesListAsString.length() - 1);
         String[] notes = notesAsString.split(", ");
         this.notesList = Arrays.stream(notes)
-                .map(Notes::new) // Calls the Notes(String) constructor
+                .map(Notes::new) // Map from String to Notes
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -53,8 +57,9 @@ public class NotesList {
      */
     public NotesList add(Notes notes) {
         requireNonNull(notes);
-        notesList.add(notes);
-        return this;
+        List<Notes> notesListCopy = new ArrayList<>(notesList);
+        notesListCopy.add(notes);
+        return new NotesList(notesListCopy);
     }
 
     /**
