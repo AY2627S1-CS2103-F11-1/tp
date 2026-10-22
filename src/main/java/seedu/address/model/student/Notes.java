@@ -1,9 +1,12 @@
 package seedu.address.model.student;
 
-//import seedu.address.model.course.Deliverable;
-
+import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
+import java.util.Objects;
+
+import seedu.address.model.course.Deliverable;
 
 /** Represents notes recorded about a student. */
 public class Notes {
@@ -12,17 +15,31 @@ public class Notes {
 
     public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
             + " or exceed 500 characters.";
+    public static final String CORRUPTED_NOTES_ERROR_MESSAGE =
+            "Student notes is corrupted and does not contain a task.";
 
     public final String notes;
-    //public final Deliverable deliverable;
+    public final Deliverable deliverable;
 
-    /** Constructs notes from a non-blank string of at most 500 characters. */
-    public Notes(String notes) {
-        requireAllNonNull(notes);
+    /** Creates Notes from a non-blank string of at most 500 characters. */
+    public Notes(String notes, String deliverable) {
+        requireAllNonNull(notes, deliverable);
         checkArgument(isValidNotes(notes), MESSAGE_CONSTRAINTS);
         this.notes = notes;
-        //this.deliverable = deliverable;
+        this.deliverable = new Deliverable(deliverable);
+    }
 
+    /**
+     * Creates Notes from the String representation.
+     * Used when loading from JSON file of loading Notes.
+     * @param notesAsString Notes as String representation
+     */
+    public Notes(String notesAsString) {
+        requireNonNull(notesAsString);
+        String[] parts = notesAsString.split(":\\s*", 2);
+
+        this.deliverable = new Deliverable(parts[0]);
+        this.notes = parts[1];
     }
 
     /**
@@ -43,7 +60,7 @@ public class Notes {
 
     @Override
     public String toString() {
-        return notes;
+        return deliverable + ": " + notes;
     }
 
     @Override
@@ -56,11 +73,12 @@ public class Notes {
             return false;
         }
 
-        return notes.equals(otherNotes.notes);
+        return notes.equals(otherNotes.notes)
+                && deliverable.equals(otherNotes.deliverable);
     }
 
     @Override
     public int hashCode() {
-        return notes.hashCode();
+        return Objects.hash(notes, deliverable);
     }
 }

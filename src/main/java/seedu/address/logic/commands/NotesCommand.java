@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -16,11 +17,12 @@ public class NotesCommand extends Command {
     public static final String COMMAND_WORD = "notes";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Adds or replaces notes for the student identified by their student ID. "
-            + "Existing notes will be overwritten by the input.\n"
-            + "Parameters: " + PREFIX_ID + " ID " + PREFIX_NOTES + " NOTES\n"
+            + ": Adds notes for a deliverable for the student identified by their student ID.\n"
+            + "Parameters: " + PREFIX_ID + " ID " + PREFIX_NOTES + " NOTES "
+            + PREFIX_TASK + " TASK\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z "
-            + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline";
+            + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline "
+            + PREFIX_TASK + "Level 4";
     public static final String INVALID_NOTES = "Notes cannot be blank";
 
     public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";

@@ -17,8 +17,8 @@ public class NotesCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        assertParseSuccess(parser, " /id A1234567Z /notes Discussed inheritance",
-                new NotesCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")));
+        assertParseSuccess(parser, " /id A1234567Z /notes Implemented inheritance /task Level 1",
+                new NotesCommand(new Id("A1234567Z"), new Notes("Implemented inheritance", "Level 1")));
     }
 
     @Test

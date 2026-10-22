@@ -109,8 +109,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_notes() throws Exception {
-        assertEquals(new NotesCommand(new Id("A1234567Z"), new Notes("Discussed inheritance")), parser.parseCommand(
-                NotesCommand.COMMAND_WORD + " /id A1234567Z /notes Discussed inheritance"));
+        assertEquals(new NotesCommand(new Id("A1234567Z"), new Notes("Implemented inheritance", "Level 1")),
+                parser.parseCommand(NotesCommand.COMMAND_WORD
+                        + " /id A1234567Z /notes Implemented inheritance /task Level 1"));
         assertEquals(new ViewNotesCommand(new Id("A1234567Z")), parser.parseCommand(
                 ViewNotesCommand.COMMAND_WORD + " /id A1234567Z"));
         assertEquals(new DeleteNotesCommand(new Id("A1234567Z")), parser.parseCommand(

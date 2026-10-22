@@ -15,7 +15,7 @@ public final class TypicalStudents {
 
     public static final Student ALICE = new StudentBuilder().withName("Alice Pauline")
             .withId("A1234567Y").withEmail("alice@u.nus.edu").withTutorialClass("T07")
-            .withNotes("Needs help with testing").build();
+            .withNotes("Needs help with testing", "Code Testing").build();
     public static final Student BENSON = new StudentBuilder().withName("Benson Meier")
             .withId("A2345678X").withEmail("benson@u.nus.edu").withTutorialClass("F10").withNotes().build();
     public static final Student CARL = new StudentBuilder().withName("Carl Kurz")

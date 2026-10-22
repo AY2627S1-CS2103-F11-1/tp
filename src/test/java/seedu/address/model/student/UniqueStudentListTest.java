@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TASK_PARTICIPATIVE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
@@ -41,7 +42,7 @@ public class UniqueStudentListTest {
     public void contains_studentWithSameIdentityFieldsInList_returnsTrue() {
         uniqueStudentList.add(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE)
+                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_TASK_PARTICIPATIVE)
                 .build();
         assertTrue(uniqueStudentList.contains(editedAlice));
     }
@@ -85,7 +86,7 @@ public class UniqueStudentListTest {
     public void setStudent_editedStudentHasSameIdentity_success() {
         uniqueStudentList.add(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE)
+                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_TASK_PARTICIPATIVE)
                 .build();
         uniqueStudentList.setStudent(ALICE, editedAlice);
         UniqueStudentList expectedUniqueStudentList = new UniqueStudentList();
