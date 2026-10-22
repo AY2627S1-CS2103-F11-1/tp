@@ -13,10 +13,11 @@ public class Notes {
 
     public static final int MAX_LENGTH = 500;
 
+    public static final String VALID_NOTES_AS_STRING_REGEX = "^.+?:\\s*.+$";
     public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
             + " or exceed 500 characters.";
     public static final String CORRUPTED_NOTES_ERROR_MESSAGE =
-            "Student notes is corrupted and does not contain a task.";
+            "Student notes is corrupted.";
 
     public final String notes;
     public final Deliverable deliverable;
@@ -38,9 +39,10 @@ public class Notes {
      */
     public Notes(String notesAsString) {
         requireNonNull(notesAsString);
+
+        checkArgument(isNotesAsStringValid(notesAsString), CORRUPTED_NOTES_ERROR_MESSAGE);
         String[] parts = notesAsString.split(":\\s*", 2);
 
-        checkArgument(parts.length == 2, "Notes have been corrupted");
         checkArgument(isValidNotes(parts[1]), MESSAGE_CONSTRAINTS);
         checkArgument(Deliverable.isValidDeliverable(parts[0]), Deliverable.MESSAGE_CONSTRAINTS);
 
@@ -55,6 +57,15 @@ public class Notes {
      */
     public static boolean isValidNotes(String notes) {
         return (!notes.isBlank()) && notes.length() <= MAX_LENGTH;
+    }
+
+    /**
+     * Checks if String representation of Notes is valid.
+     * Returns true if follows format of Deliverable: Notes and returns false otherwise.
+     * @param notesAsString String representation of Notes.
+     */
+    public static boolean isNotesAsStringValid(String notesAsString) {
+        return notesAsString.matches(VALID_NOTES_AS_STRING_REGEX);
     }
 
     /**

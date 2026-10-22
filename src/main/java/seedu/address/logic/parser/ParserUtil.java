@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 
 import java.util.List;
 
@@ -83,10 +84,10 @@ public class ParserUtil {
         String trimmedNotes = notes.trim();
         String trimmedDeliverable = deliverable.trim();
         if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Notes.MESSAGE_CONSTRAINTS));
         }
         if (!Deliverable.isValidDeliverable(trimmedDeliverable)) {
-            throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
+            throw new ParseException(String.format(MESSAGE_INVALID_DATA_FORMAT, Deliverable.MESSAGE_CONSTRAINTS));
         }
         return new Notes(trimmedNotes, trimmedDeliverable);
     }
