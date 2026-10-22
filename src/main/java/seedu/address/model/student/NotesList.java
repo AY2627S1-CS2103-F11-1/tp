@@ -13,11 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Stores a Student's Notes in a List */
 public class NotesList {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     public static final String NOT_JSON_ARRAY_ERROR_MESSAGE = "NotesList must be a JSON array.";
     public static final String NOT_JSON_STRING_ERROR_MESSAGE = "Notes must be a JSON string.";
-    public static final String INVALID_JSON_ARRAY_ERROR_MESSAGE ="NotesList contains invalid JSON.";
+    public static final String INVALID_JSON_ARRAY_ERROR_MESSAGE = "NotesList contains invalid JSON.";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final List<Notes> notesList;
 
