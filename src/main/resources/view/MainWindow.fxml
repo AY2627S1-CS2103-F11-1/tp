@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-         title="TAssist" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
+         title="TAssist" minWidth="600" minHeight="600" onCloseRequest="#handleExit">
   <icons>
     <Image url="@/images/tassist_logo.png" />
   </icons>
@@ -46,12 +46,17 @@
           </padding>
         </StackPane>
 
-        <VBox fx:id="personList" styleClass="pane-with-border" minWidth="340" prefWidth="340" VBox.vgrow="ALWAYS">
-          <padding>
-            <Insets top="10" right="10" bottom="10" left="10" />
-          </padding>
-          <StackPane fx:id="studentListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
-        </VBox>
+        <SplitPane dividerPositions="0.48" VBox.vgrow="ALWAYS">
+          <items>
+            <VBox fx:id="personList" styleClass="pane-with-border" minWidth="280" prefWidth="340">
+              <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+              </padding>
+              <StackPane fx:id="studentListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <StackPane fx:id="deliverablesPanelPlaceholder" minWidth="300" />
+          </items>
+        </SplitPane>
 
         <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
       </VBox>

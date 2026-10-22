@@ -22,15 +22,27 @@ public class CommandResult {
 
     private final Id studentIdToFocus;
 
+    /** Deliverables that should be displayed in the details panel, if any. */
+    private final StudentDeliverablesView studentDeliverablesView;
+
     /**
      * Constructs a CommandResult with an optional added student ID.
      */
     public CommandResult(String feedbackToUser, boolean showHelp,
             boolean exit, Id studentIdToFocus) {
+        this(feedbackToUser, showHelp, exit, studentIdToFocus, null);
+    }
+
+    /**
+     * Constructs a CommandResult with optional UI display data.
+     */
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, Id studentIdToFocus,
+                         StudentDeliverablesView studentDeliverablesView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
         this.studentIdToFocus = studentIdToFocus;
+        this.studentDeliverablesView = studentDeliverablesView;
     }
 
     /**
@@ -45,6 +57,14 @@ public class CommandResult {
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false);
+    }
+
+    /**
+     * Constructs a CommandResult that displays one student's deliverables.
+     */
+    public CommandResult(String feedbackToUser, StudentDeliverablesView studentDeliverablesView) {
+        this(feedbackToUser, false, false, requireNonNull(studentDeliverablesView).getStudent().getId(),
+                studentDeliverablesView);
     }
 
     public String getFeedbackToUser() {
@@ -63,6 +83,10 @@ public class CommandResult {
         return Optional.ofNullable(studentIdToFocus);
     }
 
+    public Optional<StudentDeliverablesView> getStudentDeliverablesView() {
+        return Optional.ofNullable(studentDeliverablesView);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -77,12 +101,13 @@ public class CommandResult {
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && showHelp == otherCommandResult.showHelp
                 && exit == otherCommandResult.exit
-                && Objects.equals(studentIdToFocus, otherCommandResult.studentIdToFocus);
+                && Objects.equals(studentIdToFocus, otherCommandResult.studentIdToFocus)
+                && Objects.equals(studentDeliverablesView, otherCommandResult.studentDeliverablesView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus);
+        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus, studentDeliverablesView);
     }
 
     @Override
@@ -92,6 +117,7 @@ public class CommandResult {
                 .add("showHelp", showHelp)
                 .add("exit", exit)
                 .add("studentIdToFocus", studentIdToFocus)
+                .add("studentDeliverablesView", studentDeliverablesView)
                 .toString();
     }
 

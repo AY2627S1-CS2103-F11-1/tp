@@ -349,3 +349,83 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+.deliverables-panel {
+    -fx-background-color: #f5f7fa;
+}
+
+.deliverables-panel .label {
+    -fx-text-fill: #263238;
+}
+
+.deliverables-empty-state {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-text-fill: #607d8b;
+    -fx-padding: 20px;
+}
+
+.deliverables-student-name {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 20px;
+}
+
+.deliverables-student-id {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12px;
+    -fx-text-fill: #607d8b !important;
+}
+
+.deliverables-scroll-pane,
+.deliverables-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.deliverables-course-group {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-color: #dce3e8;
+    -fx-border-radius: 6px;
+    -fx-padding: 12px;
+}
+
+.deliverables-course-heading {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+}
+
+.deliverables-task-list {
+    -fx-padding: 0 0 0 2px;
+}
+
+.deliverable-task-row {
+    -fx-padding: 3px 0 3px 0;
+}
+
+.deliverable-task-name {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+}
+
+.deliverable-status-box-complete,
+.deliverable-status-box-incomplete {
+    -fx-min-width: 14px;
+    -fx-pref-width: 14px;
+    -fx-max-width: 14px;
+    -fx-min-height: 14px;
+    -fx-pref-height: 14px;
+    -fx-max-height: 14px;
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+}
+
+.deliverable-status-box-complete {
+    -fx-background-color: #4c956c;
+    -fx-border-color: #4c956c;
+}
+
+.deliverable-status-box-incomplete {
+    -fx-background-color: white;
+    -fx-border-color: #78909c;
+    -fx-border-width: 1.5px;
+}

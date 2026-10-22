@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +57,9 @@ public class ViewProgressCommand extends Command {
                 .filter(candidate -> candidate.getStudentId().equals(student.getId()))
                 .toList();
 
-        return new CommandResult(formatProgress(student, progressRecords));
+        model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
+        return new CommandResult(formatProgress(student, progressRecords),
+                new StudentDeliverablesView(student, progressRecords));
     }
 
     private Student findStudent(Model model) throws CommandException {

@@ -209,7 +209,11 @@ Examples:
 ### Viewing a student's deliverable progress: `view`
 
 Shows every deliverable and its completion status for one student across all
-initialised course-semesters.
+initialised course-semesters. After a successful command, TAssist highlights
+the selected student in the student list and displays their tracked courses in
+a compact panel on the right. Each course heading shows the number of completed
+deliverables, while a filled box marks a completed deliverable and an empty box
+marks an incomplete deliverable.
 
 Format: `view /id ID` or `view /name NAME`
 
@@ -218,9 +222,10 @@ Examples:
 * `view /id A1234567Z`
 * `view /name John Doe`
 
-Use `/id` when several students have the same name. The result groups
-deliverables by course and semester, and lists each as `Done` or `Not Done` in
-the order it was initialised.
+Use `/id` when several students have the same name. The result lists each
+deliverable in the order it was initialised. The right-hand panel groups the
+student's tracked deliverables by course and semester so that their progress can
+be reviewed without hiding the student list.
 
 ### Deleting a student: `delete`
 

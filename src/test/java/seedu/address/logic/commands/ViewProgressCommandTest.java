@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
@@ -42,7 +43,8 @@ public class ViewProgressCommandTest {
                 + "CS2103T AY26/27-S1:\n[Not Done] v1.1\n[Done] MVP\n\n"
                 + "CS2030S AY26/27-S2:\n[Not Done] Lab 1\n[Not Done] PE", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, new CommandResult(expectedMessage,
+                createDeliverablesView(model)), expectedModel);
     }
 
     @Test
@@ -54,7 +56,8 @@ public class ViewProgressCommandTest {
                 + "CS2103T AY26/27-S1:\n[Not Done] v1.1\n[Not Done] MVP\n\n"
                 + "CS2030S AY26/27-S2:\n[Not Done] Lab 1\n[Not Done] PE", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, new CommandResult(expectedMessage,
+                createDeliverablesView(model)), expectedModel);
     }
 
     @Test
@@ -65,7 +68,30 @@ public class ViewProgressCommandTest {
         String expectedMessage = String.format(ViewProgressCommand.MESSAGE_NO_PROGRESS,
                 ALICE.getName(), ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, new CommandResult(expectedMessage,
+                createDeliverablesView(model)), expectedModel);
+    }
+
+    @Test
+    public void execute_studentWithMultipleCourses_deliverablesViewContainsEveryCourse() throws Exception {
+        Model model = modelWithCourses();
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId());
+
+        StudentDeliverablesView view = command.execute(model).getStudentDeliverablesView().orElseThrow();
+
+        assertEquals(List.of(CS2103T.getCourseCode(), CS2030S.getCourseCode()),
+                view.getCourseProgresses().stream().map(StudentCourseProgress::getCourseCode).toList());
+    }
+
+    @Test
+    public void execute_studentExcludedByActiveFilter_restoresStudentList() throws Exception {
+        Model model = modelWithCourses();
+        model.updateFilteredStudentList(student -> !student.getId().equals(ALICE.getId()));
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId());
+
+        command.execute(model);
+
+        assertEquals(model.getAddressBook().getStudentList(), model.getFilteredStudentList());
     }
 
     @Test
@@ -112,5 +138,12 @@ public class ViewProgressCommandTest {
                 .findFirst()
                 .orElseThrow();
         model.setStudentCourseProgress(originalProgress, originalProgress.withStatus(MVP, CompletionStatus.DONE));
+    }
+
+    private StudentDeliverablesView createDeliverablesView(Model model) {
+        List<StudentCourseProgress> progresses = model.getStudentCourseProgressList().stream()
+                .filter(progress -> progress.getStudentId().equals(ALICE.getId()))
+                .toList();
+        return new StudentDeliverablesView(ALICE, progresses);
     }
 }
