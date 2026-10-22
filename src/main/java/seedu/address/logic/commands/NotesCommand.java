@@ -24,6 +24,7 @@ public class NotesCommand extends Command {
             + PREFIX_NOTES + " Used Task as Parent class of ToDo and Deadline "
             + PREFIX_TASK + "Level 4";
     public static final String INVALID_NOTES = "Notes cannot be blank";
+    public static final String INVALID_NOTES_TASK = "Task cannot be blank";
 
     public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";
 
