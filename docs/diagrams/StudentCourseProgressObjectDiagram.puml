@@ -1,0 +1,63 @@
+@startuml
+!include style.puml
+show members
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR_T4
+skinparam objectBackgroundColor MODEL_COLOR
+skinparam objectFontColor white
+skinparam objectBorderColor MODEL_COLOR_T4
+
+object "addressBook:AddressBook" as AddressBook
+
+object "students:UniqueStudentList" as Students MODEL_COLOR_T1
+object "courses:UniqueCourseList" as Courses MODEL_COLOR_T1
+object "progresses:UniqueStudentCourseProgressList" as Progresses MODEL_COLOR_T1
+
+object "alex:Student" as Alex {
+  id = A1234567B
+  name = Alex Yeoh
+  email = alex@example.com
+}
+
+object "cs2103:Course" as Cs2103 {
+  courseCode = CS2103T
+  semester = AY26/27-S1
+  deliverables = [v1.1, MVP]
+}
+
+object "cs2030:Course" as Cs2030 {
+  courseCode = CS2030S
+  semester = AY26/27-S1
+  deliverables = [Lab 1, Project]
+}
+
+object "cs2103Progress:StudentCourseProgress" as Cs2103Progress {
+  studentId = A1234567B
+  courseCode = CS2103T
+  semester = AY26/27-S1
+  v1.1 = DONE
+  MVP = NOT_DONE
+}
+
+object "cs2030Progress:StudentCourseProgress" as Cs2030Progress {
+  studentId = A1234567B
+  courseCode = CS2030S
+  semester = AY26/27-S1
+  Lab 1 = DONE
+  Project = DONE
+}
+
+AddressBook *-- Students
+AddressBook *-- Courses
+AddressBook *-- Progresses
+
+Students -- Alex : contains
+Courses -- Cs2103 : contains
+Courses -- Cs2030 : contains
+Progresses -- Cs2103Progress : contains
+Progresses -- Cs2030Progress : contains
+
+Alex -[hidden]right- Cs2103
+Cs2103 -[hidden]right- Cs2030
+Cs2103Progress -[hidden]right- Cs2030Progress
+@enduml

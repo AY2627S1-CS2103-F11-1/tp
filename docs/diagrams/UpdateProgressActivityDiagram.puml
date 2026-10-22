@@ -1,0 +1,34 @@
+@startuml
+!include style.puml
+skinparam activity {
+  BackgroundColor LOGIC_COLOR_T1
+  BorderColor LOGIC_COLOR_T4
+  DiamondBackgroundColor LOGIC_COLOR_T2
+  DiamondBorderColor LOGIC_COLOR_T4
+  FontName Arial
+  FontSize 15
+}
+skinparam ArrowColor LOGIC_COLOR_T4
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 14
+
+start
+:Find exactly one student;
+:Find the requested course-semester;
+:Validate every requested deliverable;
+:Find the student's progress record;
+
+if (Can every requested status be changed?) then ([yes])
+  :Copy the immutable progress record;
+  repeat
+    :Set one requested deliverable's status
+    in the copied record;
+  repeat while (More deliverables?) is ([yes]) not ([no])
+  MODEL_COLOR_T1:Replace the stored progress record;
+  :Return a successful CommandResult;
+else ([no])
+  :Return the matching CommandException;
+endif
+
+stop
+@enduml
