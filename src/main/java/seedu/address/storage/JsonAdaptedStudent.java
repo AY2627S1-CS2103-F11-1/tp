@@ -7,7 +7,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
@@ -54,7 +54,7 @@ class JsonAdaptedStudent {
             TutorialClass modelClass = new TutorialClass(tutorialClass);
             return notes == null || notes.isEmpty()
                     ? new Student(modelName, modelId, modelEmail, modelClass)
-                    : new Student(modelName, modelId, modelEmail, modelClass, new Notes(notes));
+                    : new Student(modelName, modelId, modelEmail, modelClass, new NotesList(notes));
         } catch (IllegalArgumentException exception) {
             throw new IllegalValueException(exception.getMessage());
         }

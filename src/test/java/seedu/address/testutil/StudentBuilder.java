@@ -6,6 +6,7 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Notes;
+import seedu.address.model.student.NotesList;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
 
@@ -16,13 +17,12 @@ public class StudentBuilder {
     public static final String DEFAULT_ID = "A1234567Y";
     public static final String DEFAULT_EMAIL = "amy@u.nus.edu";
     public static final String DEFAULT_TUTORIAL_CLASS = "T07";
-    public static final String DEFAULT_NOTES = "Y2 student";
 
     private Name name;
     private Id id;
     private Email email;
     private TutorialClass tutorialClass;
-    private Notes notes;
+    private NotesList notesList;
 
     /** Creates a builder with valid default student details. */
     public StudentBuilder() {
@@ -30,7 +30,7 @@ public class StudentBuilder {
         id = new Id(DEFAULT_ID);
         email = new Email(DEFAULT_EMAIL);
         tutorialClass = new TutorialClass(DEFAULT_TUTORIAL_CLASS);
-        notes = new Notes(DEFAULT_NOTES);
+        notesList = new NotesList();
     }
 
     /** Creates a builder using the details of {@code studentToCopy}. */
@@ -39,7 +39,7 @@ public class StudentBuilder {
         id = studentToCopy.getId();
         email = studentToCopy.getEmail();
         tutorialClass = studentToCopy.getTutorialClass();
-        notes = studentToCopy.getNotes();
+        notesList = studentToCopy.getNotes();
     }
 
     /** Sets the student's name. */
@@ -66,16 +66,28 @@ public class StudentBuilder {
         return this;
     }
 
-    /** Sets the student's notes. */
-    public StudentBuilder withNotes(String... notes) {
-        this.notes = notes.length == 0 ? null : new Notes(String.join(", ", notes));
+    /** Sets the student's notes as an empty NotesList */
+    public StudentBuilder withNotes() {
+        this.notesList = new NotesList();
+        return this;
+    }
+
+    /** Sets the student's notes given a String of Notes to add. */
+    public StudentBuilder withNotes(String notes) {
+        this.notesList = new NotesList(new Notes(notes));
+        return this;
+    }
+
+    /** Sets the student's notes given a NotesList. */
+    public StudentBuilder withNotes(NotesList notesList) {
+        this.notesList = notesList;
         return this;
     }
 
     /** Builds a student with the configured details. */
     public Student build() {
-        return notes == null
+        return notesList == null
                 ? new Student(name, id, email, tutorialClass)
-                : new Student(name, id, email, tutorialClass, notes);
+                : new Student(name, id, email, tutorialClass, notesList);
     }
 }
