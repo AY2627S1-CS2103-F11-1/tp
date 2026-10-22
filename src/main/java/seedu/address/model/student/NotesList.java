@@ -19,7 +19,7 @@ public class NotesList {
     }
 
     /**
-     * Creates a NotesList given a Notes.
+     * Creates a NotesList of only the provided Notes.
      * @param notes Notes to be added into NotesList.
      */
     public NotesList(Notes notes) {
@@ -53,6 +53,8 @@ public class NotesList {
 
     /**
      * Adds a Notes to the NotesList.
+     * Adds Notes to a copy and returns the copy.
+     * Does not change old NotesList, ensuring immutability.
      * @param notes
      */
     public NotesList add(Notes notes) {
