@@ -105,11 +105,26 @@ public class NotesList {
     }
 
     /**
-     * Displays the number of notes.
+     * Displays the number of Notes.
      * Used in {@code StudentCard}
      */
     public String displaySize() {
         return "You have " + size() + " notes.";
+    }
+
+    /**
+     * Displays all the Notes.
+     * Used in {@code ViewNotesCommand}
+     */
+    public String viewNotes() {
+        String finalString = "";
+        int counter = 1;
+
+        for (Notes notes : notesList) {
+            finalString += counter + ". " + notes + "\n";
+            counter++;
+        }
+        return finalString;
     }
 
     /**

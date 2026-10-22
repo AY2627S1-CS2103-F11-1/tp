@@ -30,7 +30,7 @@ public class ViewNotesCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
-        String notes = student.getNotes().isEmpty() ? MESSAGE_NO_NOTES : student.getNotes().toString();
+        String notes = student.getNotes().isEmpty() ? MESSAGE_NO_NOTES : student.getNotes().viewNotes();
 
         return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
                 student.getName(), student.getId(), notes), false, false, student.getId());
