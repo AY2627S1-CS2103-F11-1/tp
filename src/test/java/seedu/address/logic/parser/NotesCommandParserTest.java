@@ -23,25 +23,36 @@ public class NotesCommandParserTest {
 
     @Test
     public void parse_missingRequiredField_failure() {
-        assertParseFailure(parser, " /id A1234567Z",
+        assertParseFailure(parser, " notes /id A1234567Z",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, " /notes Discussed inheritance",
+        assertParseFailure(parser, " notes /id A1234567Z /notes Implemented inheritance",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " notes /id A1234567Z /task Level 1",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " notes /notes Implemented inheritance /task Level 1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, NotesCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_blankNotes_failure() {
-        assertParseFailure(parser, " /id A1234567Z /notes ",
+        assertParseFailure(parser, " /id A1234567Z /notes /task Level 1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                         NotesCommand.INVALID_NOTES + '\n' + NotesCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_blankTask_failure() {
+        assertParseFailure(parser, " /id A1234567Z /notes Used inheritance /task",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        NotesCommand.INVALID_NOTES_TASK + '\n' + NotesCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_noteExceedingMaximumLength_failure() {
         String notesOverMaximumLength = "a".repeat(Notes.MAX_LENGTH + 1);
 
-        assertParseFailure(parser, " /id A1234567Z /notes " + notesOverMaximumLength,
-                Notes.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " /id A1234567Z /notes " + notesOverMaximumLength
+                + " /task Level 1", Notes.MESSAGE_CONSTRAINTS);
     }
 
     @Test
