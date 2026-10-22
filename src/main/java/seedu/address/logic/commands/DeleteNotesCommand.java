@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
@@ -31,17 +32,15 @@ public class DeleteNotesCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Student studentToEdit = StudentNotesCommandUtil.findStudentById(model, studentId);
-        if (studentToEdit.getNotes().isEmpty()) {
+        StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolmentByStudentId(model, studentId);
+        if (enrolment.getNotes().isEmpty()) {
             throw new CommandException(MESSAGE_NO_NOTES);
         }
 
-        Student editedStudent = new Student(
-                studentToEdit.getName(), studentToEdit.getId(), studentToEdit.getEmail(),
-                studentToEdit.getTutorialClass(), new Notes());
-        model.setStudent(studentToEdit, editedStudent);
+        model.setEnrolment(enrolment, enrolment.withNotes(new Notes()));
 
         return new CommandResult(String.format(MESSAGE_DELETE_NOTES_SUCCESS,
-                editedStudent.getName(), editedStudent.getId()), false, false, editedStudent.getId());
+                studentToEdit.getName(), studentToEdit.getId()), false, false, studentToEdit.getId());
     }
 
     @Override

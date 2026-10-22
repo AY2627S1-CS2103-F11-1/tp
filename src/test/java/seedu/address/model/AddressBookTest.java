@@ -194,6 +194,11 @@ public class AddressBookTest {
         public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
             return FXCollections.observableArrayList();
         }
+
+        @Override
+        public ObservableList<seedu.address.model.enrolment.StudentCourseEnrolment> getEnrolmentList() {
+            return FXCollections.observableArrayList();
+        }
     }
 
 }

@@ -5,7 +5,6 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
@@ -71,7 +70,7 @@ public class EditCommandParserTest {
         String userInput = " /id " + VALID_ID_AMY + NAME_DESC_AMY + " /newid " + VALID_ID_BOB + EMAIL_DESC_AMY
                 + CLASS_DESC_AMY;
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY).build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_AMY).build();
 
         assertParseSuccess(parser, userInput, new EditCommand(new Id(VALID_ID_AMY), descriptor));
     }
@@ -80,7 +79,7 @@ public class EditCommandParserTest {
     public void parse_someFieldsSpecified_success() throws ParseException {
         String userInput = " /id " + VALID_ID_AMY + EMAIL_DESC_AMY + CLASS_DESC_AMY;
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
-                .withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY).build();
+                .withEmail(VALID_EMAIL_AMY).build();
 
         assertParseSuccess(parser, userInput, new EditCommand(new Id(VALID_ID_AMY), descriptor));
     }

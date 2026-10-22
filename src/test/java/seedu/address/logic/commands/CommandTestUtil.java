@@ -61,9 +61,9 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY).build();
+                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).build();
         DESC_BOB = new EditStudentDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass(VALID_CLASS_BOB).build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).build();
     }
 
     /**

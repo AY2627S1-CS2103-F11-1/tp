@@ -7,6 +7,9 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -108,4 +111,41 @@ public interface Model {
      * {@code original}.
      */
     boolean hasDuplicateStudent(Student otherStudent, Student currentStudent);
+
+    /**
+     * Returns true if the specified student-course enrolment exists.
+     */
+    boolean hasEnrolment(StudentCourseEnrolment enrolment);
+
+    /**
+     * Returns the course matching the specified course code and semester,
+     * or an empty Optional if no matching course exists.
+     */
+    Optional<Course> getCourse(CourseCode courseCode, Semester semester);
+
+    /**
+     * Adds a student with their initial enrolment and deliverable progress.
+     * The student must not already exist, and the course must exist.
+     */
+    void addStudentWithEnrolment(Student student, StudentCourseEnrolment enrolment);
+
+    /**
+     * Adds a student with one or more initial course enrolments.
+     */
+    void addStudentWithEnrolments(
+            Student student, List<StudentCourseEnrolment> enrolments);
+
+    /**
+     * Adds an enrolment for an existing student and initialises its progress.
+     */
+    void addEnrolment(StudentCourseEnrolment enrolment);
+
+    /** Replaces an existing student-course enrolment. */
+    void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment);
+
+    /**
+     * Removes a student's enrolment and its associated progress.
+     * Removes the student if they have no remaining enrolments.
+     */
+    void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester);
 }

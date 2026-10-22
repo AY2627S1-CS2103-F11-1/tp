@@ -28,7 +28,7 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@u.nus.edu a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07` : Adds a student with an initial course enrolment.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -77,11 +77,19 @@ Format: `help`
 
 Adds a student to the address book.
 
-Format: `add /name NAME /id ID /email EMAIL /class CLASS​`
+Format: `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
+
+The course, semester and tutorial-class values are matched by position. At least
+one complete enrolment is required. The referenced course-semester must already
+have been initialised with `init course`.
 
 
 Examples:
-* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07`
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07`
+
+Multiple enrolments can be added in one command:
+
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02`
 
 ### Initialising a course: `init course`
 
@@ -103,11 +111,11 @@ Format: `list`
 
 Edits the details of an existing student identified by their current student ID.
 
-Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
+Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
 
 * `/id CURRENT_ID` is **required** and identifies the student whose details are to be edited.
 
-* At least one of the optional fields (`/name`, `/newid`, `/email`, `/class`) must be provided.
+* At least one of the optional fields (`/name`, `/newid`, `/email`) must be provided.
 
 * Only the specified fields will be updated. All unspecified fields, including existing project notes, will remain unchanged.
 
@@ -122,8 +130,8 @@ Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]
 Examples:
 * `edit /id A1234567Z /email johndoe@u.nus.edu` Updates the email address of the student with ID `A1234567Z` to `johndoe@u.nus.edu`.
 
-* `edit /id A1234567Z /name John Tan /class T07`
-Updates the student's name to `John Tan` and tutorial class to `T07`.
+* `edit /id A1234567Z /name John Tan /email johntan@u.nus.edu`
+Updates the student's name and email address.
 
 * `edit /id A1234567Z /newid A7654321B`
 Changes the student's ID from `A1234567Z` to `A7654321B`.
@@ -131,9 +139,30 @@ Changes the student's ID from `A1234567Z` to `A7654321B`.
 * `edit /id A1234567Z /newid A7654321B /email johntan@u.nus.edu`
 Updates both the student's ID and email address.
 
-### Locating persons by name: `find`
+### Managing course enrolments: `enrol`, `unenrol`
 
-Finds persons whose names contain any of the given keywords.
+Use `enrol` to add an existing student to another course-semester. The course
+must have been initialised first.
+
+Format: `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`
+
+Example:
+
+* `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+
+Use `unenrol` to remove one course-semester enrolment. Its deliverable progress
+is removed as well. If it was the student's final enrolment, the student record
+is removed too.
+
+Format: `unenrol /id ID /course COURSE /sem SEMESTER`
+
+Example:
+
+* `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
+
+### Locating students by name: `find`
+
+Finds students whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
@@ -285,10 +314,10 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add /name NAME /id ID /email EMAIL /class CLASS​` 
+**Add** | `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
-**Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
+**Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
@@ -296,4 +325,6 @@ Action | Format, Examples
 **View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
+**Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+**Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 **Help** | `help`

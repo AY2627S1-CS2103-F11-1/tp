@@ -27,11 +27,15 @@ import seedu.address.logic.commands.NotesCommand;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.ViewNotesCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
 import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentMatchesQueryPredicate;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.EditStudentDescriptorBuilder;
 import seedu.address.testutil.StudentBuilder;
 import seedu.address.testutil.StudentUtil;
@@ -43,8 +47,13 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_add() throws Exception {
         Student student = new StudentBuilder().withNotes().build();
-        AddCommand command = (AddCommand) parser.parseCommand(StudentUtil.getAddCommand(student));
-        assertEquals(new AddCommand(student), command);
+        String input = StudentUtil.getAddCommand(student)
+                + " /course CS2103T /sem AY26/27-S1 /class T07";
+        AddCommand command = (AddCommand) parser.parseCommand(input);
+        StudentCourseEnrolment enrolment = new StudentCourseEnrolment(student.getId(),
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                new TutorialClass("T07"), new Notes());
+        assertEquals(new AddCommand(student, List.of(enrolment)), command);
     }
 
     @Test

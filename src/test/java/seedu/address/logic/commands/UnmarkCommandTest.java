@@ -43,7 +43,6 @@ public class UnmarkCommandTest {
     @Test
     public void execute_alreadyIncomplete_throwsCommandException() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         Model model = new ModelManager(addressBook, new UserPrefs());
         UnmarkCommand command = new UnmarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(MVP));
@@ -53,7 +52,6 @@ public class UnmarkCommandTest {
 
     private Model modelWithCompletedMvp() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         Model model = new ModelManager(addressBook, new UserPrefs());
         StudentCourseProgress originalProgress = findAliceProgress(model);
         model.setStudentCourseProgress(originalProgress, originalProgress.withStatus(MVP, CompletionStatus.DONE));

@@ -3,11 +3,9 @@ package seedu.address.model.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
 
@@ -28,7 +26,7 @@ public class StudentTest {
 
         // different identity fields -> returns false
         Student editedAlice = new StudentBuilder(ALICE).withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB)
-                .withTutorialClass(VALID_CLASS_BOB).withNotes(VALID_NOTES_PARTICIPATIVE).build();
+                .build();
         assertFalse(ALICE.isSameStudent(editedAlice));
 
         // different name, same identity fields -> returns true
@@ -75,20 +73,12 @@ public class StudentTest {
         editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different tutorialClass -> returns false
-        editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB).build();
-        assertFalse(ALICE.equals(editedAlice));
-
-        // different tags -> returns false
-        editedAlice = new StudentBuilder(ALICE).withNotes(VALID_NOTES_PARTICIPATIVE).build();
-        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
     public void toStringMethod() {
         String expected = Student.class.getCanonicalName() + "{name=" + ALICE.getName() + ", id=" + ALICE.getId()
-                + ", email=" + ALICE.getEmail() + ", class=" + ALICE.getTutorialClass()
-                + ", notes=" + ALICE.getNotes() + "}";
+                + ", email=" + ALICE.getEmail() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

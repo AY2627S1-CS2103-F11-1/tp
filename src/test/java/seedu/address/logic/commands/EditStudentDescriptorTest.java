@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -47,10 +46,6 @@ public class EditStudentDescriptorTest {
         editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
-        // different tutorialClass -> returns false
-        editedAmy = new EditStudentDescriptorBuilder(DESC_AMY).withTutorialClass(VALID_CLASS_BOB).build();
-        assertFalse(DESC_AMY.equals(editedAmy));
-
     }
 
     @Test
@@ -59,8 +54,7 @@ public class EditStudentDescriptorTest {
         String expected = EditStudentDescriptor.class.getCanonicalName() + "{name="
                 + editStudentDescriptor.getName().orElse(null) + ", id="
                 + editStudentDescriptor.getId().orElse(null) + ", email="
-                + editStudentDescriptor.getEmail().orElse(null) + ", tutorialClass="
-                + editStudentDescriptor.getTutorialClass().orElse(null) + "}";
+                + editStudentDescriptor.getEmail().orElse(null) + "}";
         assertEquals(expected, editStudentDescriptor.toString());
     }
 }

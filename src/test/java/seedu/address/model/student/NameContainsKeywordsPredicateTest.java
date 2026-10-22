@@ -75,7 +75,7 @@ public class NameContainsKeywordsPredicateTest {
         // Keywords match id, email and tutorialClass, but do not match name
         predicate = new NameContainsKeywordsPredicate(List.of("A7654321Z", "alice@u.nus.edu", "F10"));
         assertFalse(predicate.test(new StudentBuilder().withName("Alice").withId("A7654321Z")
-                .withEmail("alice@u.nus.edu").withTutorialClass("F10").build()));
+                .withEmail("alice@u.nus.edu").build()));
     }
 
     @Test

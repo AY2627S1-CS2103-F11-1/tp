@@ -7,7 +7,6 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Student;
-import seedu.address.model.student.TutorialClass;
 
 /**
  * A utility class to help with building EditStudentDescriptor objects.
@@ -33,7 +32,6 @@ public class EditStudentDescriptorBuilder {
         descriptor.setName(student.getName());
         descriptor.setId(student.getId());
         descriptor.setEmail(student.getEmail());
-        descriptor.setTutorialClass(student.getTutorialClass());
     }
 
     /**
@@ -63,12 +61,8 @@ public class EditStudentDescriptorBuilder {
         return this;
     }
 
-    /**
-     * Sets the {@code TutorialClass} of the {@code EditStudentDescriptor} that we
-     * are building.
-     */
+    /** Retained for compatibility with legacy tests; class is enrolment-specific. */
     public EditStudentDescriptorBuilder withTutorialClass(String tutorialClass) {
-        descriptor.setTutorialClass(new TutorialClass(tutorialClass));
         return this;
     }
 

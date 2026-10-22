@@ -24,10 +24,12 @@ public class NotesCommandTest {
         Notes notes = new Notes("Asked for help with inheritance");
         NotesCommand command = new NotesCommand(ALICE.getId(), notes);
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setStudent(ALICE, new StudentBuilder(ALICE).withNotes(notes.toString()).build());
+        expectedModel.setStudent(ALICE,
+                new StudentBuilder(ALICE).withNotes(notes.toString()).build());
 
-        assertCommandSuccess(command, model, new CommandResult(String.format(
-                NotesCommand.MESSAGE_UPDATE_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()), false, false, ALICE.getId()),
+        assertCommandSuccess(command, model, new CommandResult(
+                String.format(NotesCommand.MESSAGE_UPDATE_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()),
+                false, false, ALICE.getId()),
                 expectedModel);
     }
 

@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
@@ -30,7 +31,8 @@ public class ViewNotesCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
-        String notes = student.getNotes().isEmpty() ? MESSAGE_NO_NOTES : student.getNotes().toString();
+        StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolmentByStudentId(model, studentId);
+        String notes = enrolment.getNotes().isEmpty() ? MESSAGE_NO_NOTES : enrolment.getNotes().toString();
 
         return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
                 student.getName(), student.getId(), notes), false, false, student.getId());

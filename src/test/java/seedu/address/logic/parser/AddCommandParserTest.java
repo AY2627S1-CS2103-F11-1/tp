@@ -46,7 +46,7 @@ public class AddCommandParserTest {
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
-                + CLASS_DESC_BOB, new AddCommand(expectedStudent));
+                + CLASS_DESC_BOB, new AddCommand(expectedStudent, java.util.List.of()));
 
     }
 
@@ -119,7 +119,7 @@ public class AddCommandParserTest {
         // no optional fields
         Student expectedStudent = new StudentBuilder(AMY).withNotes().build();
         assertParseSuccess(parser, NAME_DESC_AMY + ID_DESC_AMY + EMAIL_DESC_AMY + CLASS_DESC_AMY,
-                new AddCommand(expectedStudent));
+                new AddCommand(expectedStudent, java.util.List.of()));
     }
 
     @Test

@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a student from TAssist.\n"
-            + "Parameters: /id ID or /name NAME\n"
+            + "Parameters:" + PREFIX_ID + "ID or " + PREFIX_NAME + "NAME\n"
             + "Examples: " + COMMAND_WORD + " /id A1234567Z\n"
             + "          " + COMMAND_WORD + " /name John Doe";
 

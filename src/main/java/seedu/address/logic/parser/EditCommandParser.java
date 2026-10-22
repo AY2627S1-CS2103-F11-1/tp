@@ -1,7 +1,6 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -23,11 +22,10 @@ import seedu.address.model.student.Id;
 public class EditCommandParser implements Parser<EditCommand> {
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
     public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
-            "Unknown parameter. Parameters allowed: %s, %s, %s, %s, %s",
-            PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL, PREFIX_CLASS);
+            "Unknown parameter. Parameters allowed: %s, %s, %s, %s",
+            PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
     public static final String MESSAGE_MISSING_ID = String.format("Missing required parameter: %s", PREFIX_ID);
     public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
-
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
     /**
@@ -46,14 +44,13 @@ public class EditCommandParser implements Parser<EditCommand> {
                 PREFIX_ID,
                 PREFIX_NAME,
                 PREFIX_NEW_ID,
-                PREFIX_EMAIL,
-                PREFIX_CLASS);
+                PREFIX_EMAIL);
 
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL, PREFIX_CLASS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
 
         validateParameters(argMultimap);
 
@@ -71,10 +68,6 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             descriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).orElseThrow()));
         }
-        if (argMultimap.getValue(PREFIX_CLASS).isPresent()) {
-            descriptor.setTutorialClass(
-                    ParserUtil.parseTutorialClass(argMultimap.getValue(PREFIX_CLASS).orElseThrow()));
-        }
 
         if (!descriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
@@ -90,7 +83,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(MESSAGE_MISSING_ID);
         }
 
-        for (Prefix prefix : new Prefix[] { PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL, PREFIX_CLASS }) {
+        for (Prefix prefix : new Prefix[] { PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL }) {
             Optional<String> value = argMultimap.getValue(prefix);
             if (value.isPresent() && value.get().isBlank()) {
                 emptyParameters.add(prefix.toString());
@@ -100,18 +93,23 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(String.format(
                     MESSAGE_EMPTY_PARAMETERS, emptyParameters));
         }
-
     }
 
-    /** Rejects parameters that are not supported by the add command. */
+    /**
+     * Rejects parameters that are not supported by the edit command.
+     *
+     * @throws ParseException if an unknown parameter is found.
+     */
     private void rejectUnknownParameters(String args) throws ParseException {
         Matcher matcher = PARAMETER_PATTERN.matcher(args);
+
         while (matcher.find()) {
             String parameter = "/" + matcher.group(2);
-            if (!parameter.equals(PREFIX_ID.toString()) && !parameter.equals(PREFIX_NEW_ID.toString())
+
+            if (!parameter.equals(PREFIX_ID.toString())
+                    && !parameter.equals(PREFIX_NEW_ID.toString())
                     && !parameter.equals(PREFIX_NAME.toString())
-                    && !parameter.equals(PREFIX_EMAIL.toString())
-                    && !parameter.equals(PREFIX_CLASS.toString())) {
+                    && !parameter.equals(PREFIX_EMAIL.toString())) {
                 throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
             }
         }

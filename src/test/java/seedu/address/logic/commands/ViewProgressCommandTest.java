@@ -24,7 +24,7 @@ import seedu.address.model.progress.StudentCourseProgress;
 public class ViewProgressCommandTest {
 
     private static final Course COURSE = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
-            List.of(new Deliverable("v1.1"), new Deliverable("MVP")));
+            List.of(new Deliverable("MVP"), new Deliverable("Final")));
     private static final Deliverable MVP = new Deliverable("MVP");
 
     @Test
@@ -63,7 +63,6 @@ public class ViewProgressCommandTest {
 
     private Model modelWithCourse() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         return new ModelManager(addressBook, new UserPrefs());
     }
 

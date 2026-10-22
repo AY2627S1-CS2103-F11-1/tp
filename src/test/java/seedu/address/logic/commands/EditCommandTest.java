@@ -130,9 +130,6 @@ public class EditCommandTest {
         descriptor.getName().ifPresent(name -> changes.add("Name: " + name));
         descriptor.getId().ifPresent(id -> changes.add("Student ID: " + id));
         descriptor.getEmail().ifPresent(email -> changes.add("Email: " + email));
-        descriptor.getTutorialClass().ifPresent(tutorialClass ->
-                changes.add("Tutorial class: " + tutorialClass));
-
         return String.format(EditCommand.MESSAGE_EDIT_STUDENT_SUCCESS, student.getId(), changes);
     }
 
@@ -140,7 +137,7 @@ public class EditCommandTest {
             Model expectedModel, Student expectedStudent) {
         try {
             CommandResult result = command.execute(model);
-            assertEquals(new CommandResult(expectedMessage), result);
+            assertEquals(new CommandResult(expectedMessage, false, false, expectedStudent.getId()), result);
             assertEquals(expectedModel.getAddressBook(), model.getAddressBook());
             assertTrue(model.getAddressBook().getStudentList().contains(expectedStudent));
         } catch (CommandException exception) {

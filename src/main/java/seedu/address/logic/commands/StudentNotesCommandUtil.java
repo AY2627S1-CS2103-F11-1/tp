@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
@@ -24,5 +25,14 @@ final class StudentNotesCommandUtil {
                 .filter(student -> student.getId().equals(studentId))
                 .findFirst()
                 .orElseThrow(() -> new CommandException(String.format(MESSAGE_STUDENT_ID_NOT_FOUND, studentId)));
+    }
+
+    static StudentCourseEnrolment findEnrolmentByStudentId(Model model, Id studentId)
+            throws CommandException {
+        return model.getAddressBook().getEnrolmentList().stream()
+                .filter(enrolment -> enrolment.getStudentId().equals(studentId))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(String.format(
+                        MESSAGE_STUDENT_ID_NOT_FOUND, studentId)));
     }
 }
