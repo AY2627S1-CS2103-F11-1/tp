@@ -27,11 +27,16 @@ import seedu.address.logic.commands.NotesCommand;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.ViewNotesCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentMatchesQueryPredicate;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.EditStudentDescriptorBuilder;
 import seedu.address.testutil.StudentBuilder;
 import seedu.address.testutil.StudentUtil;
@@ -43,8 +48,13 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_add() throws Exception {
         Student student = new StudentBuilder().withNotes().build();
-        AddCommand command = (AddCommand) parser.parseCommand(StudentUtil.getAddCommand(student));
-        assertEquals(new AddCommand(student), command);
+        String input = StudentUtil.getAddCommand(student)
+                + " /course CS2103T /sem AY26/27-S1 /class T07";
+        AddCommand command = (AddCommand) parser.parseCommand(input);
+        StudentCourseEnrolment enrolment = new StudentCourseEnrolment(student.getId(),
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                new TutorialClass("T07"), new NotesList());
+        assertEquals(new AddCommand(student, List.of(enrolment)), command);
     }
 
     @Test
@@ -109,13 +119,16 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_notes() throws Exception {
-        assertEquals(new NotesCommand(new Id("A1234567Z"), new Notes("Implemented inheritance", "Level 1")),
-                parser.parseCommand(NotesCommand.COMMAND_WORD
-                        + " /id A1234567Z /notes Implemented inheritance /task Level 1"));
-        assertEquals(new ViewNotesCommand(new Id("A1234567Z")), parser.parseCommand(
-                ViewNotesCommand.COMMAND_WORD + " /id A1234567Z"));
-        assertEquals(new DeleteNotesCommand(new Id("A1234567Z")), parser.parseCommand(
-                DeleteNotesCommand.COMMAND_WORD + " /id A1234567Z"));
+        assertEquals(new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1"), new Notes("Discussed inheritance", "MVP")), parser.parseCommand(
+                NotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes Discussed inheritance"));
+        assertEquals(new ViewNotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1")), parser.parseCommand(
+                ViewNotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"));
+        assertEquals(new DeleteNotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1")), parser.parseCommand(
+                DeleteNotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"));
     }
 
     @Test

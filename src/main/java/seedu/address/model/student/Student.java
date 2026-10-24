@@ -8,8 +8,10 @@ import seedu.address.commons.util.ToStringBuilder;
 
 /**
  * Represents a student in TAssist.
- * Guarantees: details are present and not null, field values are validated,
- * immutable.
+ * A student has a global identity and may be enrolled in
+ * multiple course-semester combinations.
+ *
+ * Guarantees: details are present, non-null, validated and immutable.
  */
 
 public class Student {
@@ -18,36 +20,23 @@ public class Student {
     private final Name name;
     private final Id id;
     private final Email email;
-    private final TutorialClass tutorialClass;
-    private final NotesList notesList;
 
-    /** Constructs a student without notes. */
-    public Student(Name name, Id id, Email email, TutorialClass tutorialClass) {
-        requireAllNonNull(name, id, email, tutorialClass);
-
-        this.name = name;
-        this.id = id;
-        this.email = email;
-        this.tutorialClass = tutorialClass;
-        this.notesList = new NotesList();
-    }
-
-    /** Constructs a student with notes. */
-    public Student(Name name, Id id, Email email, TutorialClass tutorialClass, NotesList notesList) {
-        requireAllNonNull(name, id, email, tutorialClass, notesList);
+    /**
+     * Constructs a student with the given details.
+     */
+    public Student(Name name, Id id, Email email) {
+        requireAllNonNull(name, id, email);
 
         this.name = name;
         this.id = id;
         this.email = email;
-        this.tutorialClass = tutorialClass;
-        this.notesList = notesList;
     }
 
     /**
-     * Returns a copy with the given core fields; notesList is carried over unchanged.
+     * Returns a copy with the given student details.
      */
-    public Student copyWith(Name name, Id id, Email email, TutorialClass tutorialClass) {
-        return new Student(name, id, email, tutorialClass, notesList);
+    public Student copyWith(Name name, Id id, Email email) {
+        return new Student(name, id, email);
     }
 
     public Name getName() {
@@ -62,16 +51,8 @@ public class Student {
         return email;
     }
 
-    public TutorialClass getTutorialClass() {
-        return tutorialClass;
-    }
-
-    public NotesList getNotes() {
-        return notesList;
-    }
-
     /**
-     * Returns true if both students have the same name.
+     * Returns true if both students share the same ID or email.
      * This defines a weaker notion of equality between two students.
      */
     public boolean isSameStudent(Student otherStudent) {
@@ -100,15 +81,13 @@ public class Student {
 
         return name.equals(otherStudent.name)
                 && id.equals(otherStudent.id)
-                && email.equals(otherStudent.email)
-                && tutorialClass.equals(otherStudent.tutorialClass)
-                && notesList.equals(otherStudent.notesList);
+                && email.equals(otherStudent.email);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, id, email, tutorialClass, notesList);
+        return Objects.hash(name, id, email);
     }
 
     @Override
@@ -117,8 +96,6 @@ public class Student {
                 .add("name", name)
                 .add("id", id)
                 .add("email", email)
-                .add("class", tutorialClass)
-                .add("notes", notesList)
                 .toString();
     }
 

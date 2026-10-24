@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.course.Course;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 
@@ -26,5 +27,10 @@ public interface ReadOnlyAddressBook {
      * Returns an unmodifiable view of student progress records.
      */
     ObservableList<StudentCourseProgress> getStudentCourseProgressList();
+
+    /**
+     * Returns an unmodifiable view of the student-course enrolment list.
+     */
+    ObservableList<StudentCourseEnrolment> getEnrolmentList();
 
 }

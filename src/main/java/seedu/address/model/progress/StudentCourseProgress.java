@@ -16,7 +16,8 @@ import seedu.address.model.course.Semester;
 import seedu.address.model.student.Id;
 
 /**
- * Stores one student's completion statuses for the deliverables of a course in a semester.
+ * Stores one student's completion statuses for the deliverables of a course in
+ * a semester.
  * Instances are immutable.
  */
 public class StudentCourseProgress {
@@ -29,7 +30,8 @@ public class StudentCourseProgress {
     private final Map<Deliverable, CompletionStatus> deliverableStatuses;
 
     /**
-     * Creates progress for all deliverables in {@code course}, initially marked as not done.
+     * Creates progress for all deliverables in {@code course}, initially marked as
+     * not done.
      */
     public StudentCourseProgress(Id studentId, Course course) {
         requireAllNonNull(studentId, course);
@@ -41,7 +43,7 @@ public class StudentCourseProgress {
     }
 
     private StudentCourseProgress(Id studentId, CourseCode courseCode, Semester semester,
-                                  Map<Deliverable, CompletionStatus> deliverableStatuses) {
+            Map<Deliverable, CompletionStatus> deliverableStatuses) {
         requireAllNonNull(studentId, courseCode, semester, deliverableStatuses);
         deliverableStatuses.forEach((deliverable, status) -> requireAllNonNull(deliverable, status));
 
@@ -55,7 +57,7 @@ public class StudentCourseProgress {
      * Restores a progress record from previously stored deliverable statuses.
      */
     public static StudentCourseProgress fromStatuses(Id studentId, CourseCode courseCode, Semester semester,
-                                                      Map<Deliverable, CompletionStatus> deliverableStatuses) {
+            Map<Deliverable, CompletionStatus> deliverableStatuses) {
         return new StudentCourseProgress(studentId, courseCode, semester, deliverableStatuses);
     }
 
@@ -87,7 +89,8 @@ public class StudentCourseProgress {
     }
 
     /**
-     * Returns a copy of this progress record with {@code deliverable} assigned {@code status}.
+     * Returns a copy of this progress record with {@code deliverable} assigned
+     * {@code status}.
      */
     public StudentCourseProgress withStatus(Deliverable deliverable, CompletionStatus status) {
         requireAllNonNull(deliverable, status);
@@ -100,7 +103,24 @@ public class StudentCourseProgress {
         return new StudentCourseProgress(studentId, courseCode, semester, updatedStatuses);
     }
 
-    /** Returns whether this progress record belongs to the specified student and course-semester. */
+    /**
+     * Returns a copy with the specified student ID,
+     * preserving all deliverable completion statuses.
+     */
+    public StudentCourseProgress withStudentId(Id newStudentId) {
+        requireNonNull(newStudentId);
+
+        return new StudentCourseProgress(
+                newStudentId,
+                courseCode,
+                semester,
+                deliverableStatuses);
+    }
+
+    /**
+     * Returns whether this progress record belongs to the specified student and
+     * course-semester.
+     */
     public boolean isFor(Id studentId, CourseCode courseCode, Semester semester) {
         requireAllNonNull(studentId, courseCode, semester);
         return this.studentId.equals(studentId)

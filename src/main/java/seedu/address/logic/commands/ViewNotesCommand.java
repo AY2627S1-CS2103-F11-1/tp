@@ -1,44 +1,72 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
+
+import java.util.Objects;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
-/** Displays notes recorded for a student. */
+/** Displays notes recorded for a student in a specified course-semester. */
 public class ViewNotesCommand extends Command {
-
-    public static final String COMMAND_WORD = "viewnotes";
-
+    public static final String COMMAND_WORD = "view notes";
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Displays notes for the student identified by their student ID.\n"
-            + "Parameters: " + PREFIX_ID + " ID\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z";
+            + ": Displays notes for a student's course enrolment.\n"
+            + "Parameters: " + PREFIX_ID + " ID " + PREFIX_COURSE + " COURSE "
+            + PREFIX_SEMESTER + " SEMESTER\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z "
+            + PREFIX_COURSE + " CS2103T " + PREFIX_SEMESTER + " AY26/27-S1";
     public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Notes for student %s (%s):\n%s";
     public static final String MESSAGE_NO_NOTES = "No notes recorded.";
 
     private final Id studentId;
+    private final CourseCode courseCode;
+    private final Semester semester;
 
-    /** Creates a command that displays the selected student's notes. */
-    public ViewNotesCommand(Id studentId) {
-        this.studentId = requireNonNull(studentId);
+    /** Creates a command that displays the selected enrolment's notes. */
+    public ViewNotesCommand(Id studentId, CourseCode courseCode, Semester semester) {
+        requireAllNonNull(studentId, courseCode, semester);
+        this.studentId = studentId;
+        this.courseCode = courseCode;
+        this.semester = semester;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        requireNonNull(model);
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
-        String notes = student.getNotes().isEmpty() ? MESSAGE_NO_NOTES : student.getNotes().viewNotes();
-
+        StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolment(
+                model, studentId, courseCode, semester);
+        String notes = enrolment.getNotes().isEmpty()
+                ? MESSAGE_NO_NOTES : enrolment.getNotes().viewNotes();
         return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
-                student.getName(), student.getId(), notes), false, false, student.getId());
+                student.getName(), student.getId(), notes), false, false, studentId);
     }
 
     @Override
     public boolean equals(Object other) {
-        return other == this || (other instanceof ViewNotesCommand otherCommand
-                && studentId.equals(otherCommand.studentId));
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof ViewNotesCommand otherCommand)) {
+            return false;
+        }
+        return studentId.equals(otherCommand.studentId)
+                && courseCode.equals(otherCommand.courseCode)
+                && semester.equals(otherCommand.semester);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentId, courseCode, semester);
     }
 }

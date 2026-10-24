@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
+
 public class NotesListTest {
 
     @Test

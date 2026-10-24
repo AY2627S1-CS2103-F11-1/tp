@@ -14,6 +14,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteNotesCommand;
 import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.EnrolCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
@@ -22,6 +23,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MarkCommand;
 import seedu.address.logic.commands.NotesCommand;
 import seedu.address.logic.commands.SearchCommand;
+import seedu.address.logic.commands.UnenrolCommand;
 import seedu.address.logic.commands.UnmarkCommand;
 import seedu.address.logic.commands.ViewNotesCommand;
 import seedu.address.logic.commands.ViewProgressCommand;
@@ -47,7 +49,19 @@ public class AddressBookParser {
      *                        format
      */
     public Command parseCommand(String userInput) throws ParseException {
-        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
+        String trimmedInput = userInput.trim();
+        if (trimmedInput.equals(ViewNotesCommand.COMMAND_WORD)
+                || trimmedInput.startsWith(ViewNotesCommand.COMMAND_WORD + " ")) {
+            return new ViewNotesCommandParser().parse(
+                    trimmedInput.substring(ViewNotesCommand.COMMAND_WORD.length()));
+        }
+        if (trimmedInput.equals(DeleteNotesCommand.COMMAND_WORD)
+                || trimmedInput.startsWith(DeleteNotesCommand.COMMAND_WORD + " ")) {
+            return new DeleteNotesCommandParser().parse(
+                    trimmedInput.substring(DeleteNotesCommand.COMMAND_WORD.length()));
+        }
+
+        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(trimmedInput);
         if (!matcher.matches()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
@@ -63,6 +77,8 @@ public class AddressBookParser {
 
         return switch (commandWord) {
             case AddCommand.COMMAND_WORD -> new AddCommandParser().parse(arguments);
+            case UnenrolCommand.COMMAND_WORD -> new UnenrolCommandParser().parse(arguments);
+            case EnrolCommand.COMMAND_WORD -> new EnrolCommandParser().parse(arguments);
             case EditCommand.COMMAND_WORD -> new EditCommandParser().parse(arguments);
             case DeleteCommand.COMMAND_WORD -> new DeleteCommandParser().parse(arguments);
             case ClearCommand.COMMAND_WORD -> new ClearCommand();
@@ -76,8 +92,6 @@ public class AddressBookParser {
             case HelpCommand.COMMAND_WORD -> new HelpCommand();
             case InitCourseCommand.COMMAND_WORD -> new InitCourseCommandParser().parse(arguments);
             case NotesCommand.COMMAND_WORD -> new NotesCommandParser().parse(arguments);
-            case ViewNotesCommand.COMMAND_WORD -> new ViewNotesCommandParser().parse(arguments);
-            case DeleteNotesCommand.COMMAND_WORD -> new DeleteNotesCommandParser().parse(arguments);
             default -> {
                 logger.finer("This user input caused a ParseException: " + userInput);
                 throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

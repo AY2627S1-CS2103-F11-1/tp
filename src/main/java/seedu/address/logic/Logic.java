@@ -5,6 +5,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.student.Student;
 
 /**
@@ -23,6 +24,9 @@ public interface Logic {
 
     /** Returns an unmodifiable view of the filtered list of students */
     ObservableList<Student> getFilteredStudentList();
+
+    /** Returns a read-only view of the address book's enrolments. */
+    ReadOnlyAddressBook getAddressBook();
 
     /**
      * Returns the user prefs' GUI settings.

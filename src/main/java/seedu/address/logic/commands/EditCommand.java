@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -19,7 +18,6 @@ import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Student;
-import seedu.address.model.student.TutorialClass;
 
 /**
  * Edits the details of an existing student in the address book.
@@ -32,21 +30,20 @@ public class EditCommand extends Command {
             + ": Edits the details of a student identified by their current student ID.\n"
             + "At least one field must be provided for updating.\n"
             + "Parameters: "
-            + PREFIX_ID + "ID "
-            + "[" + PREFIX_NAME + "NEW_NAME] "
-            + "[" + PREFIX_NEW_ID + "NEW_ID] "
-            + "[" + PREFIX_EMAIL + "NEW_EMAIL] "
-            + "[" + PREFIX_CLASS + "NEW_CLASS]\n"
+            + PREFIX_ID + " CURRENT_ID "
+            + "[" + PREFIX_NAME + " NEW_NAME] "
+            + "[" + PREFIX_NEW_ID + " NEW_ID] "
+            + "[" + PREFIX_EMAIL + " NEW_EMAIL]\n"
             + "Example: " + COMMAND_WORD
             + " " + PREFIX_ID + " A1234567Z"
             + " " + PREFIX_NAME + " John Tan"
-            + " " + PREFIX_CLASS + " T07";
+            + " " + PREFIX_EMAIL + " johntan@u.nus.edu";
 
     public static final String MESSAGE_EDIT_STUDENT_SUCCESS = "Student with id %s updated successfully."
             + " \nChanged fields: %s";
     public static final String MESSAGE_NOT_EDITED = String.format(
-            "At least one field to edit must be provided.\nAllowed fields: %s, %s, %s, %s",
-            PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL, PREFIX_CLASS);
+            "At least one field to edit must be provided.\nAllowed fields: %s, %s, %s",
+            PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
     public static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "Student with ID %s was not found.";
@@ -93,23 +90,23 @@ public class EditCommand extends Command {
         model.setStudent(studentToEdit, editedStudent);
         model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
 
-        return createSuccessResult(studentToEdit, changedFields, unchangedFields);
+        return createSuccessResult(
+                editedStudent, studentToEdit.getId(), changedFields, unchangedFields);
     }
 
     private static CommandResult createSuccessResult(
-            Student studentToEdit, String changedFields, String unchangedFields) {
+            Student editedStudent, Id originalId,
+            String changedFields, String unchangedFields) {
 
         String feedback = String.format(
-                MESSAGE_EDIT_STUDENT_SUCCESS,
-                studentToEdit.getId(),
-                changedFields);
+                MESSAGE_EDIT_STUDENT_SUCCESS, originalId, changedFields);
 
         if (!unchangedFields.isEmpty()) {
             feedback += "\n" + String.format(
                     MESSAGE_UNCHANGED_FIELDS, unchangedFields);
         }
 
-        return new CommandResult(feedback);
+        return new CommandResult(feedback, false, false, editedStudent.getId());
     }
 
     private static String formatChangedFields(Student original, Student edited) {
@@ -125,10 +122,6 @@ public class EditCommand extends Command {
 
         if (!original.getEmail().equals(edited.getEmail())) {
             changes.add("Email: " + edited.getEmail());
-        }
-
-        if (!original.getTutorialClass().equals(edited.getTutorialClass())) {
-            changes.add("Tutorial class: " + edited.getTutorialClass());
         }
 
         return changes.toString();
@@ -154,11 +147,6 @@ public class EditCommand extends Command {
                 unchangedFields.add("Email");
             }
         });
-        descriptor.getTutorialClass().ifPresent(tutorialClass -> {
-            if (originalStudent.getTutorialClass().equals(tutorialClass)) {
-                unchangedFields.add("Tutorial class");
-            }
-        });
 
         return unchangedFields.toString();
 
@@ -174,8 +162,7 @@ public class EditCommand extends Command {
         return original.copyWith(
                 descriptor.getName().orElse(original.getName()),
                 descriptor.getId().orElse(original.getId()),
-                descriptor.getEmail().orElse(original.getEmail()),
-                descriptor.getTutorialClass().orElse(original.getTutorialClass()));
+                descriptor.getEmail().orElse(original.getEmail()));
     }
 
     @Override
@@ -210,7 +197,6 @@ public class EditCommand extends Command {
         private Name name;
         private Id id;
         private Email email;
-        private TutorialClass tutorialClass;
 
         public EditStudentDescriptor() {
         }
@@ -223,14 +209,13 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setId(toCopy.id);
             setEmail(toCopy.email);
-            setTutorialClass(toCopy.tutorialClass);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, id, email, tutorialClass);
+            return CollectionUtil.isAnyNonNull(name, id, email);
         }
 
         public void setName(Name name) {
@@ -257,14 +242,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-        public void setTutorialClass(TutorialClass tutorialClass) {
-            this.tutorialClass = tutorialClass;
-        }
-
-        public Optional<TutorialClass> getTutorialClass() {
-            return Optional.ofNullable(tutorialClass);
-        }
-
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -278,8 +255,7 @@ public class EditCommand extends Command {
 
             return Objects.equals(name, otherEditStudentDescriptor.name)
                     && Objects.equals(id, otherEditStudentDescriptor.id)
-                    && Objects.equals(email, otherEditStudentDescriptor.email)
-                    && Objects.equals(tutorialClass, otherEditStudentDescriptor.tutorialClass);
+                    && Objects.equals(email, otherEditStudentDescriptor.email);
         }
 
         @Override
@@ -288,7 +264,6 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("id", id)
                     .add("email", email)
-                    .add("tutorialClass", tutorialClass)
                     .toString();
         }
     }
