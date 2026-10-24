@@ -96,7 +96,8 @@ public class EnrolCommand extends Command {
         model.addEnrolment(enrolment);
 
         return new CommandResult(String.format(
-                MESSAGE_SUCCESS, studentId, courseCode, semester, tutorialClass));
+                MESSAGE_SUCCESS, studentId, courseCode, semester, tutorialClass),
+                false, false, studentId);
     }
 
     @Override
