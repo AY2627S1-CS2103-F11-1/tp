@@ -20,7 +20,7 @@ public class UnenrolCommandParser implements Parser<UnenrolCommand> {
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
 
     public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
-            "Unknown parameter. Parameters allowed: %s, %s, %s, %s",
+            "Unknown parameter. Parameters allowed: %s, %s, %s",
             PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
     public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";

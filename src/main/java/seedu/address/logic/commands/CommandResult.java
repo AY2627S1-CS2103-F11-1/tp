@@ -56,7 +56,8 @@ public class CommandResult {
 
     /** Constructs a result containing the deliverables view for a student. */
     public CommandResult(String feedbackToUser, StudentDeliverablesView studentDeliverablesView) {
-        this(feedbackToUser, false, false, null, requireNonNull(studentDeliverablesView));
+        this(feedbackToUser, false, false,
+                requireNonNull(studentDeliverablesView).getStudent().getId(), studentDeliverablesView);
     }
 
     public String getFeedbackToUser() {
