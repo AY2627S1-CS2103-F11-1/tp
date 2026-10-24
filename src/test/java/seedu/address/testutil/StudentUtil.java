@@ -1,6 +1,5 @@
 package seedu.address.testutil;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -27,7 +26,6 @@ public final class StudentUtil {
         builder.append(PREFIX_NAME).append(" ").append(student.getName()).append(" ");
         builder.append(PREFIX_ID).append(" ").append(student.getId()).append(" ");
         builder.append(PREFIX_EMAIL).append(" ").append(student.getEmail()).append(" ");
-        builder.append(PREFIX_CLASS).append(" ").append(student.getTutorialClass()).append(" ");
         return builder.toString();
     }
 
@@ -37,8 +35,6 @@ public final class StudentUtil {
         descriptor.getName().ifPresent(name -> builder.append(PREFIX_NAME).append(" ").append(name).append(" "));
         descriptor.getId().ifPresent(id -> builder.append(PREFIX_NEW_ID).append(" ").append(id).append(" "));
         descriptor.getEmail().ifPresent(email -> builder.append(PREFIX_EMAIL).append(" ").append(email).append(" "));
-        descriptor.getTutorialClass()
-                .ifPresent(tutorialClass -> builder.append(PREFIX_CLASS).append(" ").append(tutorialClass).append(" "));
         return builder.toString();
     }
 }

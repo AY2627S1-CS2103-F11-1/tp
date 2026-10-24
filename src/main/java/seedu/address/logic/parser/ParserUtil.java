@@ -4,7 +4,15 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -13,10 +21,10 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -26,6 +34,11 @@ import seedu.address.model.student.TutorialClass;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer.";
+    public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter: %s";
+    public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
+    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
+
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
@@ -148,5 +161,72 @@ public class ParserUtil {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);
         }
         return parsedDeliverables;
+    }
+
+    /**
+     * Rejects parameters that are not included in {@code allowedPrefixes}.
+     *
+     * @throws ParseException if an unknown parameter is found.
+     */
+    public static void rejectUnknownParameters(
+            String args, Prefix... allowedPrefixes) throws ParseException {
+        requireNonNull(args);
+        requireNonNull(allowedPrefixes);
+
+        Set<String> allowed = Arrays.stream(allowedPrefixes)
+                .map(Objects::requireNonNull)
+                .map(Prefix::toString)
+                .collect(Collectors.toSet());
+
+        Matcher matcher = PARAMETER_PATTERN.matcher(args);
+
+        while (matcher.find()) {
+            String parameter = "/" + matcher.group(2);
+
+            if (!allowed.contains(parameter)) {
+                throw new ParseException(String.format(MESSAGE_UNKNOWN_PARAMETER, parameter));
+            }
+        }
+    }
+
+    /**
+     * Validates that all required parameters are present and non-blank.
+     *
+     * @throws ParseException if any required parameter is missing or empty.
+     */
+    public static void validateRequiredParameters(
+            ArgumentMultimap argMultimap, Prefix... requiredPrefixes)
+            throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(requiredPrefixes);
+
+        StringJoiner missingParameters = new StringJoiner(", ");
+        StringJoiner emptyParameters = new StringJoiner(", ");
+
+        for (Prefix prefix : requiredPrefixes) {
+            requireNonNull(prefix);
+
+            Optional<String> value = argMultimap.getValue(prefix);
+
+            if (value.isEmpty()) {
+                missingParameters.add(prefix.toString());
+            } else if (value.orElseThrow().isBlank()) {
+                emptyParameters.add(prefix.toString());
+            }
+        }
+
+        StringJoiner errors = new StringJoiner("\n");
+
+        if (missingParameters.length() > 0) {
+            errors.add(String.format(MESSAGE_MISSING_PARAMETERS, missingParameters));
+        }
+
+        if (emptyParameters.length() > 0) {
+            errors.add(String.format(MESSAGE_EMPTY_PARAMETERS, emptyParameters));
+        }
+
+        if (errors.length() > 0) {
+            throw new ParseException(errors.toString());
+        }
     }
 }

@@ -29,8 +29,11 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.CompletionStatus;
 import seedu.address.model.progress.StudentCourseProgress;
+import seedu.address.model.student.TutorialClass;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
@@ -85,14 +88,16 @@ public class JsonAddressBookStorageTest {
         assertEquals(original, new AddressBook(readBack));
 
         // Modify data, overwrite existing file, and read back
-        original.addStudent(HOON);
+        original.addStudentWithEnrolment(HOON, new StudentCourseEnrolment(HOON.getId(),
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1"), new TutorialClass("T07"), new NotesList()));
         original.removeStudent(ALICE);
         jsonAddressBookStorage.saveAddressBook(original, filePath);
         readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
         assertEquals(original, new AddressBook(readBack));
 
         // Save and read without specifying file path
-        original.addStudent(IDA);
+        original.addStudentWithEnrolment(IDA, new StudentCourseEnrolment(IDA.getId(),
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1"), new TutorialClass("T07"), new NotesList()));
         jsonAddressBookStorage.saveAddressBook(original); // file path not specified
         readBack = jsonAddressBookStorage.readAddressBook().get(); // file path not specified
         assertEquals(original, new AddressBook(readBack));
@@ -105,8 +110,9 @@ public class JsonAddressBookStorageTest {
         AddressBook original = new AddressBook();
         Course course = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
                 List.of(new Deliverable("MVP")));
-        original.addStudent(ALICE);
         original.addCourse(course);
+        original.addStudentWithEnrolment(ALICE, new StudentCourseEnrolment(ALICE.getId(),
+                course.getCourseCode(), course.getSemester(), new TutorialClass("T07"), new NotesList()));
 
         StudentCourseProgress completedProgress = original.getStudentCourseProgressList().getFirst()
                 .withStatus(new Deliverable("MVP"), CompletionStatus.DONE);

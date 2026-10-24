@@ -21,8 +21,6 @@ public class CommandResult {
     private final boolean exit;
 
     private final Id studentIdToFocus;
-
-    /** Deliverables that should be displayed in the details panel, if any. */
     private final StudentDeliverablesView studentDeliverablesView;
 
     /**
@@ -33,11 +31,8 @@ public class CommandResult {
         this(feedbackToUser, showHelp, exit, studentIdToFocus, null);
     }
 
-    /**
-     * Constructs a CommandResult with optional UI display data.
-     */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, Id studentIdToFocus,
-                         StudentDeliverablesView studentDeliverablesView) {
+    private CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
+            Id studentIdToFocus, StudentDeliverablesView studentDeliverablesView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
@@ -59,12 +54,10 @@ public class CommandResult {
         this(feedbackToUser, false, false);
     }
 
-    /**
-     * Constructs a CommandResult that displays one student's deliverables.
-     */
+    /** Constructs a result containing the deliverables view for a student. */
     public CommandResult(String feedbackToUser, StudentDeliverablesView studentDeliverablesView) {
-        this(feedbackToUser, false, false, requireNonNull(studentDeliverablesView).getStudent().getId(),
-                studentDeliverablesView);
+        this(feedbackToUser, false, false,
+                requireNonNull(studentDeliverablesView).getStudent().getId(), studentDeliverablesView);
     }
 
     public String getFeedbackToUser() {
@@ -83,6 +76,7 @@ public class CommandResult {
         return Optional.ofNullable(studentIdToFocus);
     }
 
+    /** Returns the optional deliverables view produced by the command. */
     public Optional<StudentDeliverablesView> getStudentDeliverablesView() {
         return Optional.ofNullable(studentDeliverablesView);
     }

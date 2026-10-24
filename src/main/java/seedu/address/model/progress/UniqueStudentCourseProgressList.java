@@ -8,18 +8,21 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
 import seedu.address.model.progress.exceptions.DuplicateStudentCourseProgressException;
 import seedu.address.model.progress.exceptions.StudentCourseProgressNotFoundException;
 import seedu.address.model.student.Id;
 
 /**
- * A list of progress records with at most one record for each student and course-semester pair.
+ * A list of progress records with at most one record for each student and
+ * course-semester pair.
  */
 public class UniqueStudentCourseProgressList implements Iterable<StudentCourseProgress> {
 
     private final ObservableList<StudentCourseProgress> internalList = FXCollections.observableArrayList();
-    private final ObservableList<StudentCourseProgress> internalUnmodifiableList =
-            FXCollections.unmodifiableObservableList(internalList);
+    private final ObservableList<StudentCourseProgress> internalUnmodifiableList = FXCollections
+            .unmodifiableObservableList(internalList);
 
     /** Returns whether an equivalent progress record already exists. */
     public boolean contains(StudentCourseProgress progress) {
@@ -46,7 +49,10 @@ public class UniqueStudentCourseProgressList implements Iterable<StudentCoursePr
         internalList.setAll(progresses);
     }
 
-    /** Replaces an existing progress record with an updated record for the same identity. */
+    /**
+     * Replaces an existing progress record with an updated record for the same
+     * identity.
+     */
     public void set(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
         requireAllNonNull(target, updatedProgress);
         int index = internalList.indexOf(target);
@@ -64,6 +70,36 @@ public class UniqueStudentCourseProgressList implements Iterable<StudentCoursePr
     public void removeForStudent(Id studentId) {
         requireNonNull(studentId);
         internalList.removeIf(progress -> progress.getStudentId().equals(studentId));
+    }
+
+    /**
+     * Removes progress belonging to the specified student and course-semester.
+     */
+    public void removeForStudentCourse(
+            Id studentId, CourseCode courseCode, Semester semester) {
+        requireAllNonNull(studentId, courseCode, semester);
+
+        internalList.removeIf(progress -> progress.isFor(studentId, courseCode, semester));
+    }
+
+    /**
+     * Updates the student ID of all progress records belonging to {@code oldId},
+     * preserving their completion statuses.
+     */
+    public void updateStudentId(Id oldId, Id newId) {
+        requireAllNonNull(oldId, newId);
+
+        if (oldId.equals(newId)) {
+            return;
+        }
+
+        List<StudentCourseProgress> updatedProgresses = internalList.stream()
+                .map(progress -> progress.getStudentId().equals(oldId)
+                        ? progress.withStudentId(newId)
+                        : progress)
+                .toList();
+
+        setProgresses(updatedProgresses);
     }
 
     /** Returns the backing list as an unmodifiable observable list. */

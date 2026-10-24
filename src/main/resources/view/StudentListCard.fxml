@@ -7,7 +7,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Separator?>
 
 <HBox id="cardPane" fx:id="cardPane"
       xmlns="http://javafx.com/javafx/17"
@@ -21,14 +23,14 @@
         </columnConstraints>
 
         <VBox alignment="CENTER_LEFT"
-              minHeight="105"
+              spacing="8"
               GridPane.columnIndex="0">
 
             <padding>
-                <Insets top="5"
-                        right="5"
-                        bottom="5"
-                        left="15" />
+                <Insets top="10"
+                        right="12"
+                        bottom="10"
+                        left="16" />
             </padding>
 
             <HBox spacing="5" alignment="CENTER_LEFT">
@@ -60,21 +62,20 @@
                        styleClass="cell_small_label" />
             </HBox>
 
-            <HBox spacing="8" alignment="CENTER_LEFT">
-                <ImageView fitWidth="16"
-                           fitHeight="16"
-                           preserveRatio="true">
-                    <image>
-                        <Image url="@../images/users.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="tutorialClass"
-                       styleClass="cell_small_label" />
+            <Separator />
+
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Enrolled courses"
+                       styleClass="student-section-heading" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="courseCount"
+                       styleClass="student-course-count" />
             </HBox>
 
-            <Label fx:id="notes"
-                   styleClass="cell_small_label"
-                   wrapText="true" />
+            <VBox fx:id="enrolledCourses"
+                  spacing="6"
+                  styleClass="student-courses" />
+
 
         </VBox>
     </GridPane>

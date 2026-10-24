@@ -17,7 +17,8 @@ import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
 /**
- * Displays a student's deliverable completion status for every tracked course-semester.
+ * Displays a student's deliverable completion status for every tracked
+ * course-semester.
  */
 public class ViewProgressCommand extends Command {
 

@@ -1,4 +1,4 @@
-package seedu.address.model.student;
+package seedu.address.model.enrolment;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
@@ -19,8 +19,8 @@ public class Notes {
     public static final String CORRUPTED_NOTES_ERROR_MESSAGE =
             "Student notes is corrupted.";
 
-    public final String notes;
-    public final Deliverable deliverable;
+    private final String notes;
+    private final Deliverable deliverable;
 
     /** Creates Notes from a non-blank string of at most 500 characters. */
     public Notes(String notes, String deliverable) {
@@ -73,6 +73,16 @@ public class Notes {
      */
     public boolean isEmpty() {
         return notes.isEmpty();
+    }
+
+    /** Returns the note text. */
+    public String getNotes() {
+        return notes;
+    }
+
+    /** Returns the deliverable associated with this note. */
+    public Deliverable getDeliverable() {
+        return deliverable;
     }
 
     @Override

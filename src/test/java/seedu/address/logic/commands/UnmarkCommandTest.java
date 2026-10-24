@@ -37,13 +37,15 @@ public class UnmarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.NOT_DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as incomplete for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as incomplete for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
     public void execute_alreadyIncomplete_throwsCommandException() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         Model model = new ModelManager(addressBook, new UserPrefs());
         UnmarkCommand command = new UnmarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(MVP));
@@ -53,7 +55,6 @@ public class UnmarkCommandTest {
 
     private Model modelWithCompletedMvp() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         Model model = new ModelManager(addressBook, new UserPrefs());
         StudentCourseProgress originalProgress = findAliceProgress(model);
         model.setStudentCourseProgress(originalProgress, originalProgress.withStatus(MVP, CompletionStatus.DONE));

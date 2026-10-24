@@ -3,6 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -17,15 +20,21 @@
 
   <VBox fx:id="content" spacing="4">
     <Label fx:id="studentName" wrapText="true" styleClass="deliverables-student-name" />
-    <Label fx:id="studentId" styleClass="deliverables-student-id" />
+    <HBox spacing="8" alignment="CENTER_LEFT"  styleClass="deliverables-student-id">
+        <ImageView fitWidth="16"
+                    fitHeight="16"
+                    preserveRatio="true">
+            <image>
+                <Image url="@../images/id-card.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="studentId"
+                styleClass="cell_small_label" />
+    </HBox>
     <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
                 styleClass="deliverables-scroll-pane">
       <content>
-        <VBox fx:id="courses" spacing="14">
-          <padding>
-            <Insets top="12" />
-          </padding>
-        </VBox>
+        <VBox fx:id="courses" spacing="8" />
       </content>
     </ScrollPane>
   </VBox>

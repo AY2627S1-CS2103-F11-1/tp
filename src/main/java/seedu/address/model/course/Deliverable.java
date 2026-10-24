@@ -9,7 +9,8 @@ import java.util.Locale;
  * Represents one project deliverable belonging to a course.
  */
 public class Deliverable {
-    public static final String MESSAGE_CONSTRAINTS = "Deliverable name must not be blank or contain a colon.";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Deliverable name must not be blank or contain a colon.";
 
     public final String name;
 
