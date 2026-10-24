@@ -86,8 +86,8 @@ Examples:
 ### Initialising a course: `init course`
 
 Initialises one course for a semester and records its project deliverables. A course can be initialised only once
-per semester, regardless of letter case. Provide at least one unique deliverable and separate deliverable names with
-commas.
+per semester, regardless of letter case. Provide between one and 20 unique deliverables, and separate deliverable
+names with commas.
 
 Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`
 
