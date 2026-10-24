@@ -48,11 +48,11 @@ deactivate AddressBookParser
 LogicManager -> DeleteCommand : execute(model)
 activate DeleteCommand
 
-DeleteCommand -> Model : getAddressBook()
-activate Model
-
-Model --> DeleteCommand : addressBook
-deactivate Model
+note right of DeleteCommand
+  The student is located using
+  the supplied ID.
+  Lookup details are omitted.
+end note
 
 DeleteCommand -> Model : deleteStudent(student)
 activate Model
