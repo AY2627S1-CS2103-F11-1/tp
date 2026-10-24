@@ -51,7 +51,6 @@ activate DeleteCommand
 note right of DeleteCommand
   The student is located using
   the supplied ID.
-
   Lookup details are omitted.
 end note
 
