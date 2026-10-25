@@ -3,7 +3,10 @@ layout: page
 title: User Guide
 ---
 
-TAssist is a **desktop application for managing students, optimized for use through a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
+TAssist is a **desktop application for university teaching assistants who manage
+students across project-based computing courses**. It combines a command-line
+workflow for fast data entry with a graphical overview of student enrolments,
+notes, and project-deliverable progress.
 
 * Table of Contents
 {:toc}
@@ -12,14 +15,15 @@ TAssist is a **desktop application for managing students, optimized for use thro
 
 ## Quick start
 
-1. Ensure that Java `25` or later is installed on your computer.<br>
+1. Ensure that Java `25` is installed on your computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download `TAssist.jar` from the
+   [latest TAssist release](https://github.com/AY2627S1-CS2103-F11-1/tp/releases/latest).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for TAssist.
 
-1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar addressbook.jar`.<br>
+1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar TAssist.jar`.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -32,7 +36,7 @@ TAssist is a **desktop application for managing students, optimized for use thro
 
    * `delete /id A1234567Z` : Deletes the student with the specified ID.
 
-   * `clear` : Deletes all students.
+   * `clear` : Deletes all students, courses, enrolments, notes, and progress records.
 
    * `exit` : Exits the app.
 
@@ -50,10 +54,11 @@ TAssist is a **desktop application for managing students, optimized for use thro
   For example, in `add /name NAME`, replace `NAME` with a value such as `John Doe`.
 
 * Items in square brackets are optional.<br>
-  The optional parameters shown in each command's format may be omitted.
+  For example, `edit /id ID [/email EMAIL]` can be used as
+  `edit /id A1234567Z /email john@u.nus.edu`.
 
-* Items followed by `…`​ can appear zero or more times.<br>
-  For example, `[t/TAG]…​` may be omitted, or written as `t/friend` or `t/friend t/family`.
+* Items followed by `...` accept multiple comma-separated values.<br>
+  For example, `/task TASK[, TASK]...` can be `/task v1.4` or `/task v1.4, v1.5`.
 
 * Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
   The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
@@ -75,7 +80,7 @@ Format: `help`
 
 ### Adding a student: `add`
 
-Adds a student to the address book.
+Adds a student to TAssist with at least one course enrolment.
 
 Format: `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
 
@@ -208,7 +213,7 @@ Examples:
 
 * `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
 * `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
-* `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes notes for the selected enrolment.
+* `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes all notes for the selected enrolment.
 
 ### Marking deliverables as complete: `mark`
 
@@ -282,17 +287,20 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook automatically saves data after every command. You do not need to save manually.
+TAssist automatically saves data after every successful command. You do not need to save manually.
 
 ### Editing the data file
 
-AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+TAssist data is saved automatically as `[JAR file location]/data/addressbook.json`.
+Advanced users may update the JSON file directly, but should make a backup first.
 
 **Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes make the data file invalid, AddressBook starts with an empty address book at the next run. The invalid file remains on disk until you run a command (AddressBook saves after every command). Still, we recommend backing up the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes make the data file invalid, TAssist starts with sample data at
+the next run. The invalid file remains on disk until a command is run, at which
+point TAssist saves its current data. Edit the file only if you are confident
+that the resulting values follow the documented formats.<br>
 </div>
 
 ### Archiving data files `[coming in v2.0]`
@@ -304,7 +312,8 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?<br>
-**A**: Install the app on the other computer and overwrite the data file it creates with the data file from your previous AddressBook home folder.
+**A**: Install TAssist on the other computer and replace its generated data file
+with the `data/addressbook.json` file from your previous TAssist home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
