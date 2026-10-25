@@ -6,9 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
-import java.util.stream.Stream;
-
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.Course;
@@ -19,35 +16,51 @@ import seedu.address.model.course.Semester;
  * Parses input arguments and creates an {@link InitCourseCommand}.
  */
 public class InitCourseCommandParser implements Parser<InitCourseCommand> {
+
     private static final String COURSE_SUBCOMMAND = "course";
 
     @Override
     public InitCourseCommand parse(String args) throws ParseException {
         requireNonNull(args);
+
         String trimmedArgs = args.trim();
         if (!trimmedArgs.equals(COURSE_SUBCOMMAND)
                 && !trimmedArgs.startsWith(COURSE_SUBCOMMAND + " ")) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
         }
 
         String arguments = trimmedArgs.substring(COURSE_SUBCOMMAND.length());
-        ParserUtil.rejectUnknownParameters(arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
+
+        ParserUtil.rejectUnknownParameters(
+                arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
+
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
-        if (!arePrefixesPresent(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE)
-                || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
+
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
-        CourseCode courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE).get());
-        Semester semester = ParserUtil.parseSemester(argMultimap.getValue(PREFIX_SEMESTER).get());
-        Course course = new Course(courseCode, semester,
-                ParserUtil.parseDeliverables(argMultimap.getValue(PREFIX_DELIVERABLE).get()));
-        return new InitCourseCommand(course);
-    }
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
 
-    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
-        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+        ParserUtil.validateRequiredParameters(
+                argMultimap, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
+
+        CourseCode courseCode = ParserUtil.parseCourseCode(
+                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
+
+        Semester semester = ParserUtil.parseSemester(
+                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
+
+        Course course = new Course(
+                courseCode,
+                semester,
+                ParserUtil.parseDeliverables(
+                        argMultimap.getValue(PREFIX_DELIVERABLE).orElseThrow()));
+
+        return new InitCourseCommand(course);
     }
 }

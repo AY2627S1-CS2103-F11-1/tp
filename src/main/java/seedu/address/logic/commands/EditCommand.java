@@ -32,10 +32,6 @@ public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    private static final String FIELD_NAME = "Name";
-    private static final String FIELD_STUDENT_ID = "Student ID";
-    private static final String FIELD_EMAIL = "Email";
-
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Edits the details of a student identified by their current student ID.\n"
             + "At least one field must be provided for updating.\n"
@@ -60,13 +56,17 @@ public class EditCommand extends Command {
     public static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
             + " to the existing student details.";
 
+    private static final String FIELD_NAME = "Name";
+    private static final String FIELD_STUDENT_ID = "Student ID";
+    private static final String FIELD_EMAIL = "Email";
+
     private final Id studentId;
     private final EditStudentDescriptor descriptor;
 
     /**
-     * @param studentId  of the person in the filtered person list to
+     * @param studentId  of the student in the filtered student list to
      *                   edit
-     * @param descriptor details to edit the person with
+     * @param descriptor details to edit the student with
      */
     public EditCommand(Id studentId, EditStudentDescriptor descriptor) {
         requireNonNull(studentId);
@@ -163,7 +163,7 @@ public class EditCommand extends Command {
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
+     * Creates and returns a {@code Student} with the details of {@code original}
      * edited with {@code descriptor}.
      */
     private static Student createEditedStudent(Student original, EditStudentDescriptor descriptor) {
@@ -199,9 +199,9 @@ public class EditCommand extends Command {
     }
 
     /**
-     * Stores the details to edit the person with. Each non-empty field value will
+     * Stores the details to edit the student with. Each non-empty field value will
      * replace the
-     * corresponding field value of the person.
+     * corresponding field value of the student.
      */
     public static class EditStudentDescriptor {
         private Name name;

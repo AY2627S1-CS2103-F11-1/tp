@@ -219,44 +219,33 @@ public class ParserUtil {
         }
     }
 
-    /** Validates that exactly one of the supplied alternative prefixes is present. */
-    public static void validateExactlyOneOf(ArgumentMultimap argMultimap,
-                                            String missingMessage, String conflictMessage,
-                                            Prefix firstPrefix, Prefix secondPrefix) throws ParseException {
+    /**
+     * Validates that exactly one of the two prefixes is present and non-blank.
+     *
+     * @throws ParseException if neither or both prefixes are present,
+     *                        or the selected value is blank.
+     */
+    public static void validateExactlyOneOf(
+            ArgumentMultimap argMultimap, Prefix firstPrefix, Prefix secondPrefix)
+            throws ParseException {
         requireNonNull(argMultimap);
-        requireNonNull(missingMessage);
-        requireNonNull(conflictMessage);
         requireNonNull(firstPrefix);
         requireNonNull(secondPrefix);
 
         boolean hasFirst = argMultimap.getValue(firstPrefix).isPresent();
         boolean hasSecond = argMultimap.getValue(secondPrefix).isPresent();
+
         if (!hasFirst && !hasSecond) {
-            throw new ParseException(missingMessage);
+            throw new ParseException(String.format(
+                    Messages.MESSAGE_MISSING_IDENTIFIER, firstPrefix, secondPrefix));
         }
+
         if (hasFirst && hasSecond) {
-            throw new ParseException(conflictMessage);
+            throw new ParseException(String.format(
+                    Messages.MESSAGE_CONFLICTING_IDENTIFIERS, firstPrefix, secondPrefix));
         }
+
+        validateRequiredParameters(argMultimap, hasFirst ? firstPrefix : secondPrefix);
     }
 
-    /**
-     * Rejects parameters that appear more than once.
-     *
-     * @throws ParseException if any specified parameter is duplicated.
-     */
-    public static void rejectDuplicateParameters(
-            ArgumentMultimap argMultimap, Prefix... prefixes)
-            throws ParseException {
-        requireNonNull(argMultimap);
-        requireNonNull(prefixes);
-
-        for (Prefix prefix : prefixes) {
-            requireNonNull(prefix);
-
-            if (argMultimap.getAllValues(prefix).size() > 1) {
-                throw new ParseException(
-                        String.format(Messages.MESSAGE_DUPLICATE_PARAMETER, prefix));
-            }
-        }
-    }
 }

@@ -35,6 +35,28 @@ public class NotesCommandParserTest {
     }
 
     @Test
+    public void parse_slashInsideNoteText_success() {
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /deliverable MVP /notes See C:/tmp/results",
+                new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                        new Semester("AY26/27-S1"), new Notes("See C:/tmp/results", "MVP")));
+    }
+
+    @Test
+    public void parse_parameterLikeTextAfterNotes_failure() {
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /deliverable MVP /notes Discussed /task MVP",
+                NotesCommandParser.MESSAGE_PARAMETERS_AFTER_NOTES);
+    }
+
+    @Test
+    public void parse_repeatedNotesPrefix_failure() {
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /deliverable MVP /notes First note /notes Second note",
+                NotesCommandParser.MESSAGE_PARAMETERS_AFTER_NOTES);
+    }
+
+    @Test
     public void parse_missingRequiredField_failure() {
         assertParseFailure(parser, "", NotesCommandParser.MESSAGE_MISSING_NOTES);
         assertParseFailure(parser, "   ", NotesCommandParser.MESSAGE_MISSING_NOTES);

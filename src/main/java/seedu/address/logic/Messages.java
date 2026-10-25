@@ -23,8 +23,6 @@ public class Messages {
     public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter: %s";
     public static final String MESSAGE_MISSING_IDENTIFIER = "Missing required parameter: %s or %s";
     public static final String MESSAGE_CONFLICTING_IDENTIFIERS = "Please specify either %s or %s, not both.";
-    public static final String MESSAGE_DUPLICATE_PARAMETER = "Multiple values specified for parameter: %s";
-
     /**
      * Returns an error message indicating the duplicate prefixes.
      */

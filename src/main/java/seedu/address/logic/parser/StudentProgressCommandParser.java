@@ -32,12 +32,9 @@ abstract class StudentProgressCommandParser<T extends StudentProgressCommand> im
         if (!arguments.getPreamble().isEmpty()) {
             throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
-        ParserUtil.rejectDuplicateParameters(arguments, PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER,
-                PREFIX_DELIVERABLE);
-        ParserUtil.validateExactlyOneOf(arguments,
-                String.format(Messages.MESSAGE_MISSING_IDENTIFIER, PREFIX_ID, PREFIX_NAME),
-                String.format(Messages.MESSAGE_CONFLICTING_IDENTIFIERS, PREFIX_ID, PREFIX_NAME),
-                PREFIX_ID, PREFIX_NAME);
+        arguments.verifyNoDuplicatePrefixesFor(
+                PREFIX_ID, PREFIX_NAME, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
+        ParserUtil.validateExactlyOneOf(arguments, PREFIX_ID, PREFIX_NAME);
         boolean hasId = arguments.getValue(PREFIX_ID).isPresent();
         ParserUtil.validateRequiredParameters(arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
         String course = arguments.getValue(PREFIX_COURSE).orElseThrow();

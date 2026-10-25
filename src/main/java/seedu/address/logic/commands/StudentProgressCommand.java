@@ -24,7 +24,8 @@ public abstract class StudentProgressCommand extends Command {
 
     static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'.";
     static final String MESSAGE_STUDENT_NAME_NOT_FOUND = "No student found with name '%s'.";
-    static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. Please use the student's ID instead.";
+    static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. "
+            + "Please use the student's ID instead.";
     static final String MESSAGE_COURSE_NOT_FOUND = "Course %s %s has not been initialised.";
     static final String MESSAGE_DELIVERABLE_NOT_FOUND = "Deliverable '%s' does not exist in %s %s.";
     static final String MESSAGE_PROGRESS_NOT_FOUND = "No progress record exists for this student and course.";

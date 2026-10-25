@@ -51,6 +51,6 @@ public class SearchCommandParserTest {
         assertParseFailure(parser, " /id A1234567Z /id A2345678X",
                 "Multiple values specified for parameter: /id");
         assertParseFailure(parser, " /name John /id A1234567Z",
-                "Please search using either /name or /id, not both.");
+                "Please specify either /name or /id, not both.");
     }
 }

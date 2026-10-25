@@ -30,11 +30,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
-        ParserUtil.rejectDuplicateParameters(argMultimap, PREFIX_ID, PREFIX_NAME);
-        ParserUtil.validateExactlyOneOf(argMultimap,
-                String.format(Messages.MESSAGE_MISSING_IDENTIFIER, PREFIX_ID, PREFIX_NAME),
-                String.format(Messages.MESSAGE_CONFLICTING_IDENTIFIERS, PREFIX_ID, PREFIX_NAME),
-                PREFIX_ID, PREFIX_NAME);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME);
+        ParserUtil.validateExactlyOneOf(argMultimap, PREFIX_ID, PREFIX_NAME);
 
         if (hasId) {
             ParserUtil.validateRequiredParameters(argMultimap, PREFIX_ID);

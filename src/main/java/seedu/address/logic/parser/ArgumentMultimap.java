@@ -30,9 +30,7 @@ public class ArgumentMultimap {
      * @param argValue Argument value to be associated with the specified prefix key
      */
     public void put(Prefix prefix, String argValue) {
-        List<String> argValues = getAllValues(prefix);
-        argValues.add(argValue);
-        argMultimap.put(prefix, argValues);
+        argMultimap.computeIfAbsent(prefix, key -> new ArrayList<>()).add(argValue);
     }
 
     /**
@@ -64,7 +62,7 @@ public class ArgumentMultimap {
 
     /**
      * Throws a {@code ParseException} if any of the prefixes given in {@code prefixes} appeared more than
-     * once among the arguments.
+     * once among the arguments. All duplicated prefixes are included in the error message.
      */
     public void verifyNoDuplicatePrefixesFor(Prefix... prefixes) throws ParseException {
         Prefix[] duplicatedPrefixes = Stream.of(prefixes).distinct()
