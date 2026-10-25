@@ -165,6 +165,7 @@ public class ModelManager implements Model {
     public void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester) {
         requireAllNonNull(studentId, courseCode, semester);
         addressBook.removeEnrolment(studentId, courseCode, semester);
+        updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
     }
 
     // =========== Filtered Student List Accessors
