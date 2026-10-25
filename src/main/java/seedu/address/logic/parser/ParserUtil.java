@@ -6,6 +6,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_DATA_FORMAT;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -74,7 +75,7 @@ public class ParserUtil {
     /** Parses a student ID. */
     public static Id parseId(String id) throws ParseException {
         requireNonNull(id);
-        String trimmedId = id.trim();
+        String trimmedId = id.trim().toUpperCase(Locale.ROOT);
         if (!Id.isValidId(trimmedId)) {
             throw new ParseException(Id.MESSAGE_CONSTRAINTS);
         }

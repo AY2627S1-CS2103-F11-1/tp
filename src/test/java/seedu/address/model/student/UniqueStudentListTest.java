@@ -88,6 +88,18 @@ public class UniqueStudentListTest {
     }
 
     @Test
+    public void setStudent_editedStudentKeepsIdButConflictsWithEmail_throwsDuplicateStudentException() {
+        uniqueStudentList.add(ALICE);
+        uniqueStudentList.add(BOB);
+        Student editedAlice = new StudentBuilder(ALICE)
+                .withEmail(BOB.getEmail().toString())
+                .build();
+
+        assertThrows(DuplicateStudentException.class, () -> uniqueStudentList
+                .setStudent(ALICE, editedAlice));
+    }
+
+    @Test
     public void setStudent_editedStudentHasDifferentIdentity_success() {
         uniqueStudentList.add(ALICE);
         uniqueStudentList.setStudent(ALICE, BOB);

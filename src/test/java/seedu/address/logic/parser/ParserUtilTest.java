@@ -93,6 +93,12 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseId_lowercaseValue_returnsUppercaseId() throws Exception {
+        Id expectedId = new Id(VALID_ID);
+        assertEquals(expectedId, ParserUtil.parseId("a1234567y"));
+    }
+
+    @Test
     public void parseTutorialClass_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTutorialClass((String) null));
     }
