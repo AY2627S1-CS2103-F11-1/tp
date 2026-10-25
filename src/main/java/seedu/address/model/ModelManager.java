@@ -13,6 +13,9 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -120,6 +123,49 @@ public class ModelManager implements Model {
     @Override
     public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
         addressBook.setStudentCourseProgress(target, updatedProgress);
+    }
+
+    @Override
+    public boolean hasEnrolment(StudentCourseEnrolment enrolment) {
+        requireNonNull(enrolment);
+        return addressBook.hasEnrolment(enrolment);
+    }
+
+    @Override
+    public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
+        requireAllNonNull(courseCode, semester);
+        return addressBook.getCourse(courseCode, semester);
+    }
+
+    @Override
+    public void addStudentWithEnrolments(
+            Student student, List<StudentCourseEnrolment> enrolments) {
+        requireAllNonNull(student, enrolments);
+        addressBook.addStudentWithEnrolments(student, enrolments);
+    }
+
+    @Override
+    public void addStudentWithEnrolment(Student student, StudentCourseEnrolment enrolment) {
+        requireAllNonNull(student, enrolment);
+        addressBook.addStudentWithEnrolment(student, enrolment);
+    }
+
+    @Override
+    public void addEnrolment(StudentCourseEnrolment enrolment) {
+        requireNonNull(enrolment);
+        addressBook.addEnrolment(enrolment);
+    }
+
+    @Override
+    public void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment) {
+        addressBook.setEnrolment(target, editedEnrolment);
+    }
+
+    @Override
+    public void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester) {
+        requireAllNonNull(studentId, courseCode, semester);
+        addressBook.removeEnrolment(studentId, courseCode, semester);
+        updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
     }
 
     // =========== Filtered Student List Accessors

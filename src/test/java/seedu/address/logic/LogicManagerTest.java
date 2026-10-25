@@ -27,7 +27,14 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Student;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -177,11 +184,17 @@ public class LogicManagerTest {
         logic = new LogicManager(model, storage);
 
         // Triggers the saveAddressBook method by executing an add command
+        Course course = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                java.util.List.of(new Deliverable("MVP")));
+        model.addCourse(course);
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + ID_DESC_AMY
-                + EMAIL_DESC_AMY + CLASS_DESC_AMY;
-        Student expectedStudent = new StudentBuilder(AMY).withNotes().build();
+                + EMAIL_DESC_AMY + " /course CS2103T /sem AY26/27-S1" + CLASS_DESC_AMY;
+        Student expectedStudent = new StudentBuilder(AMY).build();
         ModelManager expectedModel = new ModelManager();
-        expectedModel.addStudent(expectedStudent);
+        expectedModel.addCourse(course);
+        expectedModel.addStudentWithEnrolment(expectedStudent, new StudentCourseEnrolment(
+                expectedStudent.getId(), course.getCourseCode(), course.getSemester(),
+                new TutorialClass("T07"), new NotesList()));
         expectedModel.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_STUDENTS);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }

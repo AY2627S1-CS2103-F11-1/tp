@@ -6,6 +6,7 @@ import javafx.scene.AccessibleRole;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import seedu.address.logic.commands.StudentDeliverablesView;
 import seedu.address.model.course.Deliverable;
@@ -49,6 +50,14 @@ public class DeliverablesPanel extends UiPart<Region> {
         content.setManaged(true);
     }
 
+    /** Clears the displayed deliverables and restores the empty state. */
+    public void clear() {
+        courses.getChildren().clear();
+        studentName.setText("");
+        studentId.setText("");
+        showEmptyState();
+    }
+
     private void showEmptyState() {
         emptyState.setVisible(true);
         emptyState.setManaged(true);
@@ -83,12 +92,19 @@ public class DeliverablesPanel extends UiPart<Region> {
     private HBox createTaskRow(Deliverable deliverable, CompletionStatus status) {
         boolean isComplete = status == CompletionStatus.DONE;
 
-        Region statusBox = new Region();
-        statusBox.getStyleClass().add(isComplete
+        Region boxBackground = new Region();
+        boxBackground.getStyleClass().add(isComplete
                 ? "deliverable-status-box-complete"
                 : "deliverable-status-box-incomplete");
+        StackPane statusBox = new StackPane(boxBackground);
+        statusBox.getStyleClass().add("deliverable-status-container");
         statusBox.setAccessibleRole(AccessibleRole.TEXT);
         statusBox.setAccessibleText(isComplete ? "Complete" : "Incomplete");
+        if (isComplete) {
+            Label checkMark = new Label("✓");
+            checkMark.getStyleClass().add("deliverable-status-check");
+            statusBox.getChildren().add(checkMark);
+        }
 
         Label taskName = new Label(deliverable.toString());
         taskName.getStyleClass().add("deliverable-task-name");

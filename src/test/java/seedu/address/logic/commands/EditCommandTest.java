@@ -37,9 +37,9 @@ public class EditCommandTest {
         Id targetId = new Id("A1234567Y");
         Student studentToEdit = findStudent(targetId);
         Student editedStudent = new StudentBuilder(studentToEdit).withName(VALID_NAME_BOB)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass("F10").build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).build();
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass("F10").build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).build();
 
         Model expectedModel = copyModel();
         expectedModel.setStudent(findStudent(expectedModel, targetId), editedStudent);
@@ -79,7 +79,7 @@ public class EditCommandTest {
         Student studentToEdit = findStudent(new Id("A1234567Y"));
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
                 .withName("Benson Meier").withId("A2345678X")
-                .withEmail("benson@u.nus.edu").withTutorialClass("F10").build();
+                .withEmail("benson@u.nus.edu").build();
 
         assertCommandFailure(new EditCommand(studentToEdit.getId(), descriptor), model,
                 EditCommand.MESSAGE_DUPLICATE_STUDENT);
@@ -130,9 +130,6 @@ public class EditCommandTest {
         descriptor.getName().ifPresent(name -> changes.add("Name: " + name));
         descriptor.getId().ifPresent(id -> changes.add("Student ID: " + id));
         descriptor.getEmail().ifPresent(email -> changes.add("Email: " + email));
-        descriptor.getTutorialClass().ifPresent(tutorialClass ->
-                changes.add("Tutorial class: " + tutorialClass));
-
         return String.format(EditCommand.MESSAGE_EDIT_STUDENT_SUCCESS, student.getId(), changes);
     }
 
@@ -140,7 +137,7 @@ public class EditCommandTest {
             Model expectedModel, Student expectedStudent) {
         try {
             CommandResult result = command.execute(model);
-            assertEquals(new CommandResult(expectedMessage), result);
+            assertEquals(new CommandResult(expectedMessage, false, false, expectedStudent.getId()), result);
             assertEquals(expectedModel.getAddressBook(), model.getAddressBook());
             assertTrue(model.getAddressBook().getStudentList().contains(expectedStudent));
         } catch (CommandException exception) {

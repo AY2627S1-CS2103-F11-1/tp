@@ -24,7 +24,7 @@ import seedu.address.model.progress.StudentCourseProgress;
 public class MarkCommandTest {
 
     private static final Course COURSE = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
-            List.of(new Deliverable("v1.1"), new Deliverable("MVP")));
+            List.of(new Deliverable("MVP"), new Deliverable("Final")));
     private static final Deliverable MVP = new Deliverable("MVP");
 
     @Test
@@ -37,7 +37,10 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
@@ -50,7 +53,10 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
@@ -75,7 +81,6 @@ public class MarkCommandTest {
 
     private Model modelWithCourse() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         return new ModelManager(addressBook, new UserPrefs());
     }
 

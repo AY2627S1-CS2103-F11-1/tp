@@ -1,10 +1,11 @@
-package seedu.address.model.student;
+package seedu.address.model.enrolment;
 
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,6 +45,7 @@ public class NotesList {
      */
     public NotesList(List<Notes> notesList) {
         requireNonNull(notesList);
+        notesList.forEach(Objects::requireNonNull);
         this.notesList = new ArrayList<>(notesList);
     }
 
@@ -118,14 +120,14 @@ public class NotesList {
      * Used in {@code ViewNotesCommand}
      */
     public String viewNotes() {
-        String finalString = "";
+        StringBuilder finalString = new StringBuilder();
         int counter = 1;
 
         for (Notes notes : notesList) {
-            finalString += counter + ". " + notes + "\n";
+            finalString.append(counter).append(". ").append(notes).append("\n");
             counter++;
         }
-        return finalString;
+        return finalString.toString();
     }
 
     /**

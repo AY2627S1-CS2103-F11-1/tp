@@ -3,9 +3,6 @@ package seedu.address.model.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TASK_PARTICIPATIVE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BOB;
@@ -41,9 +38,7 @@ public class UniqueStudentListTest {
     @Test
     public void contains_studentWithSameIdentityFieldsInList_returnsTrue() {
         uniqueStudentList.add(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_TASK_PARTICIPATIVE)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).build();
         assertTrue(uniqueStudentList.contains(editedAlice));
     }
 
@@ -85,13 +80,23 @@ public class UniqueStudentListTest {
     @Test
     public void setStudent_editedStudentHasSameIdentity_success() {
         uniqueStudentList.add(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE, VALID_TASK_PARTICIPATIVE)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).build();
         uniqueStudentList.setStudent(ALICE, editedAlice);
         UniqueStudentList expectedUniqueStudentList = new UniqueStudentList();
         expectedUniqueStudentList.add(editedAlice);
         assertEquals(expectedUniqueStudentList, uniqueStudentList);
+    }
+
+    @Test
+    public void setStudent_editedStudentKeepsIdButConflictsWithEmail_throwsDuplicateStudentException() {
+        uniqueStudentList.add(ALICE);
+        uniqueStudentList.add(BOB);
+        Student editedAlice = new StudentBuilder(ALICE)
+                .withEmail(BOB.getEmail().toString())
+                .build();
+
+        assertThrows(DuplicateStudentException.class, () -> uniqueStudentList
+                .setStudent(ALICE, editedAlice));
     }
 
     @Test

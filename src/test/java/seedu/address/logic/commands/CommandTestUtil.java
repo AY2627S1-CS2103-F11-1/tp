@@ -34,7 +34,6 @@ public class CommandTestUtil {
     public static final String VALID_CLASS_AMY = "T07";
     public static final String VALID_CLASS_BOB = "F10";
     public static final String VALID_NOTES_PARTICIPATIVE = "active participation";
-    public static final String VALID_TASK_PARTICIPATIVE = "Participation";
     public static final String VALID_NOTES_CONSULTATION = "consultation done on 9/7";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + " " + VALID_NAME_AMY;
@@ -62,9 +61,9 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).withTutorialClass(VALID_CLASS_AMY).build();
+                .withId(VALID_ID_AMY).withEmail(VALID_EMAIL_AMY).build();
         DESC_BOB = new EditStudentDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).withTutorialClass(VALID_CLASS_BOB).build();
+                .withId(VALID_ID_BOB).withEmail(VALID_EMAIL_BOB).build();
     }
 
     /**
@@ -99,7 +98,7 @@ public class CommandTestUtil {
      * Executes the given {@code command}, confirms that <br>
      * - a {@code CommandException} is thrown <br>
      * - the CommandException message matches {@code expectedMessage} <br>
-     * - the tutorialClass book, filtered student list and selected student in
+     * - the address book, filtered student list and selected student in
      * {@code actualModel} remain unchanged
      */
     public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
@@ -116,7 +115,7 @@ public class CommandTestUtil {
     /**
      * Updates {@code model}'s filtered list to show only the student at the given
      * {@code targetIndex} in the
-     * {@code model}'s tutorialClass book.
+     * {@code model}'s address book.
      */
     public static void showStudentAtIndex(Model model, Index targetIndex) {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredStudentList().size());
