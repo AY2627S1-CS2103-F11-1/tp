@@ -41,11 +41,11 @@ public class NotesCommandParserTest {
         assertParseFailure(parser, " notes /id A1234567Z",
                 NotesCommandParser.MESSAGE_MISSING_NOTES);
         assertParseFailure(parser, " notes /id A1234567Z /notes Implemented inheritance",
-                ParserMessages.UNEXPECTED_TEXT);
+                "Unexpected text found before parameter.");
         assertParseFailure(parser, " notes /id A1234567Z /deliverable Level 1",
                 NotesCommandParser.MESSAGE_MISSING_NOTES);
         assertParseFailure(parser, " notes /notes Implemented inheritance /deliverable Level 1",
-                ParserMessages.UNEXPECTED_TEXT);
+                "Unexpected text found before parameter.");
     }
 
     @Test
@@ -58,7 +58,8 @@ public class NotesCommandParserTest {
 
     @Test
     public void parse_blankDeliverable_failure() {
-        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable /notes Used inheritance",
+        assertParseFailure(parser,
+                " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable /notes Used inheritance",
                 "Empty parameter value(s): /deliverable");
     }
 

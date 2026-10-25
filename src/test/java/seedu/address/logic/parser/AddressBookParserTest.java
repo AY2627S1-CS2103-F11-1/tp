@@ -101,7 +101,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_initCourse() throws Exception {
-        assertTrue(parser.parseCommand("init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP")
+        assertTrue(parser.parseCommand("init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP")
                 instanceof InitCourseCommand);
     }
 
@@ -113,7 +113,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_mark() throws Exception {
-        assertTrue(parser.parseCommand("mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP")
+        assertTrue(parser.parseCommand("mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP")
                 instanceof MarkCommand);
     }
 
@@ -122,7 +122,7 @@ public class AddressBookParserTest {
         assertEquals(new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                 new Semester("AY26/27-S1"), new Notes("Discussed inheritance", "MVP")), parser.parseCommand(
                 NotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"
-                        + " /task MVP /notes Discussed inheritance"));
+                        + " /deliverable MVP /notes Discussed inheritance"));
         assertEquals(new ViewNotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                 new Semester("AY26/27-S1")), parser.parseCommand(
                 ViewNotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"));

@@ -35,24 +35,24 @@ public class UnmarkCommandParserTest {
     @Test
     public void parse_missingStudent_throwsParseException() {
         assertParseFailure(parser, " /course CS2103T /sem AY26/27-S1 /deliverable MVP",
-                StudentProgressCommandParser.MESSAGE_MISSING_STUDENT);
+                "Missing required parameter: /id or /name");
     }
 
     @Test
     public void parse_bothStudentIdentifiers_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable MVP",
-                StudentProgressCommandParser.MESSAGE_BOTH_IDENTIFIERS);
+                "Please specify either /id or /name, not both.");
     }
 
     @Test
     public void parse_unknownParameter_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /class T07",
-                StudentProgressCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+                "Unknown parameter: /class");
     }
 
     @Test
     public void parse_emptyDeliverable_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable",
-                StudentProgressCommandParser.MESSAGE_EMPTY_PARAMETER);
+                "Empty parameter value(s): /deliverable");
     }
 }

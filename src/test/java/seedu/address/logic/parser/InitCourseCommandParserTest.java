@@ -58,6 +58,6 @@ public class InitCourseCommandParserTest {
     @Test
     public void parse_unknownParameter_failure() {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable MVP /foo value",
-                String.format(ParserMessages.UNKNOWN_PARAMETER, "/foo"));
+                "Unknown parameter: /foo");
     }
 }
