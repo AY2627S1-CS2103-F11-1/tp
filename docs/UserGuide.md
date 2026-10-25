@@ -101,11 +101,25 @@ Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIV
 
 Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
 
-### Listing all students: `list`
+### Listing students: `list`
 
-Shows a list of all students in the address book.
+Shows all students, or only students enrolled in a selected course-semester and
+optional tutorial class.
 
 Format: `list`
+
+Filtered formats:
+
+* `list /course COURSE /sem SEMESTER`
+* `list /course COURSE /sem SEMESTER /class CLASS`
+
+Examples:
+
+* `list /course CS2103T /sem AY26/27-S1` shows students enrolled in CS2103T for the selected semester.
+* `list /course CS2103T /sem AY26/27-S1 /class T07` shows only students from tutorial T07 in that course-semester.
+
+`/course` and `/sem` must be supplied together. `/class` can be used only with
+both of them. Students appear once even if they have other enrolments.
 
 ### Editing a student: `edit`
 
@@ -325,7 +339,7 @@ Action | Format, Examples
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
-**List** | `list`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /class T07`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
