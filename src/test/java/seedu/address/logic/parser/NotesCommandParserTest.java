@@ -68,6 +68,14 @@ public class NotesCommandParserTest {
     }
 
     @Test
+    public void parse_unicodeNotes_success() {
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes Reviewed 👍 and discussed 测试",
+                new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                        new Semester("AY26/27-S1"), new Notes("Reviewed 👍 and discussed 测试", "MVP")));
+    }
+
+    @Test
     public void parse_duplicatePrefix_failure() {
         assertParseFailure(parser, " /id A1234567Z /id A7654321Z /notes Discussed inheritance",
                 "Multiple values specified for the following single-valued field(s): /id");

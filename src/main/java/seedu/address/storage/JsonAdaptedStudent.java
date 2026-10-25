@@ -15,8 +15,8 @@ class JsonAdaptedStudent {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Student's %s field is missing!";
     public static final String LEGACY_FIELDS_MESSAGE =
-            "Legacy student course data cannot be migrated automatically. "
-                    + "Please back up and update the address book data manually.";
+            "Old save format detected. Please back up and delete data/addressbook.json "
+                    + "or restore a compatible backup.";
 
     private final String name;
     private final String id;
