@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,8 +29,7 @@ public class NotesCommandParser implements Parser<NotesCommand> {
 
     public static final String MESSAGE_EMPTY_NOTES = "Empty parameter value: " + PREFIX_NOTES;
 
-    public static final String MESSAGE_PARAMETERS_AFTER_NOTES =
-            "The /notes parameter must be the final parameter.";
+    public static final String MESSAGE_PARAMETERS_AFTER_NOTES = "The /notes parameter must be the final parameter.";
 
     private static final String NOTES_PREFIX_REGEX = "(^|\\s)" + Pattern.quote(PREFIX_NOTES.toString()) + "(?=\\s|$)";
 
@@ -39,7 +38,7 @@ public class NotesCommandParser implements Parser<NotesCommand> {
             "(^|\\s)/\\S+(?=\\s|$)");
 
     private static final Prefix[] STRUCTURED_PREFIXES = {
-        PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK
+            PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE
     };
 
     @Override
@@ -72,7 +71,7 @@ public class NotesCommandParser implements Parser<NotesCommand> {
         Semester semester = ParserUtil.parseSemester(
                 argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
 
-        String task = argMultimap.getValue(PREFIX_TASK).orElseThrow();
+        String task = argMultimap.getValue(PREFIX_DELIVERABLE).orElseThrow();
 
         String noteText = getNotesText(args);
 

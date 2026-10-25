@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
@@ -24,10 +28,11 @@ public class ViewProgressCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Displays all deliverable progress for a student.\n"
-            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME\n"
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " or "
+            + PREFIX_NAME + " " + ARGUMENT_NAME + "\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe";
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + "\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
     public static final String MESSAGE_NO_PROGRESS = "No deliverable progress found for %s (%s).";
 
     private final Optional<Id> studentId;

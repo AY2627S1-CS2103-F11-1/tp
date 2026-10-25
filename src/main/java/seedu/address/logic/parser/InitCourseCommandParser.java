@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 
 import java.util.stream.Stream;
 
@@ -28,19 +28,19 @@ public class InitCourseCommandParser implements Parser<InitCourseCommand> {
         }
 
         String arguments = trimmedArgs.substring(COURSE_SUBCOMMAND.length());
-        ParserUtil.rejectUnknownParameters(arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
+        ParserUtil.rejectUnknownParameters(arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
-        if (!arePrefixesPresent(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK)
+                arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
+        if (!arePrefixesPresent(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_DELIVERABLE);
         CourseCode courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE).get());
         Semester semester = ParserUtil.parseSemester(argMultimap.getValue(PREFIX_SEMESTER).get());
         Course course = new Course(courseCode, semester,
-                ParserUtil.parseDeliverables(argMultimap.getValue(PREFIX_TASK).get()));
+                ParserUtil.parseDeliverables(argMultimap.getValue(PREFIX_DELIVERABLE).get()));
         return new InitCourseCommand(course);
     }
 

@@ -2,11 +2,20 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NOTES;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -27,25 +36,24 @@ public class NotesCommand extends Command {
     // Notes must be the final parameter to check for required parameters
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds notes for a deliverable for the specified student and course-semester.\n"
-            + "Parameters: " + PREFIX_ID + " ID "
-            + PREFIX_COURSE + " COURSE "
-            + PREFIX_SEMESTER + " SEMESTER "
-            + PREFIX_TASK + " TASK "
-            + PREFIX_NOTES + " NOTES\n"
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " "
+            + PREFIX_COURSE + " " + ARGUMENT_COURSE + " "
+            + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + " "
+            + PREFIX_DELIVERABLE + " " + ARGUMENT_DELIVERABLE + " "
+            + PREFIX_NOTES + " " + ARGUMENT_NOTES + "\n"
             + "Note: " + PREFIX_NOTES + " must be the final parameter.\n"
             + "Example: " + COMMAND_WORD
-            + " " + PREFIX_ID + " A1234567Z"
-            + " " + PREFIX_COURSE + " CS2103T"
-            + " " + PREFIX_SEMESTER + " AY26/27-S1"
-            + " " + PREFIX_TASK + " MVP"
+            + " " + PREFIX_ID + " " + EXAMPLE_ID
+            + " " + PREFIX_COURSE + " " + EXAMPLE_COURSE
+            + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER
+            + " " + PREFIX_DELIVERABLE + " " + EXAMPLE_DELIVERABLE
             + " " + PREFIX_NOTES + " Discussed inheritance";
 
     public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";
-    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
-            "The specified deliverable is not part of the course.";
+    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE = "The specified deliverable is not part of the course.";
 
     private final Id studentId;
     private final Notes notes;

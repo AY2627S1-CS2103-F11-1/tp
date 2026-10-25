@@ -1,6 +1,13 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NEW_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -30,14 +37,14 @@ public class EditCommand extends Command {
             + ": Edits the details of a student identified by their current student ID.\n"
             + "At least one field must be provided for updating.\n"
             + "Parameters: "
-            + PREFIX_ID + " CURRENT_ID "
-            + "[" + PREFIX_NAME + " NEW_NAME] "
-            + "[" + PREFIX_NEW_ID + " NEW_ID] "
-            + "[" + PREFIX_EMAIL + " NEW_EMAIL]\n"
+            + PREFIX_ID + " " + ARGUMENT_ID + " "
+            + "[" + PREFIX_NAME + " " + ARGUMENT_NAME + "] "
+            + "[" + PREFIX_NEW_ID + " " + ARGUMENT_NEW_ID + "] "
+            + "[" + PREFIX_EMAIL + " " + ARGUMENT_EMAIL + "]\n"
             + "Example: " + COMMAND_WORD
-            + " " + PREFIX_ID + " A1234567Z"
-            + " " + PREFIX_NAME + " John Tan"
-            + " " + PREFIX_EMAIL + " johntan@u.nus.edu";
+            + " " + PREFIX_ID + " " + EXAMPLE_ID
+            + " " + PREFIX_NAME + " " + EXAMPLE_NAME
+            + " " + PREFIX_EMAIL + " " + EXAMPLE_EMAIL;
 
     public static final String MESSAGE_EDIT_STUDENT_SUCCESS = "Student with id %s updated successfully."
             + " \nChanged fields: %s";

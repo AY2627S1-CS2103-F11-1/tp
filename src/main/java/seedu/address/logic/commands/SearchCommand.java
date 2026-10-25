@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
@@ -13,10 +17,11 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 public class SearchCommand extends Command {
     public static final String COMMAND_WORD = "search";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Searches students by name or student ID.\n"
-            + "Parameters: " + PREFIX_NAME + " NAME or " + PREFIX_ID + " ID\n"
+            + "Parameters: " + PREFIX_NAME + " " + ARGUMENT_NAME + " or "
+            + PREFIX_ID + " " + ARGUMENT_ID + "\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z";
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME + "\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID;
     public static final String MESSAGE_NO_STUDENTS = "No student records found. Add students before searching.";
     public static final String MESSAGE_SUCCESS = "Found %1$d matching student(s).";
 

@@ -2,6 +2,18 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_CLASS;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_CLASSES;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSES;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -29,21 +41,21 @@ public class AddCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a student with one or more course enrolments.\n"
             + "Parameters: "
-            + PREFIX_NAME + " NAME "
-            + PREFIX_ID + " ID "
-            + PREFIX_EMAIL + " EMAIL "
-            + PREFIX_COURSE + " COURSE[, COURSE]... "
-            + PREFIX_SEMESTER + " SEMESTER[, SEMESTER]... "
-            + PREFIX_CLASS + " CLASS[, CLASS]...\n"
+            + PREFIX_NAME + " " + ARGUMENT_NAME + " "
+            + PREFIX_ID + " " + ARGUMENT_ID + " "
+            + PREFIX_EMAIL + " " + ARGUMENT_EMAIL + " "
+            + PREFIX_COURSE + " " + ARGUMENT_COURSE + "[, " + ARGUMENT_COURSE + "]... "
+            + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + "[, " + ARGUMENT_SEMESTER + "]... "
+            + PREFIX_CLASS + " " + ARGUMENT_CLASS + "[, " + ARGUMENT_CLASS + "]...\n"
             + "Note: Each course, semester and tutorial class must correspond"
             + " by position. At least one enrolment is required.\n"
             + "Example: " + COMMAND_WORD
-            + " " + PREFIX_NAME + " John Doe"
-            + " " + PREFIX_ID + " A1234567Z"
-            + " " + PREFIX_EMAIL + " johndoe@u.nus.edu"
-            + " " + PREFIX_COURSE + " CS2103T, IS2108"
-            + " " + PREFIX_SEMESTER + " AY26/27-S1, AY26/27-S1"
-            + " " + PREFIX_CLASS + " T07, T02";
+            + " " + PREFIX_NAME + " " + EXAMPLE_NAME
+            + " " + PREFIX_ID + " " + EXAMPLE_ID
+            + " " + PREFIX_EMAIL + " " + EXAMPLE_EMAIL
+            + " " + PREFIX_COURSE + " " + EXAMPLE_COURSES
+            + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTERS
+            + " " + PREFIX_CLASS + " " + EXAMPLE_CLASSES;
 
     public static final String MESSAGE_SUCCESS = "New student added: %1$s";
 
