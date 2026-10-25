@@ -31,9 +31,12 @@ public class DeleteCommand extends Command {
             + "          " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
 
     public static final String MESSAGE_DELETE_STUDENT_SUCCESS = "Successfully deleted student %s (%s).";
-    public static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'. Please check the student ID and try again.";
-    public static final String MESSAGE_STUDENT_NAME_NOT_FOUND = "No student found with name '%s'. Please check the student name and try again.";
-    public static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. Please delete the student using their id.";
+    public static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'. "
+            + "Please check the student ID and try again.";
+    public static final String MESSAGE_STUDENT_NAME_NOT_FOUND = "No student found with name '%s'. "
+            + "Please check the student name and try again.";
+    public static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. "
+            + "Please delete the student using their id.";
 
     private final Optional<Id> studentId;
     private final Optional<String> studentName;

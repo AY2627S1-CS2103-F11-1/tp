@@ -2,13 +2,13 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
-import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;

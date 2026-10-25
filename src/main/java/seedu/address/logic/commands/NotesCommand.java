@@ -11,10 +11,10 @@ import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -52,7 +52,8 @@ public class NotesCommand extends Command {
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";
-    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE = "The specified deliverable is not part of the course.";
+    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
+            "The specified deliverable is not part of the course.";
 
     private final Id studentId;
     private final Notes notes;

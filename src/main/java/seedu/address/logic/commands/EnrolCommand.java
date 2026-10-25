@@ -3,10 +3,10 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_CLASS;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.ARGUMENT_CLASS;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;

@@ -1,19 +1,19 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 
 import java.util.List;
 
