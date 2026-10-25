@@ -37,7 +37,10 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
@@ -50,7 +53,10 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test

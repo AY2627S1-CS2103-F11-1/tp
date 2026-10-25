@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -15,6 +16,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ViewProgressCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -49,6 +51,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane deliverablesPanelPlaceholder;
+
+    @FXML
+    private SplitPane mainContentPane;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -120,7 +125,8 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        studentListPanel = new StudentListPanel(logic.getFilteredStudentList(),
+                logic.getAddressBook().getEnrolmentList());
         studentListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
 
         deliverablesPanel = new DeliverablesPanel();
@@ -191,9 +197,17 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-            commandResult.getstudentIdToFocus().ifPresent(id -> {
-                studentListPanel.scrollToStudentId(id);
-            });
+            if (commandResult.getStudentDeliverablesView().isPresent()) {
+                mainContentPane.setDividerPositions(0.48);
+                commandResult.getStudentDeliverablesView()
+                        .ifPresent(deliverablesPanel::showDeliverables);
+            } else {
+                updateDeliverablesPanelWidth(commandText);
+            }
+
+            commandResult.getstudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
+            commandResult.getStudentDeliverablesView()
+                    .ifPresent(view -> studentListPanel.scrollToStudentId(view.getStudent().getId()));
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -209,5 +223,13 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }
+    }
+
+    /** Expands the deliverables panel when the progress view command is used. */
+    private void updateDeliverablesPanelWidth(String commandText) {
+        String trimmedCommand = commandText.trim();
+        boolean isViewProgress = trimmedCommand.equals(ViewProgressCommand.COMMAND_WORD)
+                || trimmedCommand.startsWith(ViewProgressCommand.COMMAND_WORD + " ");
+        mainContentPane.setDividerPositions(isViewProgress ? 0.48 : 0.86);
     }
 }

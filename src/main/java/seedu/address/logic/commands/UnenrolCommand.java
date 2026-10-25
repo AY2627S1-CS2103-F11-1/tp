@@ -85,7 +85,8 @@ public class UnenrolCommand extends Command {
                 enrolment.getSemester());
 
         return new CommandResult(
-                String.format(MESSAGE_SUCCESS, studentId, courseCode, semester));
+                String.format(MESSAGE_SUCCESS, studentId, courseCode, semester),
+                false, false, studentId);
     }
 
     @Override

@@ -237,16 +237,16 @@ Examples:
 
 ### Viewing a student's deliverable progress: `view`
 
-Shows every deliverable and its completion status for one student in a
-course-semester.
+Shows every deliverable and its completion status for one student across all
+their course-semester enrolments. The deliverables panel expands to display
+the grouped progress details.
 
-Format: `view /id ID /course COURSE /sem SEMESTER` or
-`view /name NAME /course COURSE /sem SEMESTER`
+Format: `view /id ID` or `view /name NAME`
 
 Examples:
 
-* `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
-* `view /name John Doe /course CS2103T /sem AY26/27-S1`
+* `view /id A1234567Z`
+* `view /name John Doe`
 
 Use `/id` when several students have the same name. The result lists each
 deliverable as `Done` or `Not Done` in the order it was initialised.
@@ -322,7 +322,7 @@ Action | Format, Examples
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`

@@ -40,7 +40,7 @@ public class InitCourseCommandParserTest {
     @Test
     public void parse_blankDeliverable_failure() {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, ",
-                "Deliverable name must not be blank.");
+                Deliverable.MESSAGE_CONSTRAINTS);
     }
 
     @Test

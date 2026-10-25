@@ -1,0 +1,75 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+actor "Teaching Assistant" as TA USER_COLOR
+
+box UI UI_COLOR_T1
+participant ":MainWindow" as MainWindow UI_COLOR
+participant ":StudentListPanel" as StudentListPanel UI_COLOR
+participant ":DeliverablesPanel" as DeliverablesPanel UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant "c:ViewProgressCommand" as ViewProgressCommand LOGIC_COLOR
+participant "v:StudentDeliverablesView" as StudentDeliverablesView LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+TA -[USER_COLOR]> MainWindow : "view /id A1234567B"
+activate MainWindow UI_COLOR
+MainWindow -[UI_COLOR]> LogicManager : execute("view /id A1234567B")
+activate LogicManager LOGIC_COLOR
+LogicManager -[LOGIC_COLOR]> ViewProgressCommand : execute(m)
+activate ViewProgressCommand LOGIC_COLOR
+
+ViewProgressCommand -[LOGIC_COLOR]> Model : getAddressBook()
+activate Model MODEL_COLOR
+Model --[MODEL_COLOR]> ViewProgressCommand : students
+deactivate Model
+
+ViewProgressCommand -[LOGIC_COLOR]> Model : getStudentCourseProgressList()
+activate Model MODEL_COLOR
+Model --[MODEL_COLOR]> ViewProgressCommand : progress records
+deactivate Model
+
+note right of ViewProgressCommand
+  Select the student, then keep every
+  progress record with the same student ID.
+end note
+
+create StudentDeliverablesView
+ViewProgressCommand -[LOGIC_COLOR]> StudentDeliverablesView : StudentDeliverablesView(student, progress records)
+activate StudentDeliverablesView LOGIC_COLOR_T1
+StudentDeliverablesView --[LOGIC_COLOR]> ViewProgressCommand : v
+deactivate StudentDeliverablesView
+
+create CommandResult
+ViewProgressCommand -[LOGIC_COLOR]> CommandResult : CommandResult(feedback, v)
+activate CommandResult LOGIC_COLOR_T1
+CommandResult --[LOGIC_COLOR]> ViewProgressCommand : r
+deactivate CommandResult
+
+ViewProgressCommand --[LOGIC_COLOR]> LogicManager : r
+deactivate ViewProgressCommand
+LogicManager --[LOGIC_COLOR]> MainWindow : r
+deactivate LogicManager
+
+MainWindow -[UI_COLOR]> StudentListPanel : scrollToStudentId(id)
+activate StudentListPanel UI_COLOR
+StudentListPanel --[UI_COLOR]> MainWindow
+deactivate StudentListPanel
+
+MainWindow -[UI_COLOR]> DeliverablesPanel : showDeliverables(v)
+activate DeliverablesPanel UI_COLOR
+DeliverablesPanel --[UI_COLOR]> MainWindow
+deactivate DeliverablesPanel
+
+MainWindow --[UI_COLOR]> TA
+deactivate MainWindow
+@enduml
