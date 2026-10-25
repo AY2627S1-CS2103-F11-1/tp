@@ -29,9 +29,14 @@ public class NotesCommandParser implements Parser<NotesCommand> {
 
     public static final String MESSAGE_EMPTY_NOTES = "Empty parameter value: " + PREFIX_NOTES;
 
+    public static final String MESSAGE_PARAMETERS_AFTER_NOTES =
+            "The /notes parameter must be the final parameter.";
+
     private static final String NOTES_PREFIX_REGEX = "(^|\\s)" + Pattern.quote(PREFIX_NOTES.toString()) + "(?=\\s|$)";
 
     private static final Pattern NOTES_PREFIX_PATTERN = Pattern.compile(NOTES_PREFIX_REGEX);
+    private static final Pattern STRUCTURED_PREFIX_AFTER_NOTES_PATTERN = Pattern.compile(
+            "(^|\\s)/(id|course|sem|task|notes)(?=\\s|$)");
 
     private static final Prefix[] STRUCTURED_PREFIXES = {
         PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK
@@ -114,6 +119,10 @@ public class NotesCommandParser implements Parser<NotesCommand> {
 
         if (noteText.isBlank()) {
             throw new ParseException(MESSAGE_EMPTY_NOTES);
+        }
+
+        if (STRUCTURED_PREFIX_AFTER_NOTES_PATTERN.matcher(noteText).find()) {
+            throw new ParseException(MESSAGE_PARAMETERS_AFTER_NOTES);
         }
 
         return noteText;

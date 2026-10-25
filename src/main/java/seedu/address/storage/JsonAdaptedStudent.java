@@ -13,17 +13,32 @@ import seedu.address.model.student.Student;
 class JsonAdaptedStudent {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Student's %s field is missing!";
+    public static final String LEGACY_FIELDS_MESSAGE =
+            "Legacy student course data cannot be migrated automatically. "
+                    + "Please back up and update the address book data manually.";
 
     private final String name;
     private final String id;
     private final String email;
+    private final String legacyTutorialClass;
+    private final String legacyNotes;
 
+    public JsonAdaptedStudent(String name, String id, String email) {
+        this(name, id, email, null, null);
+    }
+
+    /**
+     * Creates an adapter while retaining legacy course fields for migration detection.
+     */
     @JsonCreator
     public JsonAdaptedStudent(@JsonProperty("name") String name, @JsonProperty("id") String id,
-            @JsonProperty("email") String email) {
+            @JsonProperty("email") String email, @JsonProperty("class") String legacyTutorialClass,
+            @JsonProperty("notes") String legacyNotes) {
         this.name = name;
         this.id = id;
         this.email = email;
+        this.legacyTutorialClass = legacyTutorialClass;
+        this.legacyNotes = legacyNotes;
     }
 
     /** Converts a {@link Student} into this Jackson-friendly representation. */
@@ -31,6 +46,8 @@ class JsonAdaptedStudent {
         name = source.getName().toString();
         id = source.getId().toString();
         email = source.getEmail().toString();
+        legacyTutorialClass = null;
+        legacyNotes = null;
     }
 
     /**
@@ -50,6 +67,9 @@ class JsonAdaptedStudent {
         if (email == null) {
             throw new IllegalValueException(
                     String.format(MISSING_FIELD_MESSAGE_FORMAT, "email"));
+        }
+        if (legacyTutorialClass != null || legacyNotes != null) {
+            throw new IllegalValueException(LEGACY_FIELDS_MESSAGE);
         }
 
         try {
