@@ -31,14 +31,14 @@ delete /id A1234567Z
 delete /name John Doe
 enrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 unenrol /id A1234567Z /course CS2103T /sem AY26/27-S1
-init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP
-notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Discussed inheritance
+init course /course CS2103T /sem AY26/27-S1 /deliverable v1.1, v1.2, MVP
+notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance
 view notes /id A1234567Z /course CS2103T /sem AY26/27-S1
 delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1
-mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
-mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1
-unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
-unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP
+mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
+mark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1
+unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
+unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP
 view /id A1234567Z
 view /name John Doe
 ```

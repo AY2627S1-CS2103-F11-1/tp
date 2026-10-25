@@ -26,7 +26,7 @@ public abstract class StudentProgressCommand extends Command {
     static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME =
             "Multiple students found with this name. Please use the student's ID instead.";
     static final String MESSAGE_COURSE_NOT_FOUND = "Course %s %s has not been initialised.";
-    static final String MESSAGE_TASK_NOT_FOUND = "Task '%s' does not exist in %s %s.";
+    static final String MESSAGE_DELIVERABLE_NOT_FOUND = "Deliverable '%s' does not exist in %s %s.";
     static final String MESSAGE_PROGRESS_NOT_FOUND = "No progress record exists for this student and course.";
 
     private final Optional<Id> studentId;
@@ -110,7 +110,8 @@ public abstract class StudentProgressCommand extends Command {
     private void validateDeliverables(Course course) throws CommandException {
         for (Deliverable deliverable : deliverables) {
             if (!course.getDeliverables().contains(deliverable)) {
-                throw new CommandException(String.format(MESSAGE_TASK_NOT_FOUND, deliverable, courseCode, semester));
+                throw new CommandException(String.format(MESSAGE_DELIVERABLE_NOT_FOUND,
+                        deliverable, courseCode, semester));
             }
         }
     }

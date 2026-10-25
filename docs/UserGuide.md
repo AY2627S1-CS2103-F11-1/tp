@@ -97,9 +97,9 @@ Initialises one course for a semester and records its project deliverables. A co
 per semester, regardless of letter case. Provide at least one unique deliverable and separate deliverable names with
 commas.
 
-Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`
+Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
-Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
+Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
 
 ### Listing all students: `list`
 
@@ -197,13 +197,13 @@ Add or replace, view, or delete the notes recorded for a student. Use the studen
 
 Formats:
 
-* `notes /id ID /course COURSE /sem SEMESTER /task TASK /notes NOTES`
+* `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`
 * `view notes /id ID /course COURSE /sem SEMESTER`
 * `delete notes /id ID /course COURSE /sem SEMESTER`
 
 Examples:
 
-* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
+* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
 * `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
 * `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes notes for the selected enrolment.
 
@@ -211,15 +211,15 @@ Examples:
 
 Marks one or more deliverables as complete for a student in a course-semester.
 
-Format: `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`mark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`mark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
-Use `/id` when several students have the same name. Every task must belong to
+Use `/id` when several students have the same name. Every deliverable must belong to
 the specified course-semester and must currently be Not Done.
 
 ### Marking deliverables as incomplete: `unmark`
@@ -227,13 +227,13 @@ the specified course-semester and must currently be Not Done.
 Marks one or more completed deliverables as incomplete for a student in a
 course-semester.
 
-Format: `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`unmark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`unmark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
 ### Viewing a student's deliverable progress: `view`
 
@@ -322,11 +322,11 @@ Action | Format, Examples
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
-**Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+**Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **List** | `list`
-**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
+**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 **Help** | `help`
