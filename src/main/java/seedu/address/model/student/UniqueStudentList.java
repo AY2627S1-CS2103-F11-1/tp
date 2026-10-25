@@ -68,7 +68,11 @@ public class UniqueStudentList implements Iterable<Student> {
             throw new StudentNotFoundException();
         }
 
-        if (!target.isSameStudent(editedStudent) && contains(editedStudent)) {
+        boolean conflictsWithAnotherStudent = internalList.stream()
+                .filter(student -> !student.equals(target))
+                .anyMatch(student -> student.isSameStudent(editedStudent));
+
+        if (conflictsWithAnotherStudent) {
             throw new DuplicateStudentException();
         }
 

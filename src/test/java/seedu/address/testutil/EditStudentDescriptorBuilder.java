@@ -61,11 +61,6 @@ public class EditStudentDescriptorBuilder {
         return this;
     }
 
-    /** Retained for compatibility with legacy tests; class is enrolment-specific. */
-    public EditStudentDescriptorBuilder withTutorialClass(String tutorialClass) {
-        return this;
-    }
-
     public EditStudentDescriptor build() {
         return descriptor;
     }

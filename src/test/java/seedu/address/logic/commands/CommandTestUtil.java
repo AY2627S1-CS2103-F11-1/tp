@@ -98,7 +98,7 @@ public class CommandTestUtil {
      * Executes the given {@code command}, confirms that <br>
      * - a {@code CommandException} is thrown <br>
      * - the CommandException message matches {@code expectedMessage} <br>
-     * - the tutorialClass book, filtered student list and selected student in
+     * - the address book, filtered student list and selected student in
      * {@code actualModel} remain unchanged
      */
     public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
@@ -115,7 +115,7 @@ public class CommandTestUtil {
     /**
      * Updates {@code model}'s filtered list to show only the student at the given
      * {@code targetIndex} in the
-     * {@code model}'s tutorialClass book.
+     * {@code model}'s address book.
      */
     public static void showStudentAtIndex(Model model, Index targetIndex) {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredStudentList().size());

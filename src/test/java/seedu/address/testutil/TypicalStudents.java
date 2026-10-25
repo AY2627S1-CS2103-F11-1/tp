@@ -47,7 +47,7 @@ public final class TypicalStudents {
     private TypicalStudents() {
     }
 
-    /** Returns an tutorialClass book containing the typical students. */
+    /** Returns an address book containing the typical students and enrolments. */
     public static AddressBook getTypicalAddressBook() {
         AddressBook addressBook = new AddressBook();
         Course course = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),

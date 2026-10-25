@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -13,25 +14,36 @@ import seedu.address.model.student.Student;
 class JsonAdaptedStudent {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Student's %s field is missing!";
+    public static final String LEGACY_FIELDS_MESSAGE =
+            "Old save format detected. Please back up and delete data/addressbook.json "
+                    + "or restore a compatible backup.";
 
     private final String name;
     private final String id;
     private final String email;
+    @JsonProperty("class")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private final String legacyTutorialClass;
+    @JsonProperty("notes")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private final String legacyNotes;
 
-    @JsonCreator
-    public JsonAdaptedStudent(@JsonProperty("name") String name, @JsonProperty("id") String id,
-            @JsonProperty("email") String email) {
-        this.name = name;
-        this.id = id;
-        this.email = email;
+    public JsonAdaptedStudent(String name, String id, String email) {
+        this(name, id, email, null, null);
     }
 
     /**
-     * Compatibility constructor for old JSON fixtures; course-specific fields are
-     * ignored.
+     * Creates an adapter while retaining legacy course fields for migration detection.
      */
-    public JsonAdaptedStudent(String name, String id, String email, String ignoredClass, String ignoredNotes) {
-        this(name, id, email);
+    @JsonCreator
+    public JsonAdaptedStudent(@JsonProperty("name") String name, @JsonProperty("id") String id,
+            @JsonProperty("email") String email, @JsonProperty("class") String legacyTutorialClass,
+            @JsonProperty("notes") String legacyNotes) {
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.legacyTutorialClass = legacyTutorialClass;
+        this.legacyNotes = legacyNotes;
     }
 
     /** Converts a {@link Student} into this Jackson-friendly representation. */
@@ -39,6 +51,8 @@ class JsonAdaptedStudent {
         name = source.getName().toString();
         id = source.getId().toString();
         email = source.getEmail().toString();
+        legacyTutorialClass = null;
+        legacyNotes = null;
     }
 
     /**
@@ -58,6 +72,9 @@ class JsonAdaptedStudent {
         if (email == null) {
             throw new IllegalValueException(
                     String.format(MISSING_FIELD_MESSAGE_FORMAT, "email"));
+        }
+        if (legacyTutorialClass != null || legacyNotes != null) {
+            throw new IllegalValueException(LEGACY_FIELDS_MESSAGE);
         }
 
         try {

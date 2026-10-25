@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -49,6 +50,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane deliverablesPanelPlaceholder;
+
+    @FXML
+    private SplitPane mainContentPane;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -120,7 +124,8 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        studentListPanel = new StudentListPanel(logic.getFilteredStudentList(),
+                logic.getAddressBook().getEnrolmentList());
         studentListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
 
         deliverablesPanel = new DeliverablesPanel();
@@ -191,9 +196,18 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-            commandResult.getstudentIdToFocus().ifPresent(id -> {
-                studentListPanel.scrollToStudentId(id);
-            });
+            if (commandResult.getStudentDeliverablesView().isPresent()) {
+                mainContentPane.setDividerPositions(0.48);
+                commandResult.getStudentDeliverablesView()
+                        .ifPresent(deliverablesPanel::showDeliverables);
+            } else {
+                deliverablesPanel.clear();
+                mainContentPane.setDividerPositions(0.86);
+            }
+
+            commandResult.getstudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
+            commandResult.getStudentDeliverablesView()
+                    .ifPresent(view -> studentListPanel.scrollToStudentId(view.getStudent().getId()));
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -210,4 +224,5 @@ public class MainWindow extends UiPart<Stage> {
             throw e;
         }
     }
+
 }

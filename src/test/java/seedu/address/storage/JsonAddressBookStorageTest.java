@@ -77,6 +77,11 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
+    public void readAddressBook_legacyStudentFormat_throwDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> readAddressBook("legacyStudentAddressBook.json"));
+    }
+
+    @Test
     public void readAndSaveAddressBook_allInOrder_success() throws Exception {
         Path filePath = testFolder.resolve("TempAddressBook.json");
         AddressBook original = getTypicalAddressBook();

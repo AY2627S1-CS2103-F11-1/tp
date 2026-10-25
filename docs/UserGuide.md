@@ -237,16 +237,16 @@ Examples:
 
 ### Viewing a student's deliverable progress: `view`
 
-Shows every deliverable and its completion status for one student in a
-course-semester.
+Shows every deliverable and its completion status for one student across all
+their course-semester enrolments. The deliverables panel expands to display
+the grouped progress details.
 
-Format: `view /id ID /course COURSE /sem SEMESTER` or
-`view /name NAME /course COURSE /sem SEMESTER`
+Format: `view /id ID` or `view /name NAME`
 
 Examples:
 
-* `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
-* `view /name John Doe /course CS2103T /sem AY26/27-S1`
+* `view /id A1234567Z`
+* `view /name John Doe`
 
 Use `/id` when several students have the same name. The result lists each
 deliverable as `Done` or `Not Done` in the order it was initialised.
@@ -285,6 +285,8 @@ AddressBook automatically saves data after every command. You do not need to sav
 
 AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
+**Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
+
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes make the data file invalid, AddressBook starts with an empty address book at the next run. The invalid file remains on disk until you run a command (AddressBook saves after every command). Still, we recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
@@ -322,7 +324,7 @@ Action | Format, Examples
 **Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`

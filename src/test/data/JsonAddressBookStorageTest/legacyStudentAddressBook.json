@@ -1,0 +1,11 @@
+{
+  "students" : [
+    {
+      "name" : "Alice Pauline",
+      "id" : "A1234567Y",
+      "email" : "alice@u.nus.edu",
+      "class" : "T07",
+      "notes" : "[]"
+    }
+  ]
+}

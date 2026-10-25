@@ -47,7 +47,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_add() throws Exception {
-        Student student = new StudentBuilder().withNotes().build();
+        Student student = new StudentBuilder().build();
         String input = StudentUtil.getAddCommand(student)
                 + " /course CS2103T /sem AY26/27-S1 /class T07";
         AddCommand command = (AddCommand) parser.parseCommand(input);

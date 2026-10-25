@@ -71,7 +71,12 @@ public abstract class StudentProgressCommand extends Command {
             updatedProgress = updatedProgress.withStatus(deliverable, targetStatus);
         }
         model.setStudentCourseProgress(progress, updatedProgress);
-        return new CommandResult(String.format(getSuccessMessage(), formatDeliverables(), student.getName()));
+        List<StudentCourseProgress> allProgress = model.getStudentCourseProgressList().stream()
+                .filter(candidate -> candidate.getStudentId().equals(student.getId()))
+                .toList();
+        return new CommandResult(
+                String.format(getSuccessMessage(), formatDeliverables(), student.getName()),
+                new StudentDeliverablesView(student, allProgress));
     }
 
     private Student findStudent(Model model) throws CommandException {

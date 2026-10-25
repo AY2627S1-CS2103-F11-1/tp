@@ -48,26 +48,6 @@ public class StudentBuilder {
         return this;
     }
 
-    /** Retained for compatibility with legacy tests; course data belongs to enrolments. */
-    public StudentBuilder withTutorialClass(String tutorialClass) {
-        return this;
-    }
-
-    /** Retained for compatibility with legacy tests; notes belong to enrolments. */
-    public StudentBuilder withNotes() {
-        return this;
-    }
-
-    /** Sets the student's notes given a String of Notes to add. */
-    public StudentBuilder withNotes(String notes, String deliverable) {
-        return this;
-    }
-
-    /** Sets the student's notes given a NotesList. */
-    public StudentBuilder withNotes(Object notesList) {
-        return this;
-    }
-
     /** Builds a student with the configured details. */
     public Student build() {
         return new Student(name, id, email);

@@ -30,8 +30,6 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_INVALID_ENROLMENT =
             "Enrolment references a student or course that does not exist.";
     public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
-    public static final String MESSAGE_STUDENT_WITHOUT_ENROLMENT =
-            "A student must be enrolled in at least one course.";
 
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
@@ -137,15 +135,6 @@ class JsonSerializableAddressBook {
             }
 
             modelEnrolments.add(enrolment);
-        }
-
-        for (Student student : addressBook.getStudentList()) {
-            boolean isEnrolled = modelEnrolments.stream()
-                    .anyMatch(enrolment -> enrolment.getStudentId().equals(student.getId()));
-
-            if (!isEnrolled) {
-                throw new IllegalValueException(MESSAGE_STUDENT_WITHOUT_ENROLMENT);
-            }
         }
 
         List<StudentCourseProgress> modelProgresses = new ArrayList<>();
