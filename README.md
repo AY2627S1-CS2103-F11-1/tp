@@ -25,6 +25,7 @@ With many students, potentially from different tutorial classes, TAs may not be 
 list
 list /course CS2103T /sem AY26/27-S1
 list /course CS2103T /sem AY26/27-S1 /class T07
+list /course CS2103T /sem AY26/27-S1 /task MVP
 search /name John Doe
 search /id A1234567Z
 add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02

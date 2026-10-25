@@ -103,23 +103,27 @@ Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
 
 ### Listing students: `list`
 
-Shows all students, or only students enrolled in a selected course-semester and
-optional tutorial class.
+Shows all students, or only students enrolled in a selected course-semester.
+The filtered list can be narrowed further by tutorial class or by a deliverable
+that is still incomplete.
 
 Format: `list`
 
 Filtered formats:
 
 * `list /course COURSE /sem SEMESTER`
-* `list /course COURSE /sem SEMESTER /class CLASS`
+* `list /course COURSE /sem SEMESTER [/class CLASS] [/task DELIVERABLE]`
 
 Examples:
 
 * `list /course CS2103T /sem AY26/27-S1` shows students enrolled in CS2103T for the selected semester.
 * `list /course CS2103T /sem AY26/27-S1 /class T07` shows only students from tutorial T07 in that course-semester.
+* `list /course CS2103T /sem AY26/27-S1 /task MVP` shows enrolled students whose MVP is still incomplete.
+* `list /course CS2103T /sem AY26/27-S1 /class T07 /task MVP` combines the tutorial and incomplete-deliverable filters.
 
-`/course` and `/sem` must be supplied together. `/class` can be used only with
-both of them. Students appear once even if they have other enrolments.
+`/course` and `/sem` must be supplied together. `/class` and `/task` can be used
+only with both of them. `/task` accepts exactly one deliverable tracked by that
+course-semester. Students appear once even if they have other enrolments.
 
 ### Editing a student: `edit`
 
@@ -339,7 +343,7 @@ Action | Format, Examples
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
-**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /class T07`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/task DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /task MVP`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
