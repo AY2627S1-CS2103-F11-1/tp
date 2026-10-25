@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -20,7 +21,11 @@ class JsonAdaptedStudent {
     private final String name;
     private final String id;
     private final String email;
+    @JsonProperty("class")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String legacyTutorialClass;
+    @JsonProperty("notes")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String legacyNotes;
 
     public JsonAdaptedStudent(String name, String id, String email) {
