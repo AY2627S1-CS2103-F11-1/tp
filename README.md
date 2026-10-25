@@ -1,6 +1,6 @@
 # TAssist
 
-[![Java CI](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml)
+[![Java CI](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml)
 ![Ui](docs/images/Ui.png)
 
 ## Introduction
@@ -25,18 +25,18 @@ With many students, potentially from different tutorial classes, TAs may not be 
 list
 search /name John Doe
 search /id A1234567Z
-add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
-edit /id A1234567Z /name John Tan /newid A1234567Y /email johntan@u.nus.edu
-delete /id A1245678Z
+add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, CS1231 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
+edit /id A1234567Z /name John Doe /newid A1234567Y /email johndoe@u.nus.edu
+delete /id A1234567Z
 delete /name John Doe
 enrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 unenrol /id A1234567Z /course CS2103T /sem AY26/27-S1
-init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation
+init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP
+notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Discussed inheritance
 view notes /id A1234567Z /course CS2103T /sem AY26/27-S1
 delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1
-mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
-mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
+mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
+mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1
 unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
 unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP
 view /id A1234567Z
