@@ -25,6 +25,15 @@ public class NotesCommandParserTest {
     }
 
     @Test
+    public void parse_notesContainingParameterLikeText_success() {
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes Discussed /course usage and /task wording",
+                new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                        new Semester("AY26/27-S1"),
+                        new Notes("Discussed /course usage and /task wording", "MVP")));
+    }
+
+    @Test
     public void parse_missingRequiredField_failure() {
         assertParseFailure(parser, " notes /id A1234567Z",
                 NotesCommandParser.MESSAGE_MISSING_NOTES);

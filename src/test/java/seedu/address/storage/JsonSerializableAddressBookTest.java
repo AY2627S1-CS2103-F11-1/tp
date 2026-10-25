@@ -17,6 +17,13 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.JsonUtil;
 import seedu.address.model.AddressBook;
+import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.TypicalStudents;
 
 public class JsonSerializableAddressBookTest {
@@ -48,6 +55,20 @@ public class JsonSerializableAddressBookTest {
                 JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_STUDENT,
                 dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_multipleCoursesAndEnrolments_roundTrips() throws Exception {
+        AddressBook original = TypicalStudents.getTypicalAddressBook();
+        Course secondCourse = new Course(new CourseCode("IS2108"), new Semester("AY26/27-S1"),
+                java.util.List.of(new Deliverable("Project")));
+        original.addCourse(secondCourse);
+        original.addEnrolment(new StudentCourseEnrolment(
+                TypicalStudents.ALICE.getId(), secondCourse.getCourseCode(), secondCourse.getSemester(),
+                new TutorialClass("T08"), new NotesList()));
+
+        AddressBook restored = new JsonSerializableAddressBook(original).toModelType();
+        assertEquals(original, restored);
     }
 
 }
