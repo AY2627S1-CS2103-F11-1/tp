@@ -41,6 +41,8 @@ public class AddressBook implements ReadOnlyAddressBook {
             "Progress record identity cannot be changed.";
     private static final String MESSAGE_NO_ENROLMENT = "A student must have at least one enrolment.";
     private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH = "Enrolment student ID does not match.";
+    private static final String MESSAGE_INVALID_ENROLMENT =
+            "Enrolment references a student or course that does not exist.";
     private static final String MESSAGE_PROGRESS_NOT_FOUND =
             "Progress record for the enrolment does not exist.";
     private static final String MESSAGE_ENROLMENT_ID_CHANGE =
@@ -201,6 +203,11 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /** Replaces the progress records with the supplied unique records. */
     public void setStudentCourseProgresses(List<StudentCourseProgress> studentCourseProgresses) {
+        requireNonNull(studentCourseProgresses);
+        studentCourseProgresses.forEach(Objects::requireNonNull);
+        if (studentCourseProgresses.stream().anyMatch(progress -> !hasEnrolmentFor(progress))) {
+            throw new IllegalArgumentException(MESSAGE_PROGRESS_NOT_FOUND);
+        }
         this.studentCourseProgresses.setProgresses(studentCourseProgresses);
     }
 
@@ -407,6 +414,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setEnrolments(List<StudentCourseEnrolment> enrolments) {
         requireNonNull(enrolments);
+        enrolments.forEach(Objects::requireNonNull);
+        if (enrolments.stream().anyMatch(enrolment -> !hasStudentFor(enrolment)
+                || !hasCourseFor(enrolment))) {
+            throw new IllegalArgumentException(MESSAGE_INVALID_ENROLMENT);
+        }
         this.enrolments.setEnrolments(enrolments);
     }
 
@@ -464,6 +476,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return Objects.hash(students, courses, enrolments, studentCourseProgresses);
+    }
+
+    private boolean hasStudentFor(StudentCourseEnrolment enrolment) {
+        return students.asUnmodifiableObservableList().stream()
+                .anyMatch(student -> student.getId().equals(enrolment.getStudentId()));
+    }
+
+    private boolean hasCourseFor(StudentCourseEnrolment enrolment) {
+        return getCourse(enrolment.getCourseCode(), enrolment.getSemester()).isPresent();
+    }
+
+    private boolean hasEnrolmentFor(StudentCourseProgress progress) {
+        return enrolments.asUnmodifiableObservableList().stream()
+                .anyMatch(enrolment -> enrolment.isFor(
+                        progress.getStudentId(), progress.getCourseCode(), progress.getSemester()));
     }
 
 }
