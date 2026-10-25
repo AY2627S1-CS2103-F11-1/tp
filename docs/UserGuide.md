@@ -107,6 +107,27 @@ Shows a list of all students in the address book.
 
 Format: `list`
 
+### Viewing a course progress overview: `overview`
+
+Shows every student enrolled in a course-semester together with the number of
+completed deliverables out of the total tracked deliverables. Students are
+shown in the same order as the main student list.
+
+Format: `overview /course COURSE /sem SEMESTER`
+
+Example: `overview /course CS2103T /sem AY26/27-S1`
+
+Example output:
+
+```text
+Progress overview for CS2103T (AY26/27-S1):
+Alice Pauline (A1234567Y): 2/5 completed
+Benson Meier (A2345678X): 4/5 completed
+```
+
+The selected course must already be initialised. This command reports progress
+only and does not change students, enrolments, or completion statuses.
+
 ### Editing a student: `edit`
 
 Edits the details of an existing student identified by their current student ID.
@@ -325,6 +346,7 @@ Action | Format, Examples
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
+**Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`

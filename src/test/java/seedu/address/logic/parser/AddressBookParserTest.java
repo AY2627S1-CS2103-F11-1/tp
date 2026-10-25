@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CourseProgressOverviewCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteNotesCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -109,6 +110,13 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertThrows(ParseException.class, () -> parser.parseCommand(ListCommand.COMMAND_WORD + " 3"));
+    }
+
+    @Test
+    public void parseCommand_courseProgressOverview() throws Exception {
+        assertEquals(new CourseProgressOverviewCommand(
+                        new CourseCode("CS2103T"), new Semester("AY26/27-S1")),
+                parser.parseCommand("overview /course CS2103T /sem AY26/27-S1"));
     }
 
     @Test
