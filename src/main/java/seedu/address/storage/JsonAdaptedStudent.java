@@ -26,14 +26,6 @@ class JsonAdaptedStudent {
         this.email = email;
     }
 
-    /**
-     * Compatibility constructor for old JSON fixtures; course-specific fields are
-     * ignored.
-     */
-    public JsonAdaptedStudent(String name, String id, String email, String ignoredClass, String ignoredNotes) {
-        this(name, id, email);
-    }
-
     /** Converts a {@link Student} into this Jackson-friendly representation. */
     public JsonAdaptedStudent(Student source) {
         name = source.getName().toString();

@@ -32,7 +32,7 @@ public class JsonAdaptedStudentTest {
     @Test
     public void toModelType_missingRequiredField_throwsIllegalValueException() {
         JsonAdaptedStudent adaptedStudent = new JsonAdaptedStudent(null, "A1234567Y",
-                "alice@u.nus.edu", "T07", "notes");
+                "alice@u.nus.edu");
         assertThrows(IllegalValueException.class, adaptedStudent::toModelType);
     }
 }

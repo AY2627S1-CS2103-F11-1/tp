@@ -12,8 +12,12 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 
 /** Tests for {@code UnenrolCommand}. */
@@ -24,6 +28,27 @@ public class UnenrolCommandTest {
 
     @Test
     public void execute_existingEnrolment_success() {
+        UnenrolCommand command = new UnenrolCommand(ALICE.getId(), COURSE, SEMESTER);
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.removeEnrolment(ALICE.getId(), COURSE, SEMESTER);
+
+        CommandResult expected = new CommandResult(
+                String.format(UnenrolCommand.MESSAGE_SUCCESS, ALICE.getId(), COURSE, SEMESTER),
+                false, false, ALICE.getId());
+        assertCommandSuccess(command, model, expected, expectedModel);
+    }
+
+    @Test
+    public void execute_nonFinalEnrolment_success() {
+        CourseCode secondCourseCode = new CourseCode("IS2108");
+        Course secondCourse = new Course(secondCourseCode, SEMESTER,
+                java.util.List.of(new Deliverable("MVP")));
+        model.addCourse(secondCourse);
+        StudentCourseEnrolment secondEnrolment = new StudentCourseEnrolment(
+                ALICE.getId(), secondCourseCode, SEMESTER,
+                new seedu.address.model.student.TutorialClass("T08"), new NotesList());
+        model.addEnrolment(secondEnrolment);
+
         UnenrolCommand command = new UnenrolCommand(ALICE.getId(), COURSE, SEMESTER);
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.removeEnrolment(ALICE.getId(), COURSE, SEMESTER);

@@ -16,7 +16,6 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ViewProgressCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -202,7 +201,7 @@ public class MainWindow extends UiPart<Stage> {
                 commandResult.getStudentDeliverablesView()
                         .ifPresent(deliverablesPanel::showDeliverables);
             } else {
-                updateDeliverablesPanelWidth(commandText);
+                mainContentPane.setDividerPositions(0.86);
             }
 
             commandResult.getstudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
@@ -225,11 +224,4 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
-    /** Expands the deliverables panel when the progress view command is used. */
-    private void updateDeliverablesPanelWidth(String commandText) {
-        String trimmedCommand = commandText.trim();
-        boolean isViewProgress = trimmedCommand.equals(ViewProgressCommand.COMMAND_WORD)
-                || trimmedCommand.startsWith(ViewProgressCommand.COMMAND_WORD + " ");
-        mainContentPane.setDividerPositions(isViewProgress ? 0.48 : 0.86);
-    }
 }
