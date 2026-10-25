@@ -36,6 +36,8 @@ public class NotesCommandParserTest {
 
     @Test
     public void parse_missingRequiredField_failure() {
+        assertParseFailure(parser, "", NotesCommandParser.MESSAGE_MISSING_NOTES);
+        assertParseFailure(parser, "   ", NotesCommandParser.MESSAGE_MISSING_NOTES);
         assertParseFailure(parser, " notes /id A1234567Z",
                 NotesCommandParser.MESSAGE_MISSING_NOTES);
         assertParseFailure(parser, " notes /id A1234567Z /notes Implemented inheritance",
@@ -75,6 +77,14 @@ public class NotesCommandParserTest {
                         + " /task MVP /notes Reviewed 👍 and discussed 测试",
                 new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                         new Semester("AY26/27-S1"), new Notes("Reviewed 👍 and discussed 测试", "MVP")));
+    }
+
+    @Test
+    public void parse_newlineInNotes_success() {
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes First line\nSecond line",
+                new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
+                        new Semester("AY26/27-S1"), new Notes("First line\nSecond line", "MVP")));
     }
 
     @Test
