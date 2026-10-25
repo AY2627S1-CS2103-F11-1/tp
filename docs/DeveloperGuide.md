@@ -72,7 +72,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete /id A1234567B`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
@@ -89,32 +89,32 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
+The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `StudentListPanel`, `DeliverablesPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
-The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
+The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
 
 The `UI` component,
 
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component because it displays `Person` objects from the model.
+* depends on some classes in the `Model` component because it displays `Student` objects from the model.
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking the `execute("delete /id A1234567B")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions inside the Logic component for deleting a student by ID](images/DeleteSequenceDiagram.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, it continues to the end of the diagram.
 </div>
@@ -123,7 +123,7 @@ How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, the command is passed to an `AddressBookParser` object, which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. The command can communicate with the `Model` when it is executed (e.g. to delete a student).<br>
    Note that although this is shown as a single step in the diagram above for simplicity, the code can require several interactions between the command object and the `Model` to complete the operation.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned from `Logic`.
 
@@ -136,35 +136,35 @@ How the parsing works:
 * All `XYZCommandParser` classes, such as `AddCommandParser` and `DeleteCommandParser`, implement the `Parser` interface so they can be treated similarly where appropriate, for example during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+<img src="images/ModelClassDiagram.png" width="1000" />
 
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the `Person` objects selected by the current filter, such as search results, in a separate _filtered_ list. It exposes this list as an unmodifiable `ObservableList<Person>` that the UI can observe and bind to, so the UI updates when the list changes.
+* stores students, courses, and one deliverable-progress record for each student and course-semester combination.
+* keeps those objects in `UniqueStudentList`, `UniqueCourseList`, and `UniqueStudentCourseProgressList` respectively.
+* stores the students selected by the current filter, such as search results, in a separate filtered list. It exposes this list as an unmodifiable `ObservableList<Student>` that the UI can observe and bind to, so the UI updates when the list changes.
 * stores a `UserPrefs` object that represents the user’s preferences (currently, just the GUI settings). This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The alternative, arguably more object-oriented, design below keeps a unique list of tags in `AddressBook`, and each `Person` references tags from that list. This lets `AddressBook` maintain one `Tag` object per unique tag instead of each `Person` holding its own `Tag` objects.<br>
+The object diagram below gives a concrete snapshot of the stored model. Alex has one global student record and separate progress records for two courses. The progress records refer to the student and course-semester using their identifying values, allowing one student to be tracked across multiple courses without duplicating the student object.
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
-
-</div>
+![Example objects for one student's multi-course progress](images/StudentCourseProgressObjectDiagram.png)
 
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-<img src="images/StorageClassDiagram.png" width="550" />
+<img src="images/StorageClassDiagram.png" width="800" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save students, courses, deliverable-progress records, and user preferences in JSON format, and read them back into corresponding model objects.
 * is implemented by `StorageManager`, which delegates the actual JSON file access to `JsonAddressBookStorage` and `JsonUserPrefsStorage` (one class per data file).
-* depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
+* uses separate JSON adapter classes for `Student`, `Course`, and `StudentCourseProgress`.
+* depends on some classes in the `Model` component because its responsibility is to save and retrieve model objects.
 
 ### Common classes
 
@@ -191,6 +191,49 @@ milestones for that course. `UniqueCourseList` prevents duplicate course-semeste
 Courses are kept alongside students in `AddressBook`. `JsonSerializableAddressBook` and `JsonAdaptedCourse` save and
 restore them with the existing JSON data file, so a successfully initialised course remains available after a normal
 application restart.
+
+### Updating deliverable progress
+
+`MarkCommand` and `UnmarkCommand` share the workflow implemented by `StudentProgressCommand`. The command first
+identifies one student and one course-semester, verifies that every requested deliverable exists, and retrieves the
+matching `StudentCourseProgress` record. Because progress records are immutable, the command creates updated copies
+and replaces the original record in the model only after all validation succeeds.
+
+The following activity diagram summarizes that workflow. Any failed lookup or validation returns the corresponding
+`CommandException` without modifying the stored progress.
+
+![Workflow for marking or unmarking deliverables](images/UpdateProgressActivityDiagram.png)
+
+### Viewing deliverables feature
+
+The `view` command displays all tracked deliverables for one student. The command accepts either a student ID or a
+name. `ViewProgressCommand` first identifies exactly one student, then filters the model's
+`StudentCourseProgress` records by that student's ID. This lets one command display progress from every course and
+semester associated with the student.
+
+The command returns two forms of output in one `CommandResult`:
+
+* a textual summary for `ResultDisplay`; and
+* an immutable `StudentDeliverablesView` containing the selected `Student` and their progress records.
+
+Using a structured view object keeps the UI independent of the wording and formatting of the textual feedback.
+`ViewProgressCommand` restores the full student list before returning. `MainWindow` can then focus the selected
+student's card and pass the view object to `DeliverablesPanel`. The panel creates one group per course-semester, shows
+the completed/total count, and renders each deliverable with a filled or empty status box.
+
+The following sequence diagram shows the successful `view /id A1234567B` flow. Parser interactions are omitted so
+the diagram can focus on how the command result reaches both sides of the split-screen UI.
+
+![Interactions for viewing a student's deliverables](images/ViewDeliverablesSequenceDiagram.png)
+
+#### Design consideration: passing UI data
+
+**Alternative 1: Parse the feedback string in the UI.** This avoids adding another result type, but couples
+`DeliverablesPanel` to presentation text and makes wording changes likely to break the panel.
+
+**Alternative 2 (current choice): Attach a structured payload to `CommandResult`.** This requires the small
+`StudentDeliverablesView` class, but preserves component boundaries and gives the UI strongly typed, immutable data.
+This approach was chosen because it is safer to extend and easier to test.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -589,20 +632,20 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a student
 
-1. Deleting a person while all persons are being shown
+1. Deleting a student while all students are being shown
 
-   1. Prerequisites: List all persons using the `list` command, with multiple persons in the list.
+   1. Prerequisites: List all students using the `list` command, with multiple students in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: The first contact is deleted from the list. The status message shows the deleted contact's details.
+   1. Test case: `delete /id A1234567B`<br>
+      Expected: Alex Yeoh is deleted from the list. The status message shows the deleted student's details.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. The status message shows error details.
+   1. Test case: `delete /name Bernice Yu`<br>
+      Expected: Bernice Yu is deleted from the list. The status message shows the deleted student's details.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   1. Other incorrect delete commands to try: `delete`, `delete /id`, and `delete /unknown value`.<br>
+      Expected: No student is deleted. The status message shows the relevant error details.
 
 1. _{ more test cases …​ }_
 
