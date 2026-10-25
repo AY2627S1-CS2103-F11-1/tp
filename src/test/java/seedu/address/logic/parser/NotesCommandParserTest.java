@@ -50,6 +50,8 @@ public class NotesCommandParserTest {
     public void parse_blankNotes_failure() {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes",
                 NotesCommandParser.MESSAGE_EMPTY_NOTES);
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes    ",
+                NotesCommandParser.MESSAGE_EMPTY_NOTES);
     }
 
     @Test
@@ -79,5 +81,8 @@ public class NotesCommandParserTest {
     public void parse_duplicatePrefix_failure() {
         assertParseFailure(parser, " /id A1234567Z /id A7654321Z /notes Discussed inheritance",
                 "Multiple values specified for the following single-valued field(s): /id");
+        assertParseFailure(parser, " /ID A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes Discussed inheritance",
+                "Unknown parameter: /ID");
     }
 }
