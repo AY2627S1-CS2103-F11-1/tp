@@ -201,6 +201,7 @@ public class MainWindow extends UiPart<Stage> {
                 commandResult.getStudentDeliverablesView()
                         .ifPresent(deliverablesPanel::showDeliverables);
             } else {
+                deliverablesPanel.clear();
                 mainContentPane.setDividerPositions(0.86);
             }
 

@@ -37,6 +37,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     private static final String MESSAGE_PROGRESS_EXISTS = "Progress record already exists.";
     private static final String MESSAGE_PROGRESS_FOR_ENROLMENT_EXISTS =
             "Progress record already exists for this enrolment.";
+    private static final String MESSAGE_PROGRESS_ID_CHANGE =
+            "Progress record identity cannot be changed.";
     private static final String MESSAGE_NO_ENROLMENT = "A student must have at least one enrolment.";
     private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH = "Enrolment student ID does not match.";
     private static final String MESSAGE_PROGRESS_NOT_FOUND =
@@ -204,6 +206,11 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /** Replaces an existing student-course progress record. */
     public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+        requireAllNonNull(target, updatedProgress);
+        if (!target.isFor(updatedProgress.getStudentId(), updatedProgress.getCourseCode(),
+                updatedProgress.getSemester())) {
+            throw new IllegalArgumentException(MESSAGE_PROGRESS_ID_CHANGE);
+        }
         studentCourseProgresses.set(target, updatedProgress);
     }
 

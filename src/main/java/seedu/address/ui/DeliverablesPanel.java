@@ -50,6 +50,14 @@ public class DeliverablesPanel extends UiPart<Region> {
         content.setManaged(true);
     }
 
+    /** Clears the displayed deliverables and restores the empty state. */
+    public void clear() {
+        courses.getChildren().clear();
+        studentName.setText("");
+        studentId.setText("");
+        showEmptyState();
+    }
+
     private void showEmptyState() {
         emptyState.setVisible(true);
         emptyState.setManaged(true);

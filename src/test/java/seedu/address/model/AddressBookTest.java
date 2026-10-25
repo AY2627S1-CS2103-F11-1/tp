@@ -19,8 +19,10 @@ import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.course.exceptions.DuplicateCourseException;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.model.student.exceptions.DuplicateStudentException;
 import seedu.address.testutil.StudentBuilder;
 
@@ -136,6 +138,23 @@ public class AddressBookTest {
         addressBook.addCourse(CS2103);
 
         assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
+    }
+
+    @Test
+    public void setStudentCourseProgress_identityChange_throwsIllegalArgumentException() {
+        Course secondCourse = new Course(new CourseCode("IS2108"), new Semester("AY26/27-S1"),
+                List.of(new Deliverable("Project")));
+        addressBook.addCourse(CS2103);
+        addressBook.addCourse(secondCourse);
+        addressBook.addStudentWithEnrolment(ALICE, new StudentCourseEnrolment(
+                ALICE.getId(), CS2103.getCourseCode(), CS2103.getSemester(),
+                new TutorialClass("T07"), new seedu.address.model.enrolment.NotesList()));
+
+        StudentCourseProgress target = addressBook.getStudentCourseProgressList().getFirst();
+        StudentCourseProgress differentIdentity = new StudentCourseProgress(ALICE.getId(), secondCourse);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook
+                .setStudentCourseProgress(target, differentIdentity));
     }
 
     @Test
