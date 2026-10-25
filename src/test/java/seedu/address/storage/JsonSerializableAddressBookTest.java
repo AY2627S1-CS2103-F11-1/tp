@@ -71,4 +71,13 @@ public class JsonSerializableAddressBookTest {
         assertEquals(original, restored);
     }
 
+    @Test
+    public void toModelType_studentWithoutEnrolment_roundTrips() throws Exception {
+        AddressBook original = new AddressBook();
+        original.addStudent(TypicalStudents.ALICE);
+
+        AddressBook restored = new JsonSerializableAddressBook(original).toModelType();
+        assertEquals(original, restored);
+    }
+
 }

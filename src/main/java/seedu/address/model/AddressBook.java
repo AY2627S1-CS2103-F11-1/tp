@@ -39,6 +39,8 @@ public class AddressBook implements ReadOnlyAddressBook {
             "Progress record already exists for this enrolment.";
     private static final String MESSAGE_NO_ENROLMENT = "A student must have at least one enrolment.";
     private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH = "Enrolment student ID does not match.";
+    private static final String MESSAGE_PROGRESS_NOT_FOUND =
+            "Progress record for the enrolment does not exist.";
     private static final String MESSAGE_ENROLMENT_ID_CHANGE =
             "Enrolment identity cannot be changed through setEnrolment.";
 
@@ -366,6 +368,13 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         if (!exists) {
             throw new StudentCourseEnrolmentNotFoundException();
+        }
+
+        boolean progressExists = studentCourseProgresses.asUnmodifiableObservableList().stream()
+                .anyMatch(progress -> progress.isFor(studentId, courseCode, semester));
+
+        if (!progressExists) {
+            throw new IllegalStateException(MESSAGE_PROGRESS_NOT_FOUND);
         }
 
         enrolments.removeForStudentCourse(studentId, courseCode, semester);
