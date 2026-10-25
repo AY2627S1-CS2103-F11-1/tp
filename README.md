@@ -7,7 +7,10 @@
 
 TAssist is designed for university teaching assistants teaching computing modules with at least one multi-week coding project.
 
-With many students, potentially from different tutorial classes, TAs may not be able to remember each individual student’s progress. By tracking metrics like attendance, deliverables, key design decisions, and personal details like past interactions, TAs will be able to assess their progress and offer or initiate contextualized support more efficiently.
+With many students across different tutorial classes and courses, TAs may not
+remember every student's project context. TAssist keeps course enrolments,
+deliverable progress, and interaction notes together so TAs can offer more
+contextualised support.
 
 ## Features
 
@@ -15,8 +18,8 @@ With many students, potentially from different tutorial classes, TAs may not be 
 - Record student information and personal notes
 - Search for students by name or student ID
 - Track project deliverables and completion statuses
-- Record students’ project progress and design decisions
-- Add, edit and delete notes about students’ project work
+- View project progress across each student's course enrolments
+- Add, view and delete deliverable-specific notes about students’ project work
 - Use commands to perform actions efficiently
 
 ## Example Commands
@@ -31,12 +34,12 @@ delete /id A1245678Z
 delete /name John Doe
 enrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 unenrol /id A1234567Z /course CS2103T /sem AY26/27-S1
-init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
+init course /course CS2103T /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
 notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation
 view notes /id A1234567Z /course CS2103T /sem AY26/27-S1
 delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1
-mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
-mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
+mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
+mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1
 unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
 unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP
 view /id A1234567Z
