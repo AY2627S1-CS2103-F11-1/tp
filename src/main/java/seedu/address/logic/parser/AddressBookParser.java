@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
@@ -49,6 +50,7 @@ public class AddressBookParser {
      *                        format
      */
     public Command parseCommand(String userInput) throws ParseException {
+        requireNonNull(userInput);
         String trimmedInput = userInput.trim();
         if (trimmedInput.equals(ViewNotesCommand.COMMAND_WORD)
                 || trimmedInput.startsWith(ViewNotesCommand.COMMAND_WORD + " ")) {

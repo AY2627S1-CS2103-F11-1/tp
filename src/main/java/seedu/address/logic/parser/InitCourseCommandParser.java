@@ -1,12 +1,14 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
 import java.util.stream.Stream;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.Course;
@@ -21,6 +23,7 @@ public class InitCourseCommandParser implements Parser<InitCourseCommand> {
 
     @Override
     public InitCourseCommand parse(String args) throws ParseException {
+        requireNonNull(args);
         String trimmedArgs = args.trim();
         if (!trimmedArgs.equals(COURSE_SUBCOMMAND)
                 && !trimmedArgs.startsWith(COURSE_SUBCOMMAND + " ")) {

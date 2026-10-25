@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_ID;
 import java.util.Optional;
 import java.util.StringJoiner;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -18,12 +19,6 @@ import seedu.address.model.student.Id;
  * Parses input arguments and creates a new EditCommand object
  */
 public class EditCommandParser implements Parser<EditCommand> {
-    public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
-    public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
-            "Unknown parameter. Parameters allowed: %s, %s, %s, %s",
-            PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
-    public static final String MESSAGE_MISSING_ID = String.format("Missing required parameter: %s", PREFIX_ID);
-    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
 
     /**
      * Parses the given {@code String} of arguments in the context of the
@@ -45,7 +40,7 @@ public class EditCommandParser implements Parser<EditCommand> {
                 PREFIX_EMAIL);
 
         if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
+            throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
@@ -94,7 +89,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         if (emptyParameters.length() > 0) {
             throw new ParseException(String.format(
-                    MESSAGE_EMPTY_PARAMETERS, emptyParameters));
+                    Messages.MESSAGE_EMPTY_PARAMETERS, emptyParameters));
         }
     }
 }

@@ -58,7 +58,7 @@ public class ViewProgressCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Student student = findStudent(model);
+        Student student = StudentProgressCommand.findStudent(model, studentId, studentName);
         List<StudentCourseProgress> progressRecords = model.getStudentCourseProgressList().stream()
                 .filter(candidate -> candidate.getStudentId().equals(student.getId()))
                 .toList();
@@ -66,28 +66,6 @@ public class ViewProgressCommand extends Command {
         model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
         return new CommandResult(formatProgress(student, progressRecords),
                 new StudentDeliverablesView(student, progressRecords));
-    }
-
-    private Student findStudent(Model model) throws CommandException {
-        if (studentId.isPresent()) {
-            return model.getAddressBook().getStudentList().stream()
-                    .filter(student -> student.getId().equals(studentId.get()))
-                    .findFirst()
-                    .orElseThrow(() -> new CommandException(String.format(
-                            StudentProgressCommand.MESSAGE_STUDENT_ID_NOT_FOUND, studentId.get())));
-        }
-
-        List<Student> matchingStudents = model.getAddressBook().getStudentList().stream()
-                .filter(student -> student.getName().fullName.equalsIgnoreCase(studentName.orElseThrow()))
-                .toList();
-        if (matchingStudents.isEmpty()) {
-            throw new CommandException(String.format(StudentProgressCommand.MESSAGE_STUDENT_NAME_NOT_FOUND,
-                    studentName.orElseThrow()));
-        }
-        if (matchingStudents.size() > 1) {
-            throw new CommandException(StudentProgressCommand.MESSAGE_MULTIPLE_STUDENTS_WITH_NAME);
-        }
-        return matchingStudents.getFirst();
     }
 
     private String formatProgress(Student student, List<StudentCourseProgress> progressRecords) {

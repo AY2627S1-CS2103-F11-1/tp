@@ -32,6 +32,10 @@ public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
+    private static final String FIELD_NAME = "Name";
+    private static final String FIELD_STUDENT_ID = "Student ID";
+    private static final String FIELD_EMAIL = "Email";
+
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Edits the details of a student identified by their current student ID.\n"
             + "At least one field must be provided for updating.\n"
@@ -119,15 +123,15 @@ public class EditCommand extends Command {
         StringJoiner changes = new StringJoiner("\n");
 
         if (!original.getName().equals(edited.getName())) {
-            changes.add("Name: " + edited.getName());
+            changes.add(FIELD_NAME + ": " + edited.getName());
         }
 
         if (!original.getId().equals(edited.getId())) {
-            changes.add("Student ID: " + edited.getId());
+            changes.add(FIELD_STUDENT_ID + ": " + edited.getId());
         }
 
         if (!original.getEmail().equals(edited.getEmail())) {
-            changes.add("Email: " + edited.getEmail());
+            changes.add(FIELD_EMAIL + ": " + edited.getEmail());
         }
 
         return changes.toString();
@@ -140,17 +144,17 @@ public class EditCommand extends Command {
 
         descriptor.getName().ifPresent(name -> {
             if (originalStudent.getName().equals(name)) {
-                unchangedFields.add("Name");
+                unchangedFields.add(FIELD_NAME);
             }
         });
         descriptor.getId().ifPresent(id -> {
             if (originalStudent.getId().equals(id)) {
-                unchangedFields.add("Student ID");
+                unchangedFields.add(FIELD_STUDENT_ID);
             }
         });
         descriptor.getEmail().ifPresent(email -> {
             if (originalStudent.getEmail().equals(email)) {
-                unchangedFields.add("Email");
+                unchangedFields.add(FIELD_EMAIL);
             }
         });
 
