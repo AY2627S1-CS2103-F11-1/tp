@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop application for managing contacts, optimized for use through a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI). If you type quickly, AB3 can help you manage contacts faster than traditional GUI applications.
+TAssist is a **desktop application for managing students, optimized for use through a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
 
 * Table of Contents
 {:toc}
@@ -26,13 +26,13 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 1. Type a command in the command box and press Enter to execute it. For example, type **`help`** and press Enter to open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all students.
 
    * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07` : Adds a student with an initial course enrolment.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete /id A1234567Z` : Deletes the student with the specified ID.
 
-   * `clear` : Deletes all contacts.
+   * `clear` : Deletes all students.
 
    * `exit` : Exits the app.
 
@@ -47,19 +47,19 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  For example, in `add n/NAME`, replace `NAME` with a value such as `John Doe`.
+  For example, in `add /name NAME`, replace `NAME` with a value such as `John Doe`.
 
 * Items in square brackets are optional.<br>
-  For example, `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  The optional parameters shown in each command's format may be omitted.
 
 * Items followed by `…`​ can appear zero or more times.<br>
   For example, `[t/TAG]…​` may be omitted, or written as `t/friend` or `t/friend t/family`.
 
-* Parameters can be in any order.<br>
-  For example, if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+* Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
+  The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `exit`, and `clear`, are ignored.<br>
-  For example, `help 123` is interpreted as `help`.
+* Commands reject unsupported or extraneous parameters with an error message. Commands such as `help`, `exit`, and
+  `clear` do not take parameters, while `list` also rejects unexpected text or parameters.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
@@ -170,7 +170,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * Keyword order does not matter; for example, `Hans Bo` matches `Bo Hans`.
 * The search considers only names.
 * Only full words match; for example, `Han` does not match `Hans`.
-* Persons matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
+* Students matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
 
 Examples:
 * `find John` returns `john` and `John Doe`
@@ -193,13 +193,16 @@ Student ID matching is case-insensitive.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
-Add or replace, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
+Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
 Formats:
 
 * `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`
 * `view notes /id ID /course COURSE /sem SEMESTER`
 * `delete notes /id ID /course COURSE /sem SEMESTER`
+
+The `/notes` value consumes the remaining text. Standalone slash-prefixed parameter-like
+tokens after `/notes` are rejected to prevent malformed commands from being treated as note text.
 
 Examples:
 
