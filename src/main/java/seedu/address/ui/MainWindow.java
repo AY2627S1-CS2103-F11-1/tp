@@ -205,7 +205,7 @@ public class MainWindow extends UiPart<Stage> {
                 mainContentPane.setDividerPositions(0.86);
             }
 
-            commandResult.getstudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
+            commandResult.getStudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
             commandResult.getStudentDeliverablesView()
                     .ifPresent(view -> studentListPanel.scrollToStudentId(view.getStudent().getId()));
 
