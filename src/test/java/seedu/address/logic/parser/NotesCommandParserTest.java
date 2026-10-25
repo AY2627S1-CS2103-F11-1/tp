@@ -29,6 +29,9 @@ public class NotesCommandParserTest {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
                         + " /task MVP /notes Discussed /course usage",
                 NotesCommandParser.MESSAGE_PARAMETERS_AFTER_NOTES);
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
+                        + " /task MVP /notes Discussed /unknown value",
+                NotesCommandParser.MESSAGE_PARAMETERS_AFTER_NOTES);
     }
 
     @Test

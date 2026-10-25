@@ -35,8 +35,8 @@ public class NotesCommandParser implements Parser<NotesCommand> {
     private static final String NOTES_PREFIX_REGEX = "(^|\\s)" + Pattern.quote(PREFIX_NOTES.toString()) + "(?=\\s|$)";
 
     private static final Pattern NOTES_PREFIX_PATTERN = Pattern.compile(NOTES_PREFIX_REGEX);
-    private static final Pattern STRUCTURED_PREFIX_AFTER_NOTES_PATTERN = Pattern.compile(
-            "(^|\\s)/(id|course|sem|task|notes)(?=\\s|$)");
+    private static final Pattern PARAMETER_AFTER_NOTES_PATTERN = Pattern.compile(
+            "(^|\\s)/\\S+(?=\\s|$)");
 
     private static final Prefix[] STRUCTURED_PREFIXES = {
         PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK
@@ -121,7 +121,7 @@ public class NotesCommandParser implements Parser<NotesCommand> {
             throw new ParseException(MESSAGE_EMPTY_NOTES);
         }
 
-        if (STRUCTURED_PREFIX_AFTER_NOTES_PATTERN.matcher(noteText).find()) {
+        if (PARAMETER_AFTER_NOTES_PATTERN.matcher(noteText).find()) {
             throw new ParseException(MESSAGE_PARAMETERS_AFTER_NOTES);
         }
 
