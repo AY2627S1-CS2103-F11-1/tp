@@ -44,7 +44,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_duplicateIdentifier_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /id A7654321Z",
-                "Multiple values specified for parameter: /id");
+                "Multiple values specified for the following single-valued field(s): /id");
     }
 
     @Test

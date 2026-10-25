@@ -28,7 +28,7 @@ public class InitCourseCommandParserTest {
     @Test
     public void parse_missingRequiredPrefix_failure() {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
+                "Missing required parameter(s): /deliverable");
     }
 
     @Test

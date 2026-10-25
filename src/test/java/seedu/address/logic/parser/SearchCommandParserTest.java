@@ -47,9 +47,9 @@ public class SearchCommandParserTest {
     @Test
     public void parse_duplicateOrConflictingIdentifier_failure() {
         assertParseFailure(parser, " /name John /name Jane",
-                "Multiple values specified for parameter: /name");
+                "Multiple values specified for the following single-valued field(s): /name");
         assertParseFailure(parser, " /id A1234567Z /id A2345678X",
-                "Multiple values specified for parameter: /id");
+                "Multiple values specified for the following single-valued field(s): /id");
         assertParseFailure(parser, " /name John /id A1234567Z",
                 "Please specify either /name or /id, not both.");
     }
