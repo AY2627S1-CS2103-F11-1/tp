@@ -154,10 +154,14 @@ public class ParserUtil {
         if (deliverableNames.isEmpty() || deliverableNames.stream().anyMatch(String::isBlank)) {
             throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
         }
-        List<Deliverable> parsedDeliverables = deliverableNames.stream()
-                .map(String::trim)
-                .map(Deliverable::new)
-                .toList();
+        List<Deliverable> parsedDeliverables = new java.util.ArrayList<>();
+        for (String deliverableName : deliverableNames) {
+            String trimmedName = deliverableName.trim();
+            if (!Deliverable.isValidDeliverable(trimmedName)) {
+                throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
+            }
+            parsedDeliverables.add(new Deliverable(trimmedName));
+        }
         if (!Course.hasUniqueDeliverables(parsedDeliverables)) {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);
         }

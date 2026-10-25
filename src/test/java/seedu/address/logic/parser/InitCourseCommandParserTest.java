@@ -48,4 +48,16 @@ public class InitCourseCommandParserTest {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, V1.2",
                 "A course must contain at least one unique deliverable.");
     }
+
+    @Test
+    public void parse_deliverableContainsColon_failure() {
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task MVP:Review",
+                Deliverable.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_unknownParameter_failure() {
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task MVP /foo value",
+                String.format(ParserUtil.MESSAGE_UNKNOWN_PARAMETER, "/foo"));
+    }
 }

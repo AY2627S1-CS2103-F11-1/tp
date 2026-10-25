@@ -27,8 +27,10 @@ public class InitCourseCommandParser implements Parser<InitCourseCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
         }
 
+        String arguments = trimmedArgs.substring(COURSE_SUBCOMMAND.length());
+        ParserUtil.rejectUnknownParameters(arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                trimmedArgs.substring(COURSE_SUBCOMMAND.length()), PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
+                arguments, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK);
         if (!arePrefixesPresent(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_TASK)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
