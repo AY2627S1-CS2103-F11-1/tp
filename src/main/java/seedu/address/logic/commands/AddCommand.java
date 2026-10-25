@@ -8,12 +8,9 @@ import static seedu.address.logic.parser.CliSyntax.ARGUMENT_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_CLASSES;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSES;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -53,9 +50,9 @@ public class AddCommand extends Command {
             + " " + PREFIX_NAME + " " + EXAMPLE_NAME
             + " " + PREFIX_ID + " " + EXAMPLE_ID
             + " " + PREFIX_EMAIL + " " + EXAMPLE_EMAIL
-            + " " + PREFIX_COURSE + " " + EXAMPLE_COURSES
-            + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTERS
-            + " " + PREFIX_CLASS + " " + EXAMPLE_CLASSES;
+            + " " + PREFIX_COURSE + " CS2103T, CS1231"
+            + " " + PREFIX_SEMESTER + " AY26/27-S1, AY26/27-S1"
+            + " " + PREFIX_CLASS + " T07, T02";
 
     public static final String MESSAGE_SUCCESS = "New student added: %1$s";
 

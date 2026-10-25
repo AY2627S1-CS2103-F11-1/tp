@@ -7,7 +7,6 @@ import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_CLASS;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_CLASS;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
@@ -46,7 +45,7 @@ public class EnrolCommand extends Command {
             + " " + PREFIX_ID + " " + EXAMPLE_ID
             + " " + PREFIX_COURSE + " " + EXAMPLE_COURSE
             + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER
-            + " " + PREFIX_CLASS + " " + EXAMPLE_CLASS;
+            + " " + PREFIX_CLASS + " T07";
 
     public static final String MESSAGE_SUCCESS = "Student %s enrolled in %s (%s), "
             + "tutorial class %s.";

@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
@@ -28,7 +27,7 @@ public class InitCourseCommand extends Command {
             + " " + PREFIX_DELIVERABLE + " " + ARGUMENT_DELIVERABLE + "[, " + ARGUMENT_DELIVERABLE + "]...\n"
             + "Example: " + COMMAND_WORD + " course " + PREFIX_COURSE + " " + EXAMPLE_COURSE
             + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER
-            + " " + PREFIX_DELIVERABLE + " " + EXAMPLE_DELIVERABLES;
+            + " " + PREFIX_DELIVERABLE + " v1.1, v1.2, MVP";
     public static final String MESSAGE_SUCCESS = "Course initialised: %1$s (%2$s) with %3$d deliverable(s).";
     public static final String MESSAGE_DUPLICATE_COURSE = "This course is already initialised for that semester.";
 

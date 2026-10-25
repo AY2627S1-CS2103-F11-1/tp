@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
-import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NEW_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
@@ -39,7 +38,7 @@ public class EditCommand extends Command {
             + "Parameters: "
             + PREFIX_ID + " " + ARGUMENT_ID + " "
             + "[" + PREFIX_NAME + " " + ARGUMENT_NAME + "] "
-            + "[" + PREFIX_NEW_ID + " " + ARGUMENT_NEW_ID + "] "
+            + "[" + PREFIX_NEW_ID + " NEW_ID] "
             + "[" + PREFIX_EMAIL + " " + ARGUMENT_EMAIL + "]\n"
             + "Example: " + COMMAND_WORD
             + " " + PREFIX_ID + " " + EXAMPLE_ID

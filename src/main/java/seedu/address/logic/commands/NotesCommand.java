@@ -5,7 +5,6 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
-import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NOTES;
 import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
 import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
@@ -40,7 +39,7 @@ public class NotesCommand extends Command {
             + PREFIX_COURSE + " " + ARGUMENT_COURSE + " "
             + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + " "
             + PREFIX_DELIVERABLE + " " + ARGUMENT_DELIVERABLE + " "
-            + PREFIX_NOTES + " " + ARGUMENT_NOTES + "\n"
+            + PREFIX_NOTES + " NOTES\n"
             + "Note: " + PREFIX_NOTES + " must be the final parameter.\n"
             + "Example: " + COMMAND_WORD
             + " " + PREFIX_ID + " " + EXAMPLE_ID

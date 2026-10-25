@@ -20,11 +20,9 @@ public class CliSyntax {
 
     /** Common argument labels used in command usage messages. */
     public static final String ARGUMENT_ID = "ID";
-    public static final String ARGUMENT_NEW_ID = "NEW_ID";
     public static final String ARGUMENT_NAME = "NAME";
     public static final String ARGUMENT_EMAIL = "EMAIL";
     public static final String ARGUMENT_CLASS = "CLASS";
-    public static final String ARGUMENT_NOTES = "NOTES";
     public static final String ARGUMENT_COURSE = "COURSE";
     public static final String ARGUMENT_SEMESTER = "SEMESTER";
     public static final String ARGUMENT_DELIVERABLE = "DELIVERABLE";
@@ -34,12 +32,7 @@ public class CliSyntax {
     public static final String EXAMPLE_NAME = "John Doe";
     public static final String EXAMPLE_EMAIL = "johndoe@u.nus.edu";
     public static final String EXAMPLE_COURSE = "CS2103T";
-    public static final String EXAMPLE_COURSES = "CS2103T, CS1231";
     public static final String EXAMPLE_SEMESTER = "AY26/27-S1";
-    public static final String EXAMPLE_SEMESTERS = "AY26/27-S1, AY26/27-S1";
-    public static final String EXAMPLE_CLASS = "T07";
-    public static final String EXAMPLE_CLASSES = "T07, T02";
     public static final String EXAMPLE_DELIVERABLE = "MVP";
-    public static final String EXAMPLE_DELIVERABLES = "v1.1, v1.2, MVP";
 
 }
