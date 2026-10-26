@@ -130,21 +130,37 @@ public class ParserUtil {
     }
 
     /**
+     * Splits a comma-separated value into trimmed, non-blank values.
+     *
+     * @throws ParseException if any value is blank.
+     */
+    public static List<String> parseCommaSeparatedValues(
+            String input, String emptyValueMessage) throws ParseException {
+        requireNonNull(input);
+        requireNonNull(emptyValueMessage);
+
+        List<String> values = Arrays.stream(input.split(",", -1))
+                .map(String::trim)
+                .toList();
+        if (values.stream().anyMatch(String::isBlank)) {
+            throw new ParseException(emptyValueMessage);
+        }
+        return values;
+    }
+
+    /**
      * Parses a comma-separated {@code String} into a list of deliverables.
      */
     public static List<Deliverable> parseDeliverables(String deliverables) throws ParseException {
         requireNonNull(deliverables);
-        List<String> deliverableNames = List.of(deliverables.split(",", -1));
-        if (deliverableNames.isEmpty() || deliverableNames.stream().anyMatch(String::isBlank)) {
-            throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
-        }
+        List<String> deliverableNames = parseCommaSeparatedValues(
+                deliverables, Deliverable.MESSAGE_CONSTRAINTS);
         List<Deliverable> parsedDeliverables = new java.util.ArrayList<>();
         for (String deliverableName : deliverableNames) {
-            String trimmedName = deliverableName.trim();
-            if (!Deliverable.isValidDeliverable(trimmedName)) {
+            if (!Deliverable.isValidDeliverable(deliverableName)) {
                 throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
             }
-            parsedDeliverables.add(new Deliverable(trimmedName));
+            parsedDeliverables.add(new Deliverable(deliverableName));
         }
         if (!Course.hasUniqueDeliverables(parsedDeliverables)) {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);

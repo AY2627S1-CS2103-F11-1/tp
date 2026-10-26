@@ -9,7 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.logic.Messages;
@@ -62,14 +61,14 @@ public class AddCommandParser implements Parser<AddCommand> {
         Id id = ParserUtil.parseId(argMultimap.getValue(PREFIX_ID).orElseThrow());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).orElseThrow());
 
-        List<String> courses = parseValues(
-                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
+        List<String> courses = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_COURSE).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
 
-        List<String> semesters = parseValues(
-                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
+        List<String> semesters = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
 
-        List<String> classes = parseValues(
-                argMultimap.getValue(PREFIX_CLASS).orElseThrow());
+        List<String> classes = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_CLASS).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
         Student student = new Student(name, id, email);
 
         if (courses.size() != semesters.size()
@@ -98,20 +97,4 @@ public class AddCommandParser implements Parser<AddCommand> {
 
     }
 
-    /**
-     * Parses a comma-separated list of non-blank values.
-     *
-     * @throws ParseException if any value is blank.
-     */
-    private static List<String> parseValues(String input) throws ParseException {
-        List<String> values = Arrays.stream(input.split(",", -1))
-                .map(String::trim)
-                .toList();
-
-        if (values.stream().anyMatch(String::isBlank)) {
-            throw new ParseException(MESSAGE_EMPTY_ENROLMENT_VALUE);
-        }
-
-        return values;
-    }
 }
