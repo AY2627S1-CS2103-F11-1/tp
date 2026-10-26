@@ -165,33 +165,19 @@ Example:
 
 * `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 
-### Locating students by name: `find`
-
-Finds students whose names contain any of the given keywords.
-
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Keyword order does not matter; for example, `Hans Bo` matches `Bo Hans`.
-* The search considers only names.
-* Only full words match; for example, `Han` does not match `Hans`.
-* Students matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
 ### Searching students by name or ID: `search`
 
-Searches student records by a case-insensitive name fragment or an exact student ID.
+Searches student records by case-insensitive partial name queries or exact student IDs.
 
-Format: `search /name NAME` or `search /id ID`
+Format: `search /name NAME[, NAME]...` or `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name John Doe` shows students whose names contain `John Doe`.
-* `search /id A1234567Z` shows the student with ID `A1234567Z`.
+* `search /name Alex Yeoh, Bernice Yu` shows students whose names contain
+  `Alex Yeoh` or `Bernice Yu`.
+* Name queries are case-insensitive partial matches. Commas separate queries;
+  spaces within one name query are preserved.
+* `search /id A1234567Z, A2345678X` searches for either exact student ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is case-insensitive.
@@ -332,8 +318,7 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
+**Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
