@@ -7,9 +7,13 @@ title: TAssist
 
 ![Ui](images/Ui.png)
 
-**TAssist is a desktop application that helps university teaching assistants manage student records and track project deliverables.** While it has a GUI, most user interactions happen using a CLI (Command Line Interface).
+**TAssist is a desktop application that helps university teaching assistants
+manage student records, course enrolments, interaction notes, and project
+deliverables.** While it has a GUI, most user interactions happen using a CLI
+(Command Line Interface).
 
 * If you are interested in using TAssist, head over to the [_Quick Start_ section of the **User Guide**](UserGuide.html#quick-start).
+* Download the latest packaged application from the [TAssist releases page](https://github.com/AY2627S1-CS2103-F11-1/tp/releases/latest).
 * If you are interested in developing TAssist, the [**Developer Guide**](DeveloperGuide.html) is a good place to start.
 
 
