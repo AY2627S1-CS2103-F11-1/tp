@@ -2,6 +2,14 @@
     -fx-text-fill: white;
 }
 
+#helpMessage {
+    -fx-control-inner-background: #252525;
+    -fx-font-family: monospace;
+    -fx-font-size: 13px;
+    -fx-highlight-fill: #4d6585;
+    -fx-highlight-text-fill: white;
+}
+
 #copyButton {
     -fx-background-color: dimgray;
 }
@@ -15,5 +23,5 @@
 }
 
 #helpMessageContainer {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #1d1d1d;
 }

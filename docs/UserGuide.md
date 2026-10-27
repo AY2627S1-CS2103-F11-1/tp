@@ -75,7 +75,9 @@ notes, and project-deliverable progress.
 
 ### Viewing help: `help`
 
-Shows a message explaining how to access the help page.
+Opens a read-only command reference containing the available commands, syntax,
+short descriptions, and examples. For detailed explanations, refer to this User
+Guide.
 
 ![help message](images/helpMessage.png)
 

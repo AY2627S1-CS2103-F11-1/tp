@@ -1,0 +1,51 @@
+  TAssist command reference
+
+Type commands in the command box and press Enter. This window is read-only.
+For detailed instructions and more examples, refer to the User Guide.
+
+STUDENT MANAGEMENT
+list
+    Lists all students.
+add /name NAME /id ID /email EMAIL
+    /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...
+    Adds a student with one or more course enrolments.
+    Example: add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07
+edit /id CURRENT_ID [/newid NEW_ID] [/name NEW_NAME] [/email EMAIL]
+    Edits a student's details.
+delete /id ID   or   delete /name NAME
+    Deletes a student.
+search /name NAME[, NAME]...   or   search /id ID[, ID]...
+    Searches students by case-insensitive name or student ID.
+    Example: search /name Alex Yeoh, Bernice Yu
+
+COURSE AND ENROLMENT MANAGEMENT
+init course /course COURSE_CODE /sem SEMESTER /task TASK[, TASK]...
+    Initialises a course-semester and its deliverables.
+enrol /id ID /course COURSE /sem SEMESTER /class CLASS
+    Enrols an existing student in a course-semester.
+unenrol /id ID /course COURSE /sem SEMESTER
+    Removes a student's enrolment.
+
+PROGRESS TRACKING
+mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...
+    Marks deliverables as complete.
+unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...
+    Marks deliverables as incomplete.
+view /id ID   or   view /name NAME
+    Displays a student's deliverable progress.
+
+NOTES
+notes /id ID /course COURSE /sem SEMESTER /task TASK /notes NOTES
+    Adds notes to a task. The /notes value must be last.
+view notes /id ID /course COURSE /sem SEMESTER
+    Displays notes for a course enrolment.
+delete notes /id ID /course COURSE /sem SEMESTER
+    Deletes notes for a course enrolment.
+
+GENERAL
+help
+    Opens this command reference.
+clear
+    Deletes all stored data.
+exit
+    Exits TAssist.
