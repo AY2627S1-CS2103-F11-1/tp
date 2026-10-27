@@ -1,3 +1,4 @@
+
 @startuml
 !include style.puml
 skinparam arrowThickness 1.1
@@ -7,27 +8,26 @@ skinparam classBackgroundColor LOGIC_COLOR
 package Logic as LogicPackage {
 
 class AddressBookParser
-Class CommandResult
-Class "{abstract}\nCommand" as Command
+class CommandResult
+class "{abstract}\nCommand" as Command
 
-
-Class "<<interface>>\nLogic" as Logic
-Class LogicManager
+class "<<interface>>\nLogic" as Logic
+class LogicManager
 }
 
 package Model {
-interface Model
+class "<<interface>>\nModel" as Model
 }
 
 package Storage {
-interface Storage
+class "<<interface>>\nStorage" as Storage
 }
 
-Class HiddenOutside #FFFFFF
+class HiddenOutside #FFFFFF
 HiddenOutside ..> Logic
 
 LogicManager .right.|> Logic
-LogicManager -right->"1" AddressBookParser
+LogicManager -right-> "1" AddressBookParser
 AddressBookParser ..> Command : returns
 LogicManager .left.> Command : executes
 
@@ -38,4 +38,5 @@ Command .right.> Model
 Logic ..> CommandResult
 LogicManager .down.> CommandResult
 Command .up.> CommandResult : returns
+
 @enduml
