@@ -515,20 +515,22 @@ Low (unlikely to have) - `*`
 
 **Use case: Update a student's deliverable completion status**
 
-**Preconditions**: The course, its deliverables and the student are recorded in TAssist.
+**Preconditions**: The course-semester and its deliverables are recorded in TAssist,
+and the student is enrolled in that course-semester.
 
 **MSS**
 
-1. TA requests to mark or unmark a specified project deliverable for a student.
-2. TAssist validates the student, course and deliverable details.
-3. TAssist updates the deliverable's completion status for the student.
+1. TA requests to mark or unmark a specified project deliverable for a student
+   in a course-semester.
+2. TAssist validates the student, course-semester enrolment and deliverable details.
+3. TAssist updates the deliverable's completion status for that enrolment.
 4. TAssist displays the updated completion status.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The student, course or deliverable cannot be found.
+* 2a. The student, course-semester enrolment or deliverable cannot be found.
 
   * 2a1. TAssist displays an error message.
 
