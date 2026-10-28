@@ -165,36 +165,28 @@ Example:
 
 * `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 
-### Locating students by name: `find`
-
-Finds students whose names contain any of the given keywords.
-
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Keyword order does not matter; for example, `Hans Bo` matches `Bo Hans`.
-* The search considers only names.
-* Only full words match; for example, `Han` does not match `Hans`.
-* Students matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
 ### Searching students by name or ID: `search`
 
-Searches student records by a case-insensitive name fragment or an exact student ID.
+Searches student records by one or more names or student IDs. Name queries use
+case-insensitive partial-substring matching with OR semantics: a student is
+returned when their name contains at least one comma-separated query. Each
+name query may contain spaces.
 
-Format: `search /name NAME` or `search /id ID`
+Format:
+
+* `search /name NAME[, NAME]...`
+* `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name John Doe` shows students whose names contain `John Doe`.
-* `search /id A1234567Z` shows the student with ID `A1234567Z`.
+* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
+* `search /id A1234567Z, A2345678X` shows students with either ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
-Student ID matching is case-insensitive.
+Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
+
+Command words and parameter prefixes are case-sensitive. Use the documented
+lowercase syntax, such as `search` and `/name`.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
@@ -332,8 +324,7 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
+**Search** | `search /name NAME[, NAME]...`<br>`search /id ID[, ID]...`<br> e.g., `search /name John Doe, Alex`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
