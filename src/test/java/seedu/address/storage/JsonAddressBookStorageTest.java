@@ -58,6 +58,53 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
+    public void read_emptyJsonObject_returnsEmptyAddressBook() throws Exception {
+        Path filePath = testFolder.resolve("emptyAddressBook.json");
+        Files.writeString(filePath, "{}");
+
+        ReadOnlyAddressBook addressBook = new JsonAddressBookStorage(filePath)
+                .readAddressBook(filePath).orElseThrow();
+
+        assertTrue(addressBook.getStudentList().isEmpty());
+        assertTrue(addressBook.getCourseList().isEmpty());
+        assertTrue(addressBook.getEnrolmentList().isEmpty());
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
+    }
+
+    @Test
+    public void read_zeroByteFile_throwsDataLoadingException() throws Exception {
+        Path filePath = testFolder.resolve("zeroByteAddressBook.json");
+        Files.createFile(filePath);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        assertThrows(DataLoadingException.class, () -> storage.readAddressBook(filePath));
+    }
+
+    @Test
+    public void read_nullJsonFile_throwsDataLoadingExceptionWithoutOverwriting() throws Exception {
+        Path filePath = testFolder.resolve("nullAddressBook.json");
+        String originalContent = "null";
+        Files.writeString(filePath, originalContent);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        assertThrows(DataLoadingException.class, () -> storage.readAddressBook(filePath));
+
+        assertEquals(originalContent, Files.readString(filePath));
+    }
+
+    @Test
+    public void read_whitespaceOnlyFile_throwsDataLoadingExceptionWithoutOverwriting() throws Exception {
+        Path filePath = testFolder.resolve("whitespaceAddressBook.json");
+        String originalContent = "   \n\t";
+        Files.writeString(filePath, originalContent);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        assertThrows(DataLoadingException.class, () -> storage.readAddressBook(filePath));
+
+        assertEquals(originalContent, Files.readString(filePath));
+    }
+
+    @Test
     public void read_notJsonFormat_exceptionThrown() {
         assertThrows(DataLoadingException.class, () -> readAddressBook("notJsonFormatAddressBook.json"));
     }
@@ -101,6 +148,48 @@ public class JsonAddressBookStorageTest {
         assertThrows(DataLoadingException.class, storage::readAddressBook);
 
         assertEquals(originalContent, Files.readString(filePath));
+    }
+
+    @Test
+    public void readAddressBook_invalidReferences_rejectWithoutOverwriting() throws Exception {
+        String[] fileNames = {
+            "duplicateEnrolmentAddressBook.json",
+            "duplicateProgressAddressBook.json",
+            "invalidEnrolmentStudentAddressBook.json",
+            "invalidEnrolmentCourseAddressBook.json",
+            "invalidProgressEnrolmentAddressBook.json",
+            "invalidNoteAndProgressAddressBook.json"
+        };
+
+        for (String fileName : fileNames) {
+            Path filePath = testFolder.resolve(fileName);
+            Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest", fileName);
+            Files.copy(sourcePath, filePath);
+            String originalContent = Files.readString(filePath);
+
+            JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+            assertThrows(DataLoadingException.class, storage::readAddressBook);
+            assertEquals(originalContent, Files.readString(filePath));
+        }
+    }
+
+    @Test
+    public void readAddressBook_multipleReconciliationCases_repairsAndSaves() throws Exception {
+        Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest",
+                "reconciliationAddressBook.json");
+        Path filePath = testFolder.resolve("reconciliationAddressBook.json");
+        Files.copy(sourcePath, filePath);
+
+        new JsonAddressBookStorage(filePath).readAddressBook();
+
+        String savedContent = Files.readString(filePath);
+        assertTrue(savedContent.contains("\"MVP\" : \"DONE\""));
+        assertTrue(savedContent.contains("\"Final\" : \"NOT_DONE\""));
+        assertTrue(savedContent.contains("\"Proposal\" : \"NOT_DONE\""));
+        assertTrue(savedContent.contains("\"Demo\" : \"NOT_DONE\""));
+        assertFalse(savedContent.contains("\"Obsolete\""));
+        assertFalse(savedContent.contains("\"Old\""));
+        assertFalse(savedContent.contains("\"mvp\""));
     }
 
     @Test

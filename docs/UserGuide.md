@@ -292,11 +292,39 @@ Advanced users may update the JSON file directly, but should make a backup first
 **Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes make the data file invalid, TAssist starts with sample data at
-the next run. The invalid file remains on disk until a command is run, at which
-point TAssist saves its current data. Edit the file only if you are confident
-that the resulting values follow the documented formats.<br>
+Do not edit or replace the data file unless you have made a backup first. If
+TAssist cannot load an existing file, it stops normal startup and does not
+replace the file with sample data. This protects your saved student records.<br>
 </div>
+
+### Loading and recovering saved data
+
+TAssist handles the address-book data file in three ways:
+
+| Storage condition | TAssist behaviour |
+| --- | --- |
+| The data file does not exist | TAssist starts with sample data for first-time exploration. |
+| The data file exists and is valid | TAssist loads your saved data normally. |
+| The data file exists but is invalid or cannot be read | TAssist displays an **Unable to load saved data** error dialog, reports the loading problem, and stops normal startup. The original file is not replaced. |
+
+Sample data is for initial demonstration only. TAssist does not replace invalid
+saved data with sample data because this could overwrite important student
+records. It also does not automatically reassign or delete notes that refer to
+course deliverables that do not exist, because the intended deliverable cannot
+be determined reliably. After you dismiss the startup error dialog, TAssist
+exits without opening the normal application interface.
+
+If TAssist cannot load your saved data:
+
+1. Read the error message to identify the problem.
+2. Locate the file at `[JAR file location]/data/addressbook.json`.
+3. Make a backup copy of the original file before editing it.
+4. Restore a valid backup or carefully correct the invalid data.
+5. Restart TAssist.
+
+A valid but empty address book is different from a missing file: it is loaded as
+your saved data and is not replaced with sample data. Do not delete or
+overwrite the existing file unless you intentionally want to reset your data.
 
 ### Archiving data files `[coming in v2.0]`
 
