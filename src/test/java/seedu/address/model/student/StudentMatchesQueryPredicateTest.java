@@ -2,6 +2,7 @@ package seedu.address.model.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.CARL;
@@ -35,6 +36,14 @@ public class StudentMatchesQueryPredicateTest {
 
         assertTrue(predicate.test(ALICE));
         assertTrue(predicate.test(CARL));
+    }
+
+    @Test
+    public void constructor_emptyQueries_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new StudentMatchesQueryPredicate(List.of()));
+        assertThrows(IllegalArgumentException.class,
+                () -> StudentMatchesQueryPredicate.forIds(List.of()));
     }
 
     @Test

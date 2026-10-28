@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -14,6 +16,17 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 
 public class SearchCommandParserTest {
     private final SearchCommandParser parser = new SearchCommandParser();
+
+    @Test
+    public void parse_nullArgs_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> parser.parse(null));
+    }
+
+    @Test
+    public void messageUsage_describesCommaSeparatedQueries() {
+        assertTrue(SearchCommand.MESSAGE_USAGE.contains("/name NAME[, NAME]..."));
+        assertTrue(SearchCommand.MESSAGE_USAGE.contains("/id ID[, ID]..."));
+    }
 
     @Test
     public void parse_name_success() {
@@ -31,6 +44,15 @@ public class SearchCommandParserTest {
     public void parse_multipleNameQueriesWithWhitespace_success() {
         assertParseSuccess(parser, " /name  Alice Yeoh  ,\tBernice Yu  ",
                 new SearchCommand(new StudentMatchesQueryPredicate(List.of("Alice Yeoh", "Bernice Yu"))));
+    }
+
+    @Test
+    public void parse_duplicateQueries_success() {
+        assertParseSuccess(parser, " /name Alice, Alice",
+                new SearchCommand(new StudentMatchesQueryPredicate(List.of("Alice", "Alice"))));
+        assertParseSuccess(parser, " /id A1234567Z, a1234567z",
+                new SearchCommand(StudentMatchesQueryPredicate.forIds(
+                        List.of(new Id("A1234567Z"), new Id("A1234567Z")))));
     }
 
     @Test
@@ -64,6 +86,8 @@ public class SearchCommandParserTest {
         assertParseFailure(parser, " /id A1234567Z, ", "Empty parameter value(s): /id");
         assertParseFailure(parser, " /name , Alice Yeoh", "Empty parameter value(s): /name");
         assertParseFailure(parser, " /name Alice,, Bob", "Empty parameter value(s): /name");
+        assertParseFailure(parser, " /name Alice,  ", "Empty parameter value(s): /name");
+        assertParseFailure(parser, " /id  , A1234567Z", "Empty parameter value(s): /id");
     }
 
     @Test

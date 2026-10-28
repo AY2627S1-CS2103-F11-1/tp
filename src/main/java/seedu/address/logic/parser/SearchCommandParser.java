@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -17,6 +18,7 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 public class SearchCommandParser implements Parser<SearchCommand> {
     @Override
     public SearchCommand parse(String args) throws ParseException {
+        requireNonNull(args);
         ParserUtil.rejectUnknownParameters(args, PREFIX_ID, PREFIX_NAME);
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_ID);

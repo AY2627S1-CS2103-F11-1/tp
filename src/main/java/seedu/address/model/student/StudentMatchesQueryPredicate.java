@@ -28,7 +28,7 @@ public class StudentMatchesQueryPredicate implements Predicate<Student> {
 
     /** Creates a predicate that matches names containing any query, ignoring case. */
     public StudentMatchesQueryPredicate(List<String> nameQueries) {
-        this(Optional.of(List.copyOf(requireNonNull(nameQueries))), Optional.empty());
+        this(Optional.of(copyNonEmpty(nameQueries)), Optional.empty());
     }
 
     /** Creates a predicate that matches an exact student ID. */
@@ -38,8 +38,15 @@ public class StudentMatchesQueryPredicate implements Predicate<Student> {
 
     /** Creates a predicate that matches any of the given student IDs exactly. */
     public static StudentMatchesQueryPredicate forIds(List<Id> idQueries) {
-        return new StudentMatchesQueryPredicate(Optional.empty(), Optional.of(List.copyOf(
-                requireNonNull(idQueries))));
+        return new StudentMatchesQueryPredicate(Optional.empty(), Optional.of(copyNonEmpty(idQueries)));
+    }
+
+    private static <T> List<T> copyNonEmpty(List<T> values) {
+        requireNonNull(values);
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException("At least one search query is required.");
+        }
+        return List.copyOf(values);
     }
 
     @Override

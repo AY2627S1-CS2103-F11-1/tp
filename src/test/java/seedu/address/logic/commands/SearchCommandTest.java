@@ -46,6 +46,17 @@ public class SearchCommandTest {
     }
 
     @Test
+    public void execute_overlappingNameQueries_doesNotDuplicateStudents() {
+        StudentMatchesQueryPredicate predicate =
+                new StudentMatchesQueryPredicate(List.of("Ali", "Alice"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 1 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE), model.getFilteredStudentList());
+    }
+
+    @Test
     public void execute_idQuery_filtersStudents() {
         StudentMatchesQueryPredicate predicate = new StudentMatchesQueryPredicate(new Id("A1234567Y"));
         SearchCommand command = new SearchCommand(predicate);
