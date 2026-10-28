@@ -124,6 +124,12 @@ public interface Model {
     Optional<Course> getCourse(CourseCode courseCode, Semester semester);
 
     /**
+     * Returns students enrolled in the specified course-semester, preserving the
+     * main student-list order.
+     */
+    List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester);
+
+    /**
      * Adds a student with their initial enrolment and deliverable progress.
      * The student must not already exist, and the course must exist.
      */

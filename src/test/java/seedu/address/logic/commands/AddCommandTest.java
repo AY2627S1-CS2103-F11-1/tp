@@ -170,6 +170,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addCourse(Course course) {
             throw new AssertionError("This method should not be called.");
         }

@@ -13,12 +13,17 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.BENSON;
+import static seedu.address.testutil.TypicalStudents.CARL;
+import static seedu.address.testutil.TypicalStudents.DANIEL;
+import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
 
@@ -77,6 +82,16 @@ public class ModelManagerTest {
     @Test
     public void getFilteredStudentList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredStudentList().remove(0));
+    }
+
+    @Test
+    public void getStudentsEnrolledIn_returnsStudentsInMainListOrder() {
+        modelManager = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        assertEquals(List.of(ALICE, BENSON, CARL, DANIEL), modelManager.getStudentsEnrolledIn(
+                new CourseCode("CS2103T"), new Semester("AY26/27-S1")));
+        assertTrue(modelManager.getStudentsEnrolledIn(
+                new CourseCode("CS2105"), new Semester("AY26/27-S1")).isEmpty());
     }
 
     @Test

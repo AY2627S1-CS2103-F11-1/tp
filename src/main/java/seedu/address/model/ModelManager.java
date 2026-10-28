@@ -5,8 +5,10 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -135,6 +137,19 @@ public class ModelManager implements Model {
     public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
         requireAllNonNull(courseCode, semester);
         return addressBook.getCourse(courseCode, semester);
+    }
+
+    @Override
+    public List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester) {
+        requireAllNonNull(courseCode, semester);
+        Set<Id> enrolledStudentIds = addressBook.getEnrolmentList().stream()
+                .filter(enrolment -> enrolment.getCourseCode().equals(courseCode)
+                        && enrolment.getSemester().equals(semester))
+                .map(StudentCourseEnrolment::getStudentId)
+                .collect(Collectors.toSet());
+        return addressBook.getStudentList().stream()
+                .filter(student -> enrolledStudentIds.contains(student.getId()))
+                .toList();
     }
 
     @Override
