@@ -160,7 +160,8 @@ public class JsonAddressBookStorageTest {
             "invalidProgressEnrolmentAddressBook.json",
             "invalidProgressCourseAddressBook.json",
             "invalidNoteAndProgressAddressBook.json",
-            "invalidCompletionStatusAddressBook.json"
+            "invalidCompletionStatusAddressBook.json",
+            "nullStudentRecordAddressBook.json"
         };
 
         for (String fileName : fileNames) {

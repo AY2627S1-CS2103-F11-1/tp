@@ -86,6 +86,11 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
+    public void read_nullNestedRecord_throwsDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> readTestFile("nullStudentRecordAddressBook.json"));
+    }
+
+    @Test
     public void toModelType_noteDeliverableNotInCourse_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(INVALID_NOTE_DELIVERABLE_FILE,
                 JsonSerializableAddressBook.class).get();

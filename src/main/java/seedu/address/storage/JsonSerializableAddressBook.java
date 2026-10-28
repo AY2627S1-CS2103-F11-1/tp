@@ -41,6 +41,7 @@ class JsonSerializableAddressBook {
             "Progress record references a course that does not exist.";
     public static final String MESSAGE_INVALID_NOTE_DELIVERABLE =
             "Note references a deliverable that does not belong to its course.";
+    private static final String MESSAGE_NULL_RECORD = "Address book contains a null record.";
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();
@@ -59,16 +60,26 @@ class JsonSerializableAddressBook {
             @JsonProperty("enrolments") List<JsonAdaptedStudentCourseEnrolment> enrolments) {
 
         if (students != null) {
+            rejectNullRecords(students);
             this.students.addAll(students);
         }
         if (courses != null) {
+            rejectNullRecords(courses);
             this.courses.addAll(courses);
         }
         if (studentCourseProgresses != null) {
+            rejectNullRecords(studentCourseProgresses);
             this.studentCourseProgresses.addAll(studentCourseProgresses);
         }
         if (enrolments != null) {
+            rejectNullRecords(enrolments);
             this.enrolments.addAll(enrolments);
+        }
+    }
+
+    private static void rejectNullRecords(List<?> records) {
+        if (records.contains(null)) {
+            throw new IllegalArgumentException(MESSAGE_NULL_RECORD);
         }
     }
 
