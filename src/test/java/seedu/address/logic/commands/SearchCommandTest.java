@@ -21,6 +21,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
+import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentMatchesQueryPredicate;
 
 public class SearchCommandTest {
@@ -60,6 +61,17 @@ public class SearchCommandTest {
     }
 
     @Test
+    public void execute_multiWordNameQueries_preservesEachQuery() {
+        StudentMatchesQueryPredicate predicate =
+                new StudentMatchesQueryPredicate(List.of("Alice Pauline", "Benson Meier"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 2 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE, BENSON), model.getFilteredStudentList());
+    }
+
+    @Test
     public void execute_overlappingNameQueries_doesNotDuplicateStudents() {
         StudentMatchesQueryPredicate predicate =
                 new StudentMatchesQueryPredicate(List.of("Ali", "Alice"));
@@ -82,6 +94,20 @@ public class SearchCommandTest {
     }
 
     @Test
+    public void execute_queryOrder_doesNotChangeResultOrder() throws CommandException {
+        SearchCommand firstSearch = new SearchCommand(
+                new StudentMatchesQueryPredicate(List.of("Benson", "Alice")));
+        SearchCommand secondSearch = new SearchCommand(new StudentMatchesQueryPredicate(List.of("Alice", "Benson")));
+
+        firstSearch.execute(model);
+        List<Student> firstResults = List.copyOf(model.getFilteredStudentList());
+        secondSearch.execute(model);
+
+        assertEquals(firstResults, List.copyOf(model.getFilteredStudentList()));
+        assertEquals(List.of(ALICE, BENSON), firstResults);
+    }
+
+    @Test
     public void execute_duplicateNames_returnsAllMatchingStudentsInListOrder() {
         StudentMatchesQueryPredicate predicate = new StudentMatchesQueryPredicate("Meier");
         SearchCommand command = new SearchCommand(predicate);
@@ -100,6 +126,17 @@ public class SearchCommandTest {
 
         assertCommandSuccess(command, model, "Found 0 matching student(s).", expectedModel);
         assertTrue(model.getFilteredStudentList().isEmpty());
+    }
+
+    @Test
+    public void execute_mixedMatchingAndNonMatchingQueries_returnsMatchingStudents() {
+        StudentMatchesQueryPredicate predicate =
+                new StudentMatchesQueryPredicate(List.of("Zzzzz", "Alice"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 1 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE), model.getFilteredStudentList());
     }
 
     @Test
