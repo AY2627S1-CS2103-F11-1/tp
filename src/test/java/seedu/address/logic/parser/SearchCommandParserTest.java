@@ -47,6 +47,15 @@ public class SearchCommandParserTest {
     }
 
     @Test
+    public void parse_queriesSeparatedByTabsAndNewlines_success() {
+        assertParseSuccess(parser, " /name Alice,\tBenson",
+                new SearchCommand(new StudentMatchesQueryPredicate(List.of("Alice", "Benson"))));
+        assertParseSuccess(parser, " /id A1234567Z,\nA2345678X",
+                new SearchCommand(StudentMatchesQueryPredicate.forIds(
+                        List.of(new Id("A1234567Z"), new Id("A2345678X")))));
+    }
+
+    @Test
     public void parse_duplicateQueries_success() {
         assertParseSuccess(parser, " /name Alice, Alice",
                 new SearchCommand(new StudentMatchesQueryPredicate(List.of("Alice", "Alice"))));

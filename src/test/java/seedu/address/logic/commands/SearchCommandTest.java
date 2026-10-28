@@ -6,13 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
+import static seedu.address.testutil.TypicalStudents.BENSON;
 import static seedu.address.testutil.TypicalStudents.CARL;
+import static seedu.address.testutil.TypicalStudents.DANIEL;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -54,6 +57,39 @@ public class SearchCommandTest {
 
         assertCommandSuccess(command, model, "Found 1 matching student(s).", expectedModel);
         assertEquals(List.of(ALICE), model.getFilteredStudentList());
+    }
+
+    @Test
+    public void execute_duplicateNames_returnsAllMatchingStudentsInListOrder() {
+        StudentMatchesQueryPredicate predicate = new StudentMatchesQueryPredicate("Meier");
+        SearchCommand command = new SearchCommand(predicate);
+
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 2 matching student(s).", expectedModel);
+        assertEquals(List.of(BENSON, DANIEL), model.getFilteredStudentList());
+    }
+
+    @Test
+    public void execute_noMatchingQuery_returnsEmptyFilteredList() {
+        StudentMatchesQueryPredicate predicate = new StudentMatchesQueryPredicate("NoSuchStudent");
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 0 matching student(s).", expectedModel);
+        assertTrue(model.getFilteredStudentList().isEmpty());
+    }
+
+    @Test
+    public void execute_repeatedSearches_replacePreviousFilter() throws CommandException {
+        SearchCommand firstSearch = new SearchCommand(new StudentMatchesQueryPredicate("Alice"));
+        SearchCommand secondSearch = new SearchCommand(new StudentMatchesQueryPredicate("Carl"));
+
+        firstSearch.execute(model);
+        assertEquals(List.of(ALICE), model.getFilteredStudentList());
+
+        secondSearch.execute(model);
+        assertEquals(List.of(CARL), model.getFilteredStudentList());
     }
 
     @Test
