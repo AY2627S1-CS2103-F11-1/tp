@@ -29,12 +29,18 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_STUDENT = "Students list contains duplicate student(s).";
     public static final String MESSAGE_DUPLICATE_COURSE = "Courses list contains duplicate course-semester pair(s).";
-    public static final String MESSAGE_DUPLICATE_PROGRESS = "Student course progress list contains duplicate record(s).";
-    public static final String MESSAGE_DUPLICATE_ENROLMENT = "Student enrolment list contains duplicate record(s).";
-    public static final String MESSAGE_INVALID_ENROLMENT = "Enrolment references a student or course that does not exist.";
-    public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
-    public static final String MESSAGE_INVALID_PROGRESS_COURSE = "Progress record references a course that does not exist.";
-    public static final String MESSAGE_INVALID_NOTE_DELIVERABLE = "Note references a deliverable that does not belong to its course.";
+    public static final String MESSAGE_DUPLICATE_PROGRESS =
+            "Student course progress list contains duplicate record(s).";
+    public static final String MESSAGE_DUPLICATE_ENROLMENT =
+            "Student enrolment list contains duplicate record(s).";
+    public static final String MESSAGE_INVALID_ENROLMENT =
+            "Enrolment references a student or course that does not exist.";
+    public static final String MESSAGE_INVALID_PROGRESS =
+            "Progress record does not match an existing enrolment.";
+    public static final String MESSAGE_INVALID_PROGRESS_COURSE =
+            "Progress record references a course that does not exist.";
+    public static final String MESSAGE_INVALID_NOTE_DELIVERABLE =
+            "Note references a deliverable that does not belong to its course.";
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();

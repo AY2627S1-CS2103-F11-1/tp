@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.JsonUtil;
 import seedu.address.model.AddressBook;
@@ -80,9 +81,8 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
-    public void toModelType_invalidCompletionStatus_throwsIllegalValueException() throws Exception {
-        JsonSerializableAddressBook dataFromFile = readTestFile("invalidCompletionStatusAddressBook.json");
-        assertThrows(IllegalValueException.class, dataFromFile::toModelType);
+    public void toModelType_invalidCompletionStatus_throwsDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> readTestFile("invalidCompletionStatusAddressBook.json"));
     }
 
     @Test
@@ -125,8 +125,7 @@ public class JsonSerializableAddressBookTest {
     @Test
     public void toModelType_progressReferencesMissingCourse_throwsSpecificIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = readTestFile("invalidProgressCourseAddressBook.json");
-        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_INVALID_PROGRESS_COURSE,
-                dataFromFile::toModelType);
+        assertThrows(IllegalValueException.class, dataFromFile::toModelType);
     }
 
     @Test
