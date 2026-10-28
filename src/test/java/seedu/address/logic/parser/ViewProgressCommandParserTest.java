@@ -28,18 +28,18 @@ public class ViewProgressCommandParserTest {
     @Test
     public void parse_missingStudent_throwsParseException() {
         assertParseFailure(parser, "",
-                ViewProgressCommandParser.MESSAGE_MISSING_STUDENT);
+                "Missing required parameter: /id or /name");
     }
 
     @Test
     public void parse_bothStudentIdentifiers_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /name John Doe",
-                ViewProgressCommandParser.MESSAGE_BOTH_IDENTIFIERS);
+                "Please specify either /id or /name, not both.");
     }
 
     @Test
     public void parse_unknownParameter_throwsParseException() {
-        assertParseFailure(parser, " /id A1234567Z /task MVP",
-                "Unknown parameter: /task");
+        assertParseFailure(parser, " /id A1234567Z /deliverable MVP",
+                "Unknown parameter: /deliverable");
     }
 }

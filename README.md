@@ -1,22 +1,25 @@
 # TAssist
 
-[![Java CI](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml)
+[![Java CI](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml)
 ![Ui](docs/images/Ui.png)
 
 ## Introduction
 
 TAssist is designed for university teaching assistants teaching computing modules with at least one multi-week coding project.
 
-With many students, potentially from different tutorial classes, TAs may not be able to remember each individual student’s progress. By tracking metrics like attendance, deliverables, key design decisions, and personal details like past interactions, TAs will be able to assess their progress and offer or initiate contextualized support more efficiently.
+With many students across different tutorial classes and courses, TAs may not
+remember every student's project context. TAssist keeps course enrolments,
+deliverable progress, and interaction notes together so TAs can offer more
+contextualised support.
 
 ## Features
 
 - Manage student records across different tutorial classes
-- Record student information and personal notes
-- Search for students by name or student ID
+- Record student information and deliverable-specific notes
+- Search for students by one or more case-insensitive partial name queries, or by student ID
 - Track project deliverables and completion statuses
-- Record students’ project progress and design decisions
-- Add, edit and delete notes about students’ project work
+- View project progress across each student's course enrolments
+- Add, view and delete deliverable-specific notes about students’ project work
 - Use commands to perform actions efficiently
 
 ## Example Commands
@@ -24,24 +27,27 @@ With many students, potentially from different tutorial classes, TAs may not be 
 ```text
 list
 overview /course CS2103T /sem AY26/27-S1
-search /name John Doe
-search /id A1234567Z
-add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
-edit /id A1234567Z /name John Tan /newid A1234567Y /email johntan@u.nus.edu
-delete /id A1245678Z
+search /name Alex Yeoh, Bernice Yu
+search /id A2345678X, A1234567Z
+add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, CS1231 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
+edit /id A1234567Z /name John Doe /newid A1234567Y /email johndoe@u.nus.edu
+delete /id A1234567Z
 delete /name John Doe
 enrol /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07
 unenrol /id A1234567Z /course CS2103T /sem AY26/27-S1
-init course /course CS2103 /sem AY26/27-S1 /task v1.1, v1.2, MVP, PE-D, Final Demo
-notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation
+init course /course CS2103T /sem AY26/27-S1 /deliverable v1.1, v1.2, MVP
+notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance
 view notes /id A1234567Z /course CS2103T /sem AY26/27-S1
 delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1
-mark /id A1234567Z /course CS2103 /sem AY26/27-S1 /task MVP
-mark /name John Doe /course CS2103 /sem AY26/27-S1 /task v1.1
-unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP
-unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP
+mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
+mark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1
+unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
+unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP
 view /id A1234567Z
 view /name John Doe
+help
+clear
+exit
 ```
 
 ## Acknowledgements

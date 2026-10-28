@@ -60,12 +60,12 @@ public class MarkCommandTest {
     }
 
     @Test
-    public void execute_unknownTask_throwsCommandException() {
+    public void execute_unknownDeliverable_throwsCommandException() {
         Model model = modelWithCourse();
         MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(new Deliverable("PE-D")));
 
-        assertCommandFailure(command, model, "Task 'PE-D' does not exist in CS2103T AY26/27-S1.");
+        assertCommandFailure(command, model, "Deliverable 'PE-D' does not exist in CS2103T AY26/27-S1.");
     }
 
     @Test

@@ -63,8 +63,7 @@ public class ViewProgressCommandTest {
         model.setStudentCourseProgresses(List.of());
         ViewProgressCommand command = new ViewProgressCommand(ALICE.getId());
         assertCommandSuccess(command, model,
-                new CommandResult("No deliverable progress found for Alice Pauline (A1234567Y).",
-                        new StudentDeliverablesView(ALICE, List.of())),
+                new CommandResult("No deliverable progress found for Alice Pauline (A1234567Y)."),
                 new ModelManager(model.getAddressBook(), new UserPrefs()));
     }
 

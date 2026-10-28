@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
@@ -17,7 +18,6 @@ import seedu.address.logic.commands.DeleteNotesCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EnrolCommand;
 import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -50,6 +50,7 @@ public class AddressBookParser {
      *                        format
      */
     public Command parseCommand(String userInput) throws ParseException {
+        requireNonNull(userInput);
         String trimmedInput = userInput.trim();
         if (trimmedInput.equals(ViewNotesCommand.COMMAND_WORD)
                 || trimmedInput.startsWith(ViewNotesCommand.COMMAND_WORD + " ")) {
@@ -83,7 +84,6 @@ public class AddressBookParser {
             case EditCommand.COMMAND_WORD -> new EditCommandParser().parse(arguments);
             case DeleteCommand.COMMAND_WORD -> new DeleteCommandParser().parse(arguments);
             case ClearCommand.COMMAND_WORD -> new ClearCommand();
-            case FindCommand.COMMAND_WORD -> new FindCommandParser().parse(arguments);
             case ListCommand.COMMAND_WORD -> new ListCommandParser().parse(arguments);
             case CourseProgressOverviewCommand.COMMAND_WORD ->
                 new CourseProgressOverviewCommandParser().parse(arguments);

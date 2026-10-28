@@ -9,6 +9,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.CourseProgressOverviewCommand;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
@@ -48,7 +49,7 @@ public class CourseProgressOverviewCommandParserTest {
     @Test
     public void parse_unknownOrUnexpectedText_failure() {
         assertParseFailure(parser, " /course CS2103T /sem AY26/27-S1 /class T07",
-                String.format(ParserUtil.MESSAGE_UNKNOWN_PARAMETER, "/class"));
+                String.format(Messages.MESSAGE_UNKNOWN_PARAMETER, "/class"));
         assertParseFailure(parser, "students /course CS2103T /sem AY26/27-S1",
                 CourseProgressOverviewCommandParser.MESSAGE_UNEXPECTED_TEXT);
     }

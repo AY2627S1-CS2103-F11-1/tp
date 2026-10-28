@@ -2,6 +2,12 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
@@ -21,10 +27,12 @@ public class ViewNotesCommand extends Command {
     public static final String COMMAND_WORD = "view notes";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Displays notes for a student's course enrolment.\n"
-            + "Parameters: " + PREFIX_ID + " ID " + PREFIX_COURSE + " COURSE "
-            + PREFIX_SEMESTER + " SEMESTER\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z "
-            + PREFIX_COURSE + " CS2103T " + PREFIX_SEMESTER + " AY26/27-S1";
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " "
+            + PREFIX_COURSE + " " + ARGUMENT_COURSE + " "
+            + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + "\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + " "
+            + PREFIX_COURSE + " " + EXAMPLE_COURSE + " "
+            + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER;
     public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Notes for student %s (%s):\n%s";
     public static final String MESSAGE_NO_NOTES = "No notes recorded.";
 

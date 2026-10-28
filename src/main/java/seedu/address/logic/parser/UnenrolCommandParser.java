@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.UnenrolCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.CourseCode;
@@ -16,16 +17,6 @@ import seedu.address.model.student.Id;
  * Parses input arguments and creates an {@code UnenrolCommand}.
  */
 public class UnenrolCommandParser implements Parser<UnenrolCommand> {
-
-    public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
-
-    public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
-            "Unknown parameter. Parameters allowed: %s, %s, %s",
-            PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
-
-    public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
-
-    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
 
     @Override
     public UnenrolCommand parse(String args) throws ParseException {
@@ -39,7 +30,7 @@ public class UnenrolCommandParser implements Parser<UnenrolCommand> {
                 args, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
         if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
+            throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.student.Id;
+
 /**
  * Represents the result of a command execution.
  */
@@ -72,7 +73,7 @@ public class CommandResult {
         return exit;
     }
 
-    public Optional<Id> getstudentIdToFocus() {
+    public Optional<Id> getStudentIdToFocus() {
         return Optional.ofNullable(studentIdToFocus);
     }
 
