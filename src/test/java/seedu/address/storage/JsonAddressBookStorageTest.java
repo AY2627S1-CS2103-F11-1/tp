@@ -153,12 +153,13 @@ public class JsonAddressBookStorageTest {
     @Test
     public void readAddressBook_invalidReferences_rejectWithoutOverwriting() throws Exception {
         String[] fileNames = {
-            "duplicateEnrolmentAddressBook.json",
-            "duplicateProgressAddressBook.json",
-            "invalidEnrolmentStudentAddressBook.json",
-            "invalidEnrolmentCourseAddressBook.json",
-            "invalidProgressEnrolmentAddressBook.json",
-            "invalidNoteAndProgressAddressBook.json"
+                "duplicateEnrolmentAddressBook.json",
+                "duplicateProgressAddressBook.json",
+                "invalidEnrolmentStudentAddressBook.json",
+                "invalidEnrolmentCourseAddressBook.json",
+                "invalidProgressEnrolmentAddressBook.json",
+                "invalidProgressCourseAddressBook.json",
+                "invalidNoteAndProgressAddressBook.json"
         };
 
         for (String fileName : fileNames) {

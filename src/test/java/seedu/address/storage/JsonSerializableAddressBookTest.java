@@ -105,6 +105,13 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
+    public void toModelType_progressReferencesMissingCourse_throwsSpecificIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = readTestFile("invalidProgressCourseAddressBook.json");
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_INVALID_PROGRESS_COURSE,
+                dataFromFile::toModelType);
+    }
+
+    @Test
     public void toModelType_multipleReconciliationCases_preservesValidStatuses() throws Exception {
         JsonSerializableAddressBook dataFromFile = readTestFile("reconciliationAddressBook.json");
         AddressBook addressBook = dataFromFile.toModelType();

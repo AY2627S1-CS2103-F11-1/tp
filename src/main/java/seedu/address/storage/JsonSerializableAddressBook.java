@@ -29,15 +29,12 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_STUDENT = "Students list contains duplicate student(s).";
     public static final String MESSAGE_DUPLICATE_COURSE = "Courses list contains duplicate course-semester pair(s).";
-    public static final String MESSAGE_DUPLICATE_PROGRESS =
-            "Student course progress list contains duplicate record(s).";
-    public static final String MESSAGE_DUPLICATE_ENROLMENT =
-            "Student enrolment list contains duplicate record(s).";
-    public static final String MESSAGE_INVALID_ENROLMENT =
-            "Enrolment references a student or course that does not exist.";
+    public static final String MESSAGE_DUPLICATE_PROGRESS = "Student course progress list contains duplicate record(s).";
+    public static final String MESSAGE_DUPLICATE_ENROLMENT = "Student enrolment list contains duplicate record(s).";
+    public static final String MESSAGE_INVALID_ENROLMENT = "Enrolment references a student or course that does not exist.";
     public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
-    public static final String MESSAGE_INVALID_NOTE_DELIVERABLE =
-            "Note references a deliverable that does not belong to its course.";
+    public static final String MESSAGE_INVALID_PROGRESS_COURSE = "Progress record references a course that does not exist.";
+    public static final String MESSAGE_INVALID_NOTE_DELIVERABLE = "Note references a deliverable that does not belong to its course.";
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();
@@ -159,6 +156,15 @@ class JsonSerializableAddressBook {
         for (JsonAdaptedStudentCourseProgress jsonProgress : studentCourseProgresses) {
             StudentCourseProgress loadedProgress = jsonProgress.toModelType();
 
+            Course course = addressBook.getCourse(
+                    loadedProgress.getCourseCode(), loadedProgress.getSemester()).orElse(null);
+            if (course == null) {
+                throw new IllegalValueException(String.format(
+                        "%s Course: %s, Semester: %s.",
+                        MESSAGE_INVALID_PROGRESS_COURSE,
+                        loadedProgress.getCourseCode(), loadedProgress.getSemester()));
+            }
+
             if (modelProgresses.stream().anyMatch(existing -> existing.isFor(
                     loadedProgress.getStudentId(), loadedProgress.getCourseCode(), loadedProgress.getSemester()))) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PROGRESS);
@@ -174,8 +180,6 @@ class JsonSerializableAddressBook {
                 throw new IllegalValueException(MESSAGE_INVALID_PROGRESS);
             }
 
-            Course course = addressBook.getCourse(
-                    loadedProgress.getCourseCode(), loadedProgress.getSemester()).orElseThrow();
             Map<Deliverable, CompletionStatus> reconciledStatuses = new LinkedHashMap<>();
             for (Deliverable deliverable : course.getDeliverables()) {
                 CompletionStatus status = loadedProgress.getDeliverableStatuses().entrySet().stream()
