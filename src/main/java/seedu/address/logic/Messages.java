@@ -14,11 +14,15 @@ public class Messages {
 
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command.";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format!\n%1$s";
-    public static final String MESSAGE_INVALID_DATA_FORMAT = "Invalid data format!\n%1$s";
     public static final String MESSAGE_STUDENTS_LISTED_OVERVIEW = "%1$d student(s) listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
             "Multiple values specified for the following single-valued field(s): ";
-
+    public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
+    public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
+    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
+    public static final String MESSAGE_UNKNOWN_PARAMETER = "Unknown parameter: %s";
+    public static final String MESSAGE_MISSING_IDENTIFIER = "Missing required parameter: %s or %s";
+    public static final String MESSAGE_CONFLICTING_IDENTIFIERS = "Please specify either %s or %s, not both.";
     /**
      * Returns an error message indicating the duplicate prefixes.
      */

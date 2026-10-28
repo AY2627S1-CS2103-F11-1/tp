@@ -17,6 +17,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.student.Id;
+import seedu.address.model.student.NameContainsKeywordsPredicate;
 import seedu.address.model.student.StudentMatchesQueryPredicate;
 
 public class SearchCommandTest {
@@ -31,6 +32,17 @@ public class SearchCommandTest {
 
         assertCommandSuccess(command, model, "Found 1 matching student(s).", expectedModel);
         assertEquals(List.of(CARL), model.getFilteredStudentList());
+    }
+
+    @Test
+    public void execute_multipleNameKeywords_filtersStudentsByOrMatch() {
+        NameContainsKeywordsPredicate predicate =
+                new NameContainsKeywordsPredicate(List.of("Alice", "Carl"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 2 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE, CARL), model.getFilteredStudentList());
     }
 
     @Test

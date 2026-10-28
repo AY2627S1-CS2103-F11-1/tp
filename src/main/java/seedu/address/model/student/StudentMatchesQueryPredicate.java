@@ -2,6 +2,7 @@ package seedu.address.model.student;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -12,30 +13,45 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests whether a {@code Student} matches a name fragment or an exact student ID.
  */
 public class StudentMatchesQueryPredicate implements Predicate<Student> {
-    private final Optional<String> nameQuery;
-    private final Optional<Id> idQuery;
+    private final Optional<List<String>> nameQueries;
+    private final Optional<List<Id>> idQueries;
+
+    private StudentMatchesQueryPredicate(Optional<List<String>> nameQueries, Optional<List<Id>> idQueries) {
+        this.nameQueries = requireNonNull(nameQueries);
+        this.idQueries = requireNonNull(idQueries);
+    }
 
     /** Creates a predicate that matches names containing {@code nameQuery}, ignoring case. */
     public StudentMatchesQueryPredicate(String nameQuery) {
-        requireNonNull(nameQuery);
-        this.nameQuery = Optional.of(nameQuery);
-        this.idQuery = Optional.empty();
+        this(Optional.of(List.of(requireNonNull(nameQuery))), Optional.empty());
+    }
+
+    /** Creates a predicate that matches names containing any query, ignoring case. */
+    public StudentMatchesQueryPredicate(List<String> nameQueries) {
+        this(Optional.of(List.copyOf(requireNonNull(nameQueries))), Optional.empty());
     }
 
     /** Creates a predicate that matches an exact student ID. */
     public StudentMatchesQueryPredicate(Id idQuery) {
-        this.nameQuery = Optional.empty();
-        this.idQuery = Optional.of(requireNonNull(idQuery));
+        this(Optional.empty(), Optional.of(List.of(requireNonNull(idQuery))));
+    }
+
+    /** Creates a predicate that matches any of the given student IDs exactly. */
+    public static StudentMatchesQueryPredicate forIds(List<Id> idQueries) {
+        return new StudentMatchesQueryPredicate(Optional.empty(), Optional.of(List.copyOf(
+                requireNonNull(idQueries))));
     }
 
     @Override
     public boolean test(Student student) {
         requireNonNull(student);
-        if (nameQuery.isPresent()) {
-            return student.getName().fullName.toLowerCase(Locale.ROOT)
-                    .contains(nameQuery.get().toLowerCase(Locale.ROOT));
+        if (nameQueries.isPresent()) {
+            String studentName = student.getName().fullName.toLowerCase(Locale.ROOT);
+            return nameQueries.get().stream()
+                    .map(query -> query.toLowerCase(Locale.ROOT))
+                    .anyMatch(studentName::contains);
         }
-        return student.getId().equals(idQuery.orElseThrow());
+        return idQueries.get().contains(student.getId());
     }
 
     @Override
@@ -46,19 +62,19 @@ public class StudentMatchesQueryPredicate implements Predicate<Student> {
         if (!(other instanceof StudentMatchesQueryPredicate otherPredicate)) {
             return false;
         }
-        return nameQuery.equals(otherPredicate.nameQuery) && idQuery.equals(otherPredicate.idQuery);
+        return nameQueries.equals(otherPredicate.nameQueries) && idQueries.equals(otherPredicate.idQueries);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(nameQuery, idQuery);
+        return java.util.Objects.hash(nameQueries, idQueries);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("nameQuery", nameQuery)
-                .add("idQuery", idQuery)
+                .add("nameQueries", nameQueries)
+                .add("idQueries", idQueries)
                 .toString();
     }
 }

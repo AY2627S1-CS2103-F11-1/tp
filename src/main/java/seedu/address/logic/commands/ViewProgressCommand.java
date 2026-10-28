@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
@@ -24,10 +28,11 @@ public class ViewProgressCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Displays all deliverable progress for a student.\n"
-            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME\n"
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " or "
+            + PREFIX_NAME + " " + ARGUMENT_NAME + "\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe";
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + "\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
     public static final String MESSAGE_NO_PROGRESS = "No deliverable progress found for %s (%s).";
 
     private final Optional<Id> studentId;
@@ -53,7 +58,7 @@ public class ViewProgressCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Student student = findStudent(model);
+        Student student = StudentProgressCommand.findStudent(model, studentId, studentName);
         List<StudentCourseProgress> progressRecords = model.getStudentCourseProgressList().stream()
                 .filter(candidate -> candidate.getStudentId().equals(student.getId()))
                 .toList();
@@ -61,28 +66,6 @@ public class ViewProgressCommand extends Command {
         model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
         return new CommandResult(formatProgress(student, progressRecords),
                 new StudentDeliverablesView(student, progressRecords));
-    }
-
-    private Student findStudent(Model model) throws CommandException {
-        if (studentId.isPresent()) {
-            return model.getAddressBook().getStudentList().stream()
-                    .filter(student -> student.getId().equals(studentId.get()))
-                    .findFirst()
-                    .orElseThrow(() -> new CommandException(String.format(
-                            StudentProgressCommand.MESSAGE_STUDENT_ID_NOT_FOUND, studentId.get())));
-        }
-
-        List<Student> matchingStudents = model.getAddressBook().getStudentList().stream()
-                .filter(student -> student.getName().fullName.equalsIgnoreCase(studentName.orElseThrow()))
-                .toList();
-        if (matchingStudents.isEmpty()) {
-            throw new CommandException(String.format(StudentProgressCommand.MESSAGE_STUDENT_NAME_NOT_FOUND,
-                    studentName.orElseThrow()));
-        }
-        if (matchingStudents.size() > 1) {
-            throw new CommandException(StudentProgressCommand.MESSAGE_MULTIPLE_STUDENTS_WITH_NAME);
-        }
-        return matchingStudents.getFirst();
     }
 
     private String formatProgress(Student student, List<StudentCourseProgress> progressRecords) {
