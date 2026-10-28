@@ -89,19 +89,25 @@ public class ListCommand extends Command {
             return new CommandResult(String.format(MESSAGE_SUCCESS, studentCount));
         }
 
+        CourseCode selectedCourseCode = courseCode.orElseThrow();
+        Semester selectedSemester = semester.orElseThrow();
+        TutorialClass selectedTutorialClass = tutorialClass.orElse(null);
+        Deliverable selectedDeliverable = incompleteDeliverable.orElse(null);
+
+        var course = model.getCourse(selectedCourseCode, selectedSemester)
+                .orElseThrow(() -> new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND,
+                        selectedCourseCode, selectedSemester)));
         if (incompleteDeliverable.isPresent()) {
-            var course = model.getCourse(courseCode.orElseThrow(), semester.orElseThrow())
-                    .orElseThrow(() -> new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND,
-                            courseCode.orElseThrow(), semester.orElseThrow())));
-            if (!course.getDeliverables().contains(incompleteDeliverable.orElseThrow())) {
+            if (!course.getDeliverables().contains(selectedDeliverable)) {
                 throw new CommandException(String.format(MESSAGE_DELIVERABLE_NOT_FOUND,
-                        incompleteDeliverable.orElseThrow(), courseCode.orElseThrow(), semester.orElseThrow()));
+                        selectedDeliverable, selectedCourseCode, selectedSemester));
             }
         }
 
         StudentMatchesEnrolmentPredicate predicate = new StudentMatchesEnrolmentPredicate(
                 model.getAddressBook().getEnrolmentList(), model.getStudentCourseProgressList(),
-                courseCode.orElseThrow(), semester.orElseThrow(), tutorialClass, incompleteDeliverable);
+                selectedCourseCode, selectedSemester, Optional.ofNullable(selectedTutorialClass),
+                Optional.ofNullable(selectedDeliverable));
         model.updateFilteredStudentList(predicate);
 
         String tutorialDescription = tutorialClass
@@ -113,11 +119,11 @@ public class ListCommand extends Command {
         int matchingStudentCount = model.getFilteredStudentList().size();
         if (matchingStudentCount == 0) {
             return new CommandResult(String.format(MESSAGE_NO_MATCHES,
-                    courseCode.orElseThrow(), semester.orElseThrow(),
+                    selectedCourseCode, selectedSemester,
                     tutorialDescription + deliverableDescription));
         }
         return new CommandResult(String.format(MESSAGE_FILTER_SUCCESS, matchingStudentCount,
-                courseCode.orElseThrow(), semester.orElseThrow(),
+                selectedCourseCode, selectedSemester,
                 tutorialDescription + deliverableDescription));
     }
 

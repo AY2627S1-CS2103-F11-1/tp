@@ -53,16 +53,21 @@ public class ListCommandParser implements Parser<ListCommand> {
         boolean hasSemester = argMultimap.getValue(PREFIX_SEMESTER).isPresent();
         boolean hasClass = argMultimap.getValue(PREFIX_CLASS).isPresent();
         boolean hasTask = argMultimap.getValue(PREFIX_TASK).isPresent();
-        if (!hasCourse || !hasSemester) {
-            if (hasClass && !hasCourse && !hasSemester) {
+
+        if (!hasCourse && !hasSemester) {
+            if (hasClass) {
                 throw new ParseException(MESSAGE_CLASS_REQUIRES_COURSE);
             }
-            if (hasTask && !hasCourse && !hasSemester) {
+            if (hasTask) {
                 throw new ParseException(MESSAGE_TASK_REQUIRES_COURSE);
             }
-            ParserUtil.validateRequiredParameters(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER);
         }
         ParserUtil.validateRequiredParameters(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER);
+
+        CourseCode courseCode = ParserUtil.parseCourseCode(
+                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
+        Semester semester = ParserUtil.parseSemester(
+                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
 
         Optional<TutorialClass> tutorialClass = Optional.empty();
         if (hasClass) {
@@ -82,10 +87,6 @@ public class ListCommandParser implements Parser<ListCommand> {
             incompleteDeliverable = Optional.of(deliverables.getFirst());
         }
 
-        CourseCode courseCode = ParserUtil.parseCourseCode(
-                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
-        Semester semester = ParserUtil.parseSemester(
-                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
         return new ListCommand(courseCode, semester, tutorialClass, incompleteDeliverable);
     }
 }

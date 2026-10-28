@@ -11,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.showStudentAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
@@ -96,6 +98,9 @@ public class ListCommandTest {
     public void execute_validFilterWithNoMatches_showsEmptyResult() {
         CourseCode courseCode = new CourseCode("CS2105");
         Semester semester = new Semester("AY26/27-S1");
+        Course course = new Course(courseCode, semester, List.of(new Deliverable("Assignment 1")));
+        model.addCourse(course);
+        expectedModel.addCourse(course);
         StudentMatchesEnrolmentPredicate predicate = new StudentMatchesEnrolmentPredicate(
                 expectedModel.getAddressBook().getEnrolmentList(), courseCode, semester, Optional.empty());
         expectedModel.updateFilteredStudentList(predicate);
@@ -162,6 +167,27 @@ public class ListCommandTest {
 
         assertCommandFailure(new ListCommand(courseCode, semester, Optional.empty(),
                         Optional.of(new Deliverable("MVP"))),
+                model, String.format(ListCommand.MESSAGE_COURSE_NOT_FOUND, courseCode, semester));
+    }
+
+    @Test
+    public void execute_uninitialisedCourseWithoutTask_throwsCommandExceptionWithoutChangingFilter() {
+        showStudentAtIndex(model, INDEX_FIRST_PERSON);
+        CourseCode courseCode = new CourseCode("CS9999");
+        Semester semester = new Semester("AY26/27-S1");
+
+        assertCommandFailure(new ListCommand(courseCode, semester, Optional.empty()),
+                model, String.format(ListCommand.MESSAGE_COURSE_NOT_FOUND, courseCode, semester));
+    }
+
+    @Test
+    public void execute_uninitialisedCourseWithTutorial_throwsCommandExceptionWithoutChangingFilter() {
+        showStudentAtIndex(model, INDEX_FIRST_PERSON);
+        CourseCode courseCode = new CourseCode("CS9999");
+        Semester semester = new Semester("AY26/27-S1");
+
+        assertCommandFailure(new ListCommand(courseCode, semester,
+                        Optional.of(new TutorialClass("T07"))),
                 model, String.format(ListCommand.MESSAGE_COURSE_NOT_FOUND, courseCode, semester));
     }
 }
