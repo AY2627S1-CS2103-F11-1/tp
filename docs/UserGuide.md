@@ -320,11 +320,15 @@ Action | Format, Examples
 **Add** | `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
+**Delete notes** | `delete notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
+**Exit** | `exit`
 **Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
+**Notes** | `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`<br> e.g., `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
+**View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **List** | `list`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
