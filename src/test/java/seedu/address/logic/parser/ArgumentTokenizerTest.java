@@ -7,9 +7,14 @@ package seedu.address.logic.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.parser.exceptions.ParseException;
 
 public class ArgumentTokenizerTest {
 
@@ -128,6 +133,26 @@ public class ArgumentTokenizerTest {
         assertArgumentPresent(argMultimap, pSlash, "pSlash value");
         assertArgumentPresent(argMultimap, dashT, "dashT-Value", "another dashT value", "");
         assertArgumentPresent(argMultimap, hatQ, "", "");
+    }
+
+    @Test
+    public void verifyNoDuplicatePrefixesFor_duplicatePrefixes_throwsParseException() {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                " /id first /name Alice /id second /name Bob", new Prefix("/id"), new Prefix("/name"));
+
+        assertThrows(ParseException.class, () -> argMultimap.verifyNoDuplicatePrefixesFor(
+                new Prefix("/id"), new Prefix("/name")));
+    }
+
+    @Test
+    public void getAllValues_modifyReturnedList_doesNotChangeStoredValues() {
+        Prefix prefix = new Prefix("/id");
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(prefix, "first");
+
+        argMultimap.getAllValues(prefix).add("second");
+
+        assertEquals(List.of("first"), argMultimap.getAllValues(prefix));
     }
 
     @Test

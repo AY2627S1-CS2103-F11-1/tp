@@ -3,6 +3,12 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
@@ -24,17 +30,16 @@ public class UnenrolCommand extends Command {
 
     public static final String COMMAND_WORD = "unenrol";
 
-    // TODO change all the example commands aross to use shared const
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes a student's enrolment from a course-semester.\n"
             + "Parameters: "
-            + PREFIX_ID + " ID "
-            + PREFIX_COURSE + " COURSE "
-            + PREFIX_SEMESTER + " SEMESTER\n"
+            + PREFIX_ID + " " + ARGUMENT_ID + " "
+            + PREFIX_COURSE + " " + ARGUMENT_COURSE + " "
+            + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + "\n"
             + "Example: " + COMMAND_WORD
-            + " " + PREFIX_ID + " A1234567Z"
-            + " " + PREFIX_COURSE + " CS2103T"
-            + " " + PREFIX_SEMESTER + " AY26/27-S1";
+            + " " + PREFIX_ID + " " + EXAMPLE_ID
+            + " " + PREFIX_COURSE + " " + EXAMPLE_COURSE
+            + " " + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER;
 
     public static final String MESSAGE_SUCCESS =
             "Student %s has been unenrolled from %s (%s).";

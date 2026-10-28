@@ -38,9 +38,9 @@ public class EditCommandParserTest {
     @Test
     public void parse_invalidPreamble_failure() {
         assertParseFailure(parser, "unexpected /id " + VALID_ID_AMY + NAME_DESC_AMY,
-                EditCommandParser.MESSAGE_UNEXPECTED_TEXT);
+                "Unexpected text found before parameter.");
         assertParseFailure(parser, "/id " + VALID_ID_AMY + " random text" + NAME_DESC_AMY,
-                EditCommandParser.MESSAGE_UNEXPECTED_TEXT);
+                "Unexpected text found before parameter.");
     }
 
     @Test

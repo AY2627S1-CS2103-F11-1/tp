@@ -33,7 +33,6 @@ class JsonAdaptedStudentCourseEnrolment {
             @JsonProperty("courseCode") String courseCode,
             @JsonProperty("semester") String semester,
             @JsonProperty("tutorialClass") String tutorialClass,
-            // TODO: Change to List
             @JsonProperty("notes") String notes) {
 
         this.studentId = studentId;

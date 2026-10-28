@@ -3,8 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
 import java.util.Objects;
@@ -27,7 +27,7 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all students or filters them by enrolment.\n"
             + "Parameters: [" + PREFIX_COURSE + " COURSE " + PREFIX_SEMESTER + " SEMESTER "
-            + "[" + PREFIX_CLASS + " CLASS] [" + PREFIX_TASK + " DELIVERABLE]]\n"
+            + "[" + PREFIX_CLASS + " CLASS] [" + PREFIX_DELIVERABLE + " DELIVERABLE]]\n"
             + "Examples:\n"
             + "  " + COMMAND_WORD + "\n"
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE + " CS2103T "
@@ -35,7 +35,7 @@ public class ListCommand extends Command {
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE + " CS2103T "
             + PREFIX_SEMESTER + " AY26/27-S1 " + PREFIX_CLASS + " T07\n"
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE + " CS2103T "
-            + PREFIX_SEMESTER + " AY26/27-S1 " + PREFIX_TASK + " v1.3";
+            + PREFIX_SEMESTER + " AY26/27-S1 " + PREFIX_DELIVERABLE + " v1.3";
 
     public static final String MESSAGE_SUCCESS = "Displayed %1$d student(s).";
 

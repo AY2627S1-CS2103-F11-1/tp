@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +24,10 @@ public abstract class StudentProgressCommand extends Command {
 
     static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'.";
     static final String MESSAGE_STUDENT_NAME_NOT_FOUND = "No student found with name '%s'.";
-    static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME =
-            "Multiple students found with this name. Please use the student's ID instead.";
+    static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. "
+            + "Please use the student's ID instead.";
     static final String MESSAGE_COURSE_NOT_FOUND = "Course %s %s has not been initialised.";
-    static final String MESSAGE_TASK_NOT_FOUND = "Task '%s' does not exist in %s %s.";
+    static final String MESSAGE_DELIVERABLE_NOT_FOUND = "Deliverable '%s' does not exist in %s %s.";
     static final String MESSAGE_PROGRESS_NOT_FOUND = "No progress record exists for this student and course.";
 
     private final Optional<Id> studentId;
@@ -37,7 +38,7 @@ public abstract class StudentProgressCommand extends Command {
     private final CompletionStatus targetStatus;
 
     StudentProgressCommand(Id studentId, CourseCode courseCode, Semester semester,
-                           List<Deliverable> deliverables, CompletionStatus targetStatus) {
+            List<Deliverable> deliverables, CompletionStatus targetStatus) {
         this.studentId = Optional.of(requireNonNull(studentId));
         this.studentName = Optional.empty();
         this.courseCode = requireNonNull(courseCode);
@@ -47,7 +48,7 @@ public abstract class StudentProgressCommand extends Command {
     }
 
     StudentProgressCommand(String studentName, CourseCode courseCode, Semester semester,
-                           List<Deliverable> deliverables, CompletionStatus targetStatus) {
+            List<Deliverable> deliverables, CompletionStatus targetStatus) {
         this.studentId = Optional.empty();
         this.studentName = Optional.of(requireNonNull(studentName));
         this.courseCode = requireNonNull(courseCode);
@@ -60,7 +61,7 @@ public abstract class StudentProgressCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Student student = findStudent(model);
+        Student student = findStudent(model, studentId, studentName);
         Course course = findCourse(model);
         validateDeliverables(course);
         StudentCourseProgress progress = findProgress(model, student);
@@ -79,7 +80,10 @@ public abstract class StudentProgressCommand extends Command {
                 new StudentDeliverablesView(student, allProgress));
     }
 
-    private Student findStudent(Model model) throws CommandException {
+    static Student findStudent(Model model, Optional<Id> studentId, Optional<String> studentName)
+            throws CommandException {
+        requireAllNonNull(model, studentId, studentName);
+
         if (studentId.isPresent()) {
             return model.getAddressBook().getStudentList().stream()
                     .filter(student -> student.getId().equals(studentId.get()))
@@ -110,7 +114,8 @@ public abstract class StudentProgressCommand extends Command {
     private void validateDeliverables(Course course) throws CommandException {
         for (Deliverable deliverable : deliverables) {
             if (!course.getDeliverables().contains(deliverable)) {
-                throw new CommandException(String.format(MESSAGE_TASK_NOT_FOUND, deliverable, courseCode, semester));
+                throw new CommandException(String.format(MESSAGE_DELIVERABLE_NOT_FOUND,
+                        deliverable, courseCode, semester));
             }
         }
     }

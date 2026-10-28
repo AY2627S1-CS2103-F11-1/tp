@@ -9,9 +9,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.CourseCode;
@@ -23,18 +23,12 @@ import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
+
 /**
  * Parses input arguments and creates a new AddCommand object
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
-    public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found before parameter.";
-    public static final String MESSAGE_UNKNOWN_PARAMETER = String.format(
-            "Unknown parameter. Parameters allowed: %s, %s, %s, %s, %s, %s",
-            PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL,
-            PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS);
-    public static final String MESSAGE_MISSING_PARAMETERS = "Missing required parameter(s): %s";
-    public static final String MESSAGE_EMPTY_PARAMETERS = "Empty parameter value(s): %s";
     public static final String MESSAGE_DUPLICATE_ENROLMENT = "Duplicate course-semester enrolment specified.";
     public static final String MESSAGE_EMPTY_ENROLMENT_VALUE = "Enrolment values cannot be empty.";
     public static final String MESSAGE_MISMATCHED_ENROLMENTS =
@@ -49,14 +43,13 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     public AddCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ParserUtil.rejectUnknownParameters(
-                args, PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL,
+        ParserUtil.rejectUnknownParameters(args, PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL,
                 PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL,
                 PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS);
 
         if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
+            throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
         argMultimap.verifyNoDuplicatePrefixesFor(
                 PREFIX_NAME, PREFIX_ID, PREFIX_EMAIL,
@@ -68,14 +61,14 @@ public class AddCommandParser implements Parser<AddCommand> {
         Id id = ParserUtil.parseId(argMultimap.getValue(PREFIX_ID).orElseThrow());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).orElseThrow());
 
-        List<String> courses = parseValues(
-                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
+        List<String> courses = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_COURSE).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
 
-        List<String> semesters = parseValues(
-                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
+        List<String> semesters = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
 
-        List<String> classes = parseValues(
-                argMultimap.getValue(PREFIX_CLASS).orElseThrow());
+        List<String> classes = ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_CLASS).orElseThrow(), MESSAGE_EMPTY_ENROLMENT_VALUE);
         Student student = new Student(name, id, email);
 
         if (courses.size() != semesters.size()
@@ -104,20 +97,4 @@ public class AddCommandParser implements Parser<AddCommand> {
 
     }
 
-    /**
-     * Parses a comma-separated list of non-blank values.
-     *
-     * @throws ParseException if any value is blank.
-     */
-    private static List<String> parseValues(String input) throws ParseException {
-        List<String> values = Arrays.stream(input.split(",", -1))
-                .map(String::trim)
-                .toList();
-
-        if (values.stream().anyMatch(String::isBlank)) {
-            throw new ParseException(MESSAGE_EMPTY_ENROLMENT_VALUE);
-        }
-
-        return values;
-    }
 }

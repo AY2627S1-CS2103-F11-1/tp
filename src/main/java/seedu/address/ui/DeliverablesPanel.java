@@ -70,12 +70,12 @@ public class DeliverablesPanel extends UiPart<Region> {
         courseHeading.getStyleClass().add("deliverables-course-heading");
         courseHeading.setWrapText(true);
 
-        VBox taskList = new VBox(6);
-        taskList.getStyleClass().add("deliverables-task-list");
+        VBox deliverableList = new VBox(6);
+        deliverableList.getStyleClass().add("deliverables-list");
         progress.getDeliverableStatuses().forEach((deliverable, status) ->
-                taskList.getChildren().add(createTaskRow(deliverable, status)));
+                deliverableList.getChildren().add(createDeliverableRow(deliverable, status)));
 
-        VBox courseGroup = new VBox(8, courseHeading, taskList);
+        VBox courseGroup = new VBox(8, courseHeading, deliverableList);
         courseGroup.getStyleClass().add("deliverables-course-group");
         return courseGroup;
     }
@@ -89,7 +89,7 @@ public class DeliverablesPanel extends UiPart<Region> {
                 completedCount, totalCount);
     }
 
-    private HBox createTaskRow(Deliverable deliverable, CompletionStatus status) {
+    private HBox createDeliverableRow(Deliverable deliverable, CompletionStatus status) {
         boolean isComplete = status == CompletionStatus.DONE;
 
         Region boxBackground = new Region();
@@ -106,14 +106,14 @@ public class DeliverablesPanel extends UiPart<Region> {
             statusBox.getChildren().add(checkMark);
         }
 
-        Label taskName = new Label(deliverable.toString());
-        taskName.getStyleClass().add("deliverable-task-name");
-        taskName.setWrapText(true);
-        HBox.setHgrow(taskName, javafx.scene.layout.Priority.ALWAYS);
+        Label deliverableName = new Label(deliverable.toString());
+        deliverableName.getStyleClass().add("deliverable-name");
+        deliverableName.setWrapText(true);
+        HBox.setHgrow(deliverableName, javafx.scene.layout.Priority.ALWAYS);
 
-        HBox taskRow = new HBox(10, statusBox, taskName);
-        taskRow.setAlignment(Pos.CENTER_LEFT);
-        taskRow.getStyleClass().add("deliverable-task-row");
-        return taskRow;
+        HBox deliverableRow = new HBox(10, statusBox, deliverableName);
+        deliverableRow.setAlignment(Pos.CENTER_LEFT);
+        deliverableRow.getStyleClass().add("deliverable-row");
+        return deliverableRow;
     }
 }

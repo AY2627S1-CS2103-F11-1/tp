@@ -3,8 +3,8 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +22,10 @@ public class ListCommandParser implements Parser<ListCommand> {
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found after list command.";
     public static final String MESSAGE_CLASS_REQUIRES_COURSE = PREFIX_CLASS
             + " can be used only with " + PREFIX_COURSE + " and " + PREFIX_SEMESTER + ".";
-    public static final String MESSAGE_TASK_REQUIRES_COURSE = PREFIX_TASK
+    public static final String MESSAGE_DELIVERABLE_REQUIRES_COURSE = PREFIX_DELIVERABLE
             + " can be used only with " + PREFIX_COURSE + " and " + PREFIX_SEMESTER + ".";
-    public static final String MESSAGE_SINGLE_TASK = "Specify exactly one deliverable for " + PREFIX_TASK + ".";
+    public static final String MESSAGE_SINGLE_DELIVERABLE =
+            "Specify exactly one deliverable for " + PREFIX_DELIVERABLE + ".";
 
     /**
      * Parses list command arguments.
@@ -41,25 +42,26 @@ public class ListCommandParser implements Parser<ListCommand> {
             return new ListCommand();
         }
 
-        ParserUtil.rejectUnknownParameters(args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_TASK);
+        ParserUtil.rejectUnknownParameters(args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_TASK);
+                args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_TASK);
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
 
         boolean hasCourse = argMultimap.getValue(PREFIX_COURSE).isPresent();
         boolean hasSemester = argMultimap.getValue(PREFIX_SEMESTER).isPresent();
         boolean hasClass = argMultimap.getValue(PREFIX_CLASS).isPresent();
-        boolean hasTask = argMultimap.getValue(PREFIX_TASK).isPresent();
+        boolean hasDeliverable = argMultimap.getValue(PREFIX_DELIVERABLE).isPresent();
 
         if (!hasCourse && !hasSemester) {
             if (hasClass) {
                 throw new ParseException(MESSAGE_CLASS_REQUIRES_COURSE);
             }
-            if (hasTask) {
-                throw new ParseException(MESSAGE_TASK_REQUIRES_COURSE);
+            if (hasDeliverable) {
+                throw new ParseException(MESSAGE_DELIVERABLE_REQUIRES_COURSE);
             }
         }
         ParserUtil.validateRequiredParameters(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER);
@@ -77,12 +79,12 @@ public class ListCommandParser implements Parser<ListCommand> {
         }
 
         Optional<Deliverable> incompleteDeliverable = Optional.empty();
-        if (hasTask) {
-            ParserUtil.validateRequiredParameters(argMultimap, PREFIX_TASK);
+        if (hasDeliverable) {
+            ParserUtil.validateRequiredParameters(argMultimap, PREFIX_DELIVERABLE);
             List<Deliverable> deliverables = ParserUtil.parseDeliverables(
-                    argMultimap.getValue(PREFIX_TASK).orElseThrow());
+                    argMultimap.getValue(PREFIX_DELIVERABLE).orElseThrow());
             if (deliverables.size() != 1) {
-                throw new ParseException(MESSAGE_SINGLE_TASK);
+                throw new ParseException(MESSAGE_SINGLE_DELIVERABLE);
             }
             incompleteDeliverable = Optional.of(deliverables.getFirst());
         }
