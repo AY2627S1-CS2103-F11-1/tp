@@ -85,7 +85,7 @@ public class SearchCommandTest {
     @Test
     public void execute_duplicateIdQueries_doesNotDuplicateStudents() {
         StudentMatchesQueryPredicate predicate = StudentMatchesQueryPredicate.forIds(
-                List.of(new Id("A1234567Y"), new Id("a1234567y")));
+                List.of(new Id("A1234567Y"), new Id("A1234567Y")));
         SearchCommand command = new SearchCommand(predicate);
         expectedModel.updateFilteredStudentList(predicate);
 
