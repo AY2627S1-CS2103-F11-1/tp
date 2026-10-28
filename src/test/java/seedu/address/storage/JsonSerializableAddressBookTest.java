@@ -11,6 +11,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -60,12 +61,13 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
-    public void toModelType_progressDeliverableNotInCourse_throwsIllegalValueException() throws Exception {
+    public void toModelType_progressDeliverableNotInCourse_reconcilesProgress() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(MISMATCHED_PROGRESS_FILE,
                 JsonSerializableAddressBook.class).get();
-        assertThrows(IllegalValueException.class,
-                JsonSerializableAddressBook.MESSAGE_MISMATCHED_PROGRESS_DELIVERABLES,
-                dataFromFile::toModelType);
+        AddressBook addressBook = dataFromFile.toModelType();
+        assertEquals(List.of(new Deliverable("MVP"), new Deliverable("Final")),
+                addressBook.getStudentCourseProgressList().getFirst().getDeliverableStatuses().keySet()
+                        .stream().toList());
     }
 
     @Test
