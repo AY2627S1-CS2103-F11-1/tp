@@ -2,6 +2,7 @@ package seedu.address.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +12,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
@@ -30,6 +32,8 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_INVALID_ENROLMENT =
             "Enrolment references a student or course that does not exist.";
     public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
+    public static final String MESSAGE_MISMATCHED_PROGRESS_DELIVERABLES =
+            "Progress record deliverables do not match the associated course.";
 
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
@@ -155,6 +159,13 @@ class JsonSerializableAddressBook {
 
             if (!hasEnrolment) {
                 throw new IllegalValueException(MESSAGE_INVALID_PROGRESS);
+            }
+
+            Course course = addressBook.getCourse(progress.getCourseCode(), progress.getSemester()).orElseThrow();
+            Set<Deliverable> courseDeliverables = Set.copyOf(course.getDeliverables());
+            if (courseDeliverables.size() != progress.getDeliverableStatuses().size()
+                    || !courseDeliverables.equals(progress.getDeliverableStatuses().keySet())) {
+                throw new IllegalValueException(MESSAGE_MISMATCHED_PROGRESS_DELIVERABLES);
             }
 
             modelProgresses.add(progress);

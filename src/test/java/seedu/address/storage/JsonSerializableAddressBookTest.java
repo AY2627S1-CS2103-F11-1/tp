@@ -32,6 +32,8 @@ public class JsonSerializableAddressBookTest {
     private static final Path TYPICAL_STUDENTS_FILE = TEST_DATA_FOLDER.resolve("typicalStudentsAddressBook.json");
     private static final Path INVALID_STUDENT_FILE = TEST_DATA_FOLDER.resolve("invalidStudentAddressBook.json");
     private static final Path DUPLICATE_STUDENT_FILE = TEST_DATA_FOLDER.resolve("duplicateStudentAddressBook.json");
+    private static final Path MISMATCHED_PROGRESS_FILE =
+            TEST_DATA_FOLDER.resolve("mismatchedProgressAddressBook.json");
 
     @Test
     public void toModelType_typicalStudentsFile_success() throws Exception {
@@ -54,6 +56,15 @@ public class JsonSerializableAddressBookTest {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_STUDENT_FILE,
                 JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_STUDENT,
+                dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_progressDeliverableNotInCourse_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(MISMATCHED_PROGRESS_FILE,
+                JsonSerializableAddressBook.class).get();
+        assertThrows(IllegalValueException.class,
+                JsonSerializableAddressBook.MESSAGE_MISMATCHED_PROGRESS_DELIVERABLES,
                 dataFromFile::toModelType);
     }
 
