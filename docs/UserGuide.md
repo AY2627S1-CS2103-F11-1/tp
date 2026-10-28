@@ -34,7 +34,7 @@ notes, and project-deliverable progress.
 
    * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07` : Adds a student with an initial course enrolment.
 
-   * `delete /id A1234567Z` : Deletes the student with that ID.
+   * `delete /id A1234567Z` : Deletes the student with the specified ID.
 
    * `clear` : Deletes all students, courses, enrolments, notes, and progress records.
 
@@ -60,15 +60,11 @@ notes, and project-deliverable progress.
 * Items followed by `...` accept multiple comma-separated values.<br>
   For example, `/task TASK[, TASK]...` can be `/task v1.4` or `/task v1.4, v1.5`.
 
-* Parameters can be in any order.<br>
-  For example, `/id ID /email EMAIL` and `/email EMAIL /id ID` are equivalent
-  when the command accepts both parameters.
+* Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
+  The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
 
-* Commands reject unknown or repeated single-value parameters unless their
-  feature description says otherwise.
-
-* For `notes`, `/notes` must be the final parameter so the remaining text can be
-  stored exactly as the note content.
+* Commands reject unsupported or extraneous parameters with an error message. Commands such as `help`, `exit`, and
+  `clear` do not take parameters, while `list` also rejects unexpected text or parameters.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
@@ -106,9 +102,9 @@ Initialises one course for a semester and records its project deliverables. A co
 per semester, regardless of letter case. Provide at least one unique deliverable and separate deliverable names with
 commas.
 
-Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`
+Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
-Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
+Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
 
 ### Listing all students: `list`
 
@@ -169,52 +165,39 @@ Example:
 
 * `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 
-### Locating students by name: `find`
-
-Finds students whose names contain any of the given keywords.
-
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Keyword order does not matter; for example, `Hans Bo` matches `Bo Hans`.
-* The search considers only names.
-* Only full words match; for example, `Han` does not match `Hans`.
-* Students matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
 ### Searching students by name or ID: `search`
 
-Searches student records by a case-insensitive name fragment or an exact student ID.
+Searches student records by case-insensitive partial name queries or exact student IDs.
 
-Format: `search /name NAME` or `search /id ID`
+Format: `search /name NAME[, NAME]...` or `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name John Doe` shows students whose names contain `John Doe`.
-* `search /id A1234567Z` shows the student with ID `A1234567Z`.
+* `search /name Alex Yeoh, Bernice Yu` shows students whose names contain
+  `Alex Yeoh` or `Bernice Yu`.
+* Name queries are case-insensitive partial matches. Commas separate queries;
+  spaces within one name query are preserved.
+* `search /id A1234567Z, A2345678X` searches for either exact student ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is case-insensitive.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
-Add, view, or delete notes recorded for one student enrolment. A student can
-have multiple notes, and each note is attached to a deliverable. Use the
-student's unique ID to avoid ambiguity.
+Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
 Formats:
 
-* `notes /id ID /course COURSE /sem SEMESTER /task TASK /notes NOTES`
+* `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`
 * `view notes /id ID /course COURSE /sem SEMESTER`
 * `delete notes /id ID /course COURSE /sem SEMESTER`
 
+The `/notes` value consumes the remaining text. Standalone slash-prefixed parameter-like
+tokens after `/notes` are rejected to prevent malformed commands from being treated as note text.
+
 Examples:
 
-* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
+* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
 * `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
 * `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes all notes for the selected enrolment.
 
@@ -222,15 +205,15 @@ Examples:
 
 Marks one or more deliverables as complete for a student in a course-semester.
 
-Format: `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`mark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`mark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
-Use `/id` when several students have the same name. Every task must belong to
+Use `/id` when several students have the same name. Every deliverable must belong to
 the specified course-semester and must currently be Not Done.
 
 ### Marking deliverables as incomplete: `unmark`
@@ -238,13 +221,13 @@ the specified course-semester and must currently be Not Done.
 Marks one or more completed deliverables as incomplete for a student in a
 course-semester.
 
-Format: `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`unmark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`unmark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
 ### Viewing a student's deliverable progress: `view`
 
@@ -335,13 +318,12 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
-**Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
+**Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
+**Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **List** | `list`
-**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
+**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 **Help** | `help`

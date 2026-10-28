@@ -18,7 +18,6 @@ import seedu.address.logic.commands.DeleteNotesCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InitCourseCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -33,7 +32,6 @@ import seedu.address.model.enrolment.Notes;
 import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
-import seedu.address.model.student.NameContainsKeywordsPredicate;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentMatchesQueryPredicate;
 import seedu.address.model.student.TutorialClass;
@@ -86,11 +84,11 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_find() throws Exception {
+    public void parseCommand_searchByMultipleNameKeywords() throws Exception {
         List<String> keywords = List.of("foo", "bar", "baz");
-        FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+        SearchCommand command = (SearchCommand) parser.parseCommand(
+                SearchCommand.COMMAND_WORD + " /name " + keywords.stream().collect(Collectors.joining(", ")));
+        assertEquals(new SearchCommand(new StudentMatchesQueryPredicate(keywords)), command);
     }
 
     @Test
@@ -101,7 +99,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_initCourse() throws Exception {
-        assertTrue(parser.parseCommand("init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP")
+        assertTrue(parser.parseCommand("init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP")
                 instanceof InitCourseCommand);
     }
 
@@ -113,7 +111,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_mark() throws Exception {
-        assertTrue(parser.parseCommand("mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP")
+        assertTrue(parser.parseCommand("mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP")
                 instanceof MarkCommand);
     }
 
@@ -122,7 +120,7 @@ public class AddressBookParserTest {
         assertEquals(new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                 new Semester("AY26/27-S1"), new Notes("Discussed inheritance", "MVP")), parser.parseCommand(
                 NotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"
-                        + " /task MVP /notes Discussed inheritance"));
+                        + " /deliverable MVP /notes Discussed inheritance"));
         assertEquals(new ViewNotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                 new Semester("AY26/27-S1")), parser.parseCommand(
                 ViewNotesCommand.COMMAND_WORD + " /id A1234567Z /course CS2103T /sem AY26/27-S1"));

@@ -20,39 +20,39 @@ public class MarkCommandParserTest {
 
     @Test
     public void parse_validId_returnsMarkCommand() {
-        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP, v1.2",
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP, v1.2",
                 new MarkCommand(new Id("A1234567Z"), new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
                         List.of(new Deliverable("MVP"), new Deliverable("v1.2"))));
     }
 
     @Test
     public void parse_validName_returnsMarkCommand() {
-        assertParseSuccess(parser, " /name John Doe /course CS2103T /sem AY26/27-S1 /task MVP",
+        assertParseSuccess(parser, " /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable MVP",
                 new MarkCommand("John Doe", new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
                         List.of(new Deliverable("MVP"))));
     }
 
     @Test
     public void parse_missingStudent_throwsParseException() {
-        assertParseFailure(parser, " /course CS2103T /sem AY26/27-S1 /task MVP",
-                StudentProgressCommandParser.MESSAGE_MISSING_STUDENT);
+        assertParseFailure(parser, " /course CS2103T /sem AY26/27-S1 /deliverable MVP",
+                "Missing required parameter: /id or /name");
     }
 
     @Test
     public void parse_bothStudentIdentifiers_throwsParseException() {
-        assertParseFailure(parser, " /id A1234567Z /name John Doe /course CS2103T /sem AY26/27-S1 /task MVP",
-                StudentProgressCommandParser.MESSAGE_BOTH_IDENTIFIERS);
+        assertParseFailure(parser, " /id A1234567Z /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable MVP",
+                "Please specify either /id or /name, not both.");
     }
 
     @Test
     public void parse_unknownParameter_throwsParseException() {
-        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP /class T07",
-                StudentProgressCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /class T07",
+                "Unknown parameter: /class");
     }
 
     @Test
-    public void parse_emptyTask_throwsParseException() {
-        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /task",
-                StudentProgressCommandParser.MESSAGE_EMPTY_PARAMETER);
+    public void parse_emptyDeliverable_throwsParseException() {
+        assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable",
+                "Empty parameter value(s): /deliverable");
     }
 }

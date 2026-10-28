@@ -26,37 +26,37 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_missingIdentifier_throwsParseException() {
-        assertParseFailure(parser, "", DeleteCommandParser.MESSAGE_MISSING_IDENTIFIER);
+        assertParseFailure(parser, "", "Missing required parameter: /id or /name");
     }
 
     @Test
     public void parse_emptyIdentifier_throwsParseException() {
-        assertParseFailure(parser, " /id", DeleteCommandParser.MESSAGE_EMPTY_IDENTIFIER);
-        assertParseFailure(parser, " /name", DeleteCommandParser.MESSAGE_EMPTY_IDENTIFIER);
+        assertParseFailure(parser, " /id", "Empty parameter value(s): /id");
+        assertParseFailure(parser, " /name", "Empty parameter value(s): /name");
     }
 
     @Test
     public void parse_bothIdentifiers_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /name John Doe",
-                DeleteCommandParser.MESSAGE_BOTH_IDENTIFIERS);
+                "Please specify either /id or /name, not both.");
     }
 
     @Test
     public void parse_duplicateIdentifier_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /id A7654321Z",
-                String.format(DeleteCommandParser.MESSAGE_DUPLICATE_PARAMETER, "/id"));
+                "Multiple values specified for the following single-valued field(s): /id");
     }
 
     @Test
     public void parse_unknownParameter_throwsParseException() {
         assertParseFailure(parser, " /id A1234567Z /studentName John Doe",
-                DeleteCommandParser.MESSAGE_UNKNOWN_PARAMETER);
+                "Unknown parameter: /studentName");
     }
 
     @Test
     public void parse_unexpectedTextBeforeParameter_throwsParseException() {
         assertParseFailure(parser, " randomText /id A1234567Z",
-                DeleteCommandParser.MESSAGE_UNEXPECTED_TEXT);
+                "Unexpected text found before parameter.");
     }
 
     @Test

@@ -36,6 +36,6 @@ public class UnenrolCommandParserTest {
     @Test
     public void parse_unknownParameter_failure() {
         assertParseFailure(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1 /class T07",
-                String.format(ParserUtil.MESSAGE_UNKNOWN_PARAMETER, "/class"));
+                "Unknown parameter: /class");
     }
 }

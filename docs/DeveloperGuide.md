@@ -547,7 +547,7 @@ Low (unlikely to have) - `*`
 1.  TAssist should work on Windows, macOS and Linux, as long as Java `25` or above is installed.
 2.  TAssist should support up to 1,000 student records without noticeable sluggishness during typical usage.
 3.  For up to 1,000 student records, TAssist should display student search results and a selected course's deliverable completion statuses within two seconds.
-4.  A TA with above-average typing speed for regular English text should be able to accomplish frequent tasks faster using commands than using the mouse.
+4.  A TA with above-average typing speed for regular English text should be able to accomplish frequent deliverables faster using commands than using the mouse.
 5.  An invalid command should not modify existing student records, project-work notes or deliverable completion statuses.
 6.  Student records, project-work notes and deliverable completion statuses should be preserved after a normal application exit and restart.
 
