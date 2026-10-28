@@ -188,20 +188,26 @@ Example:
 
 ### Searching students by name or ID: `search`
 
-Searches student records by case-insensitive partial name queries or exact student IDs.
+Searches student records by one or more names or student IDs. Name queries use
+case-insensitive partial-substring matching with OR semantics: a student is
+returned when their name contains at least one comma-separated query. Each
+name query may contain spaces.
 
-Format: `search /name NAME[, NAME]...` or `search /id ID[, ID]...`
+Format:
+
+* `search /name NAME[, NAME]...`
+* `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name Alex Yeoh, Bernice Yu` shows students whose names contain
-  `Alex Yeoh` or `Bernice Yu`.
-* Name queries are case-insensitive partial matches. Commas separate queries;
-  spaces within one name query are preserved.
-* `search /id A1234567Z, A2345678X` searches for either exact student ID.
+* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
+* `search /id A1234567Z, A2345678X` shows students with either ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
-Student ID matching is case-insensitive.
+Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
+
+Command words and parameter prefixes are case-sensitive. Use the documented
+lowercase syntax, such as `search` and `/name`.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
