@@ -58,7 +58,8 @@ notes, and project-deliverable progress.
   `edit /id A1234567Z /email john@u.nus.edu`.
 
 * Items followed by `...` accept multiple comma-separated values.<br>
-  For example, `/task TASK[, TASK]...` can be `/task v1.4` or `/task v1.4, v1.5`.
+  For example, `/deliverable DELIVERABLE[, DELIVERABLE]...` can be
+  `/deliverable v1.4` or `/deliverable v1.4, v1.5`.
 
 * Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
   The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.

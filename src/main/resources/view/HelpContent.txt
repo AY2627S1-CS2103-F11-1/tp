@@ -19,7 +19,7 @@ search /name NAME[, NAME]...   or   search /id ID[, ID]...
     Example: search /name Alex Yeoh, Bernice Yu
 
 COURSE AND ENROLMENT MANAGEMENT
-init course /course COURSE_CODE /sem SEMESTER /task TASK[, TASK]...
+init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...
     Initialises a course-semester and its deliverables.
 enrol /id ID /course COURSE /sem SEMESTER /class CLASS
     Enrols an existing student in a course-semester.
@@ -27,16 +27,16 @@ unenrol /id ID /course COURSE /sem SEMESTER
     Removes a student's enrolment.
 
 PROGRESS TRACKING
-mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...
+mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...
     Marks deliverables as complete.
-unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...
+unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...
     Marks deliverables as incomplete.
 view /id ID   or   view /name NAME
     Displays a student's deliverable progress.
 
 NOTES
-notes /id ID /course COURSE /sem SEMESTER /task TASK /notes NOTES
-    Adds notes to a task. The /notes value must be last.
+notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES
+    Adds notes to a deliverable. The /notes value must be last.
 view notes /id ID /course COURSE /sem SEMESTER
     Displays notes for a course enrolment.
 delete notes /id ID /course COURSE /sem SEMESTER

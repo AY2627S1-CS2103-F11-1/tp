@@ -1,5 +1,8 @@
 package seedu.address.ui;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
@@ -10,16 +13,13 @@ import javafx.scene.input.ClipboardContent;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
 /**
  * Controller for a help page
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String USERGUIDE_URL = "https://github.com/AY2627S1-CS2103T-F11-1/tp/blob/master/docs/UserGuide.md";
+    public static final String USERGUIDE_URL =
+            "https://github.com/AY2627S1-CS2103-F11-1/tp/blob/master/docs/UserGuide.md";
     private static final String HELP_CONTENT_PATH = "/view/HelpContent.txt";
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
