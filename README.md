@@ -15,8 +15,8 @@ contextualised support.
 ## Features
 
 - Manage student records across different tutorial classes
-- Record student information and personal notes
-- Search for students by name or student ID
+- Record student information and deliverable-specific notes
+- Search for students by one or more case-insensitive partial name queries, or by student ID
 - Track project deliverables and completion statuses
 - View project progress across each student's course enrolments
 - Add, view and delete deliverable-specific notes about students’ project work
@@ -26,8 +26,8 @@ contextualised support.
 
 ```text
 list
-search /name John Doe
-search /id A1234567Z
+search /name Alex Yeoh, Bernice Yu
+search /id A2345678X, A1234567Z
 add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, CS1231 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
 edit /id A1234567Z /name John Doe /newid A1234567Y /email johndoe@u.nus.edu
 delete /id A1234567Z
@@ -44,6 +44,9 @@ unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
 unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP
 view /id A1234567Z
 view /name John Doe
+help
+clear
+exit
 ```
 
 ## Acknowledgements

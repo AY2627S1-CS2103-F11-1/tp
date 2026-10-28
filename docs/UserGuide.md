@@ -58,7 +58,8 @@ notes, and project-deliverable progress.
   `edit /id A1234567Z /email john@u.nus.edu`.
 
 * Items followed by `...` accept multiple comma-separated values.<br>
-  For example, `/task TASK[, TASK]...` can be `/task v1.4` or `/task v1.4, v1.5`.
+  For example, `/deliverable DELIVERABLE[, DELIVERABLE]...` can be
+  `/deliverable v1.4` or `/deliverable v1.4, v1.5`.
 
 * Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
   The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
@@ -71,7 +72,9 @@ notes, and project-deliverable progress.
 
 ### Viewing help: `help`
 
-Shows a message explaining how to access the help page.
+Opens a read-only command reference containing the available commands, syntax,
+short descriptions, and examples. For detailed explanations, refer to this User
+Guide.
 
 ![help message](images/helpMessage.png)
 
@@ -324,7 +327,7 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
-**Search** | `search /name NAME[, NAME]...`<br>`search /id ID[, ID]...`<br> e.g., `search /name John Doe, Alex`
+**Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`

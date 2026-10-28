@@ -24,14 +24,48 @@
   -fx-padding: 4 8 4 8;
 }
 
+.custom-menubar .menu > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menu .menu-item > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menubar .menu:hover > .label,
+.custom-menubar .menu:showing > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menu .context-menu {
+  -fx-background-color: #2b2b2b;
+  -fx-border-color: #444444;
+}
+
+.custom-menu .menu-item:hover,
+.custom-menu .menu-item:focused {
+  -fx-background-color: #007acc;
+}
+
+.custom-menubar .menu:hover > .label,
+.custom-menubar .menu:focused > .label {
+  -fx-text-fill: rgb(249, 249, 249);
+}
+
+.custom-menu .menu-item:hover > .label,
+.custom-menu .menu-item:focused > .label {
+  -fx-text-fill: rgb(249, 249, 249);
+}
+
 .menu-bar .label,
 .menu-bar .menu-button:hover .label {
-  -fx-text-fill: white;
+  -fx-text-fill: #1565c0;
 }
 
 .menu-bar .menu-button:hover,
 .menu-bar .menu-button:showing {
-  -fx-background-color: #1565c0;
+  -fx-background-color: #548fd2;
+  -fx-text-fill: white;
 }
 
 .context-menu {
@@ -246,6 +280,36 @@
 
 .dialog-pane > *.button-bar > *.container {
   -fx-background-color: #f4f8fc;
+}
+
+/* Keep the menu bar and its popup menus readable in every interaction state. */
+.custom-menubar .menu-button > .label,
+.custom-menubar .menu-button:hover > .label,
+.custom-menubar .menu-button:focused > .label,
+.custom-menubar .menu-button:showing > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menubar .menu-button:hover,
+.custom-menubar .menu-button:focused,
+.custom-menubar .menu-button:showing {
+  -fx-background-color: #1565c0;
+}
+
+.custom-menu .context-menu {
+  -fx-background-color: #2b2b2b;
+  -fx-border-color: #444444;
+}
+
+.custom-menu .menu-item > .label,
+.custom-menu .menu-item:hover > .label,
+.custom-menu .menu-item:focused > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menu .menu-item:hover,
+.custom-menu .menu-item:focused {
+  -fx-background-color: #007acc;
 }
 
 .dialog-pane > *.label.content,

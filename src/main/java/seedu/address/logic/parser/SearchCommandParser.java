@@ -1,8 +1,12 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.SearchCommand;
@@ -14,6 +18,7 @@ import seedu.address.model.student.StudentMatchesQueryPredicate;
 public class SearchCommandParser implements Parser<SearchCommand> {
     @Override
     public SearchCommand parse(String args) throws ParseException {
+        requireNonNull(args);
         ParserUtil.rejectUnknownParameters(args, PREFIX_ID, PREFIX_NAME);
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_ID);
@@ -35,12 +40,19 @@ public class SearchCommandParser implements Parser<SearchCommand> {
         if (hasName) {
             ParserUtil.validateRequiredParameters(argMultimap, PREFIX_NAME);
             return new SearchCommand(new StudentMatchesQueryPredicate(
-                    argMultimap.getValue(PREFIX_NAME).orElseThrow()));
+                    ParserUtil.parseCommaSeparatedValues(
+                            argMultimap.getValue(PREFIX_NAME).orElseThrow(),
+                            String.format(Messages.MESSAGE_EMPTY_PARAMETERS, PREFIX_NAME))));
         }
 
         ParserUtil.validateRequiredParameters(argMultimap, PREFIX_ID);
-        Id parsedId = ParserUtil.parseId(argMultimap.getValue(PREFIX_ID).orElseThrow());
-        return new SearchCommand(new StudentMatchesQueryPredicate(parsedId));
+        List<Id> ids = new ArrayList<>();
+        for (String value : ParserUtil.parseCommaSeparatedValues(
+                argMultimap.getValue(PREFIX_ID).orElseThrow(),
+                String.format(Messages.MESSAGE_EMPTY_PARAMETERS, PREFIX_ID))) {
+            ids.add(ParserUtil.parseId(value));
+        }
+        return new SearchCommand(StudentMatchesQueryPredicate.forIds(ids));
     }
 
 }

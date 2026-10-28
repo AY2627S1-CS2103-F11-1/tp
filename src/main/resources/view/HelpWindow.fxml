@@ -5,40 +5,119 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<fx:root resizable="false" title="Help" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root resizable="true" title="Help" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/help_icon.png" />
   </icons>
   <scene>
-    <Scene>
+    <Scene width="750.0" height="600.0">
       <stylesheets>
         <URL value="@HelpWindow.css" />
       </stylesheets>
 
-      <HBox alignment="CENTER" fx:id="helpMessageContainer">
-        <children>
-          <Label fx:id="helpMessage" text="Label">
-            <HBox.margin>
-              <Insets right="5.0" />
-            </HBox.margin>
-          </Label>
-          <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyUrl" text="Copy URL">
-            <HBox.margin>
-              <Insets left="5.0" />
-            </HBox.margin>
-          </Button>
-        </children>
-        <opaqueInsets>
-          <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
-        </opaqueInsets>
+      <BorderPane fx:id="helpMessageContainer" minHeight="500.0" minWidth="700.0">
+        <center>
+          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" vbarPolicy="AS_NEEDED">
+            <content>
+              <VBox spacing="12.0" styleClass="help-content">
+                <children>
+                  <Label styleClass="help-title" text="TAssist command reference" />
+                  <Label styleClass="help-intro" text="Type commands in the command box and press Enter. This window is read-only. For detailed instructions and examples, refer to the User Guide. " wrapText="true" />
+                  <Label styleClass="help-link" text="Use the Copy User Guide URL button below to open the detailed guide." wrapText="true" />
+                  <Label styleClass="help-section" text="Student management" />
+                  <VBox spacing="8.0">
+                    <children>
+                      <Label styleClass="help-description" text="Lists all students." wrapText="true" />
+                      <Label styleClass="help-command" text="list" />
+                      <Label styleClass="help-description" text="Adds a student with one or more course enrolments. Example: add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07" wrapText="true" />
+                      <Label styleClass="help-command" text="add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]..." wrapText="true" />
+                      <Label styleClass="help-description" text="Edits a student's details." wrapText="true" />
+                      <Label styleClass="help-command" text="edit /id CURRENT_ID [/newid NEW_ID] [/name NEW_NAME] [/email EMAIL]" wrapText="true" />
+                      <Label styleClass="help-description" text="Deletes a student." wrapText="true" />
+                      <Label styleClass="help-command" text="delete /id ID" />
+                      <Label styleClass="help-command" text="delete /name NAME" />
+                      <Label styleClass="help-description" text="Searches students by case-insensitive partial names and exact student IDs. Example: search /name Alice Pauline, Benson Meier" wrapText="true" />
+                      <Label styleClass="help-command" text="search /name NAME[, NAME]..." wrapText="true" />
+                      <Label styleClass="help-command" text="search /id ID[, ID]..." wrapText="true" />
+                    </children>
+                  </VBox>
+
+                  <Label styleClass="help-section" text="Course and enrolment management" />
+                  <VBox spacing="8.0">
+                    <children>
+                      <Label styleClass="help-description" text="Initialises a course-semester and its deliverables." wrapText="true" />
+                      <Label styleClass="help-command" text="init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-description" text="Enrols an existing student in a course-semester." wrapText="true" />
+                      <Label styleClass="help-command" text="enrol /id ID /course COURSE /sem SEMESTER /class CLASS" wrapText="true" />
+                      <Label styleClass="help-description" text="Removes a student's enrolment." wrapText="true" />
+                      <Label styleClass="help-command" text="unenrol /id ID /course COURSE /sem SEMESTER" wrapText="true" />
+                    </children>
+                  </VBox>
+
+                  <Label styleClass="help-section" text="Progress tracking" />
+                  <VBox spacing="8.0">
+                    <children>
+                      <Label styleClass="help-description" text="Marks deliverables as complete." wrapText="true" />
+                      <Label styleClass="help-command" text="mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="mark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-description" text="Marks deliverables as incomplete." wrapText="true" />
+                      <Label styleClass="help-command" text="unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="unmark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-description" text="Displays a student's deliverable progress." wrapText="true" />
+                      <Label styleClass="help-command" text="view /id ID" />
+                      <Label styleClass="help-command" text="view /name NAME" />
+                    </children>
+                  </VBox>
+
+                  <Label styleClass="help-section" text="Notes" />
+                  <VBox spacing="8.0">
+                    <children>
+                      <Label styleClass="help-description" text="Adds notes to a deliverable. The /notes value must be last." wrapText="true" />
+                      <Label styleClass="help-command" text="notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES" wrapText="true" />
+                      <Label styleClass="help-description" text="Displays notes for a course enrolment." wrapText="true" />
+                      <Label styleClass="help-command" text="view notes /id ID /course COURSE /sem SEMESTER" wrapText="true" />
+                      <Label styleClass="help-description" text="Deletes notes for a course enrolment." wrapText="true" />
+                      <Label styleClass="help-command" text="delete notes /id ID /course COURSE /sem SEMESTER" wrapText="true" />
+                    </children>
+                  </VBox>
+
+                  <Label styleClass="help-section" text="General" />
+                  <VBox spacing="8.0">
+                    <children>
+                      <Label styleClass="help-description" text="Opens this command reference." wrapText="true" />
+                      <Label styleClass="help-command" text="help" />
+                      <Label styleClass="help-description" text="Deletes all stored data." wrapText="true" />
+                      <Label styleClass="help-command" text="clear" />
+                      <Label styleClass="help-description" text="Exits TAssist." wrapText="true" />
+                      <Label styleClass="help-command" text="exit" />
+                    </children>
+                  </VBox>
+                </children>
+              </VBox>
+            </content>
+          </ScrollPane>
+        </center>
+        <bottom>
+          <HBox alignment="CENTER_RIGHT">
+            <children>
+              <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyUrl" text="Copy User Guide URL" />
+            </children>
+            <padding>
+              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            </padding>
+          </HBox>
+        </bottom>
         <padding>
-          <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
-      </HBox>
+      </BorderPane>
     </Scene>
   </scene>
 </fx:root>

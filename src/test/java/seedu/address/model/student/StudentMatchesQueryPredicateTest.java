@@ -2,9 +2,12 @@ package seedu.address.model.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.CARL;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +30,21 @@ public class StudentMatchesQueryPredicateTest {
     }
 
     @Test
+    public void test_multipleQueries_matchesAnyQuery() {
+        StudentMatchesQueryPredicate predicate =
+                new StudentMatchesQueryPredicate(List.of("Alice", "Kurz"));
+
+        assertTrue(predicate.test(ALICE));
+        assertTrue(predicate.test(CARL));
+    }
+
+    @Test
+    public void constructor_emptyQueries_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new StudentMatchesQueryPredicate(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> StudentMatchesQueryPredicate.forIds(List.of()));
+    }
+
+    @Test
     public void equalsAndHashCode() {
         StudentMatchesQueryPredicate namePredicate = new StudentMatchesQueryPredicate("Alice");
         StudentMatchesQueryPredicate sameNamePredicate = new StudentMatchesQueryPredicate("Alice");
@@ -44,7 +62,7 @@ public class StudentMatchesQueryPredicateTest {
     public void toStringMethod() {
         StudentMatchesQueryPredicate predicate = new StudentMatchesQueryPredicate("Alice");
         String expected = StudentMatchesQueryPredicate.class.getCanonicalName()
-                + "{nameQuery=Optional[Alice], idQuery=Optional.empty}";
+                + "{nameQueries=Optional[[Alice]], idQueries=Optional.empty}";
         assertEquals(expected,
                 predicate.toString());
     }
