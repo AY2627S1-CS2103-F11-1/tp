@@ -64,6 +64,9 @@ public class ViewProgressCommand extends Command {
                 .toList();
 
         model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
+        if (progressRecords.isEmpty()) {
+            return new CommandResult(formatProgress(student, progressRecords));
+        }
         return new CommandResult(formatProgress(student, progressRecords),
                 new StudentDeliverablesView(student, progressRecords));
     }

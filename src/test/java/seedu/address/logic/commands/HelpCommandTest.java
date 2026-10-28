@@ -41,7 +41,7 @@ public class HelpCommandTest {
             }
             assertTrue(content.contains("/deliverable DELIVERABLE"));
             assertFalse(content.contains("/task"));
-            assertEquals("https://github.com/AY2627S1-CS2103-F11-1/tp/blob/master/docs/UserGuide.md",
+            assertEquals("https://ay2627s1-cs2103-f11-1.github.io/tp/UserGuide.html",
                     HelpWindow.USERGUIDE_URL);
         }
     }

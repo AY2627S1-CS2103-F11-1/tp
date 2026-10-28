@@ -16,7 +16,7 @@ public class HelpWindow extends UiPart<Stage> {
 
     // Help content is intentionally static to keep the reference simple; update it when commands change.
     public static final String USERGUIDE_URL =
-            "https://github.com/AY2627S1-CS2103-F11-1/tp/blob/master/docs/UserGuide.md";
+            "https://ay2627s1-cs2103-f11-1.github.io/tp/UserGuide.html";
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String LOG_MESSAGE = "Showing help page about the application.";
     private static final String FXML = "HelpWindow.fxml";
