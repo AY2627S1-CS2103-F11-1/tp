@@ -161,7 +161,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_uninitialisedCourseWithTask_throwsCommandException() {
+    public void execute_uninitialisedCourseWithDeliverable_throwsCommandException() {
         CourseCode courseCode = new CourseCode("CS2105");
         Semester semester = new Semester("AY26/27-S1");
 
@@ -171,7 +171,7 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_uninitialisedCourseWithoutTask_throwsCommandExceptionWithoutChangingFilter() {
+    public void execute_uninitialisedCourseWithoutDeliverable_throwsCommandExceptionWithoutChangingFilter() {
         showStudentAtIndex(model, INDEX_FIRST_PERSON);
         CourseCode courseCode = new CourseCode("CS9999");
         Semester semester = new Semester("AY26/27-S1");
