@@ -41,9 +41,11 @@
                       <Label styleClass="help-description" text="Edits a student's details." wrapText="true" />
                       <Label styleClass="help-command" text="edit /id CURRENT_ID [/newid NEW_ID] [/name NEW_NAME] [/email EMAIL]" wrapText="true" />
                       <Label styleClass="help-description" text="Deletes a student." wrapText="true" />
-                      <Label styleClass="help-command" text="delete /id ID   or   delete /name NAME" />
-                      <Label styleClass="help-description" text="Searches students by case-insensitive partial names or exact student IDs. Example: search /name Alice Pauline, Benson Meier" wrapText="true" />
-                      <Label styleClass="help-command" text="search /name NAME[, NAME]...   or   search /id ID[, ID]..." wrapText="true" />
+                      <Label styleClass="help-command" text="delete /id ID" />
+                      <Label styleClass="help-command" text="delete /name NAME" />
+                      <Label styleClass="help-description" text="Searches students by case-insensitive partial names and exact student IDs. Example: search /name Alice Pauline, Benson Meier" wrapText="true" />
+                      <Label styleClass="help-command" text="search /name NAME[, NAME]..." wrapText="true" />
+                      <Label styleClass="help-command" text="search /id ID[, ID]..." wrapText="true" />
                     </children>
                   </VBox>
 
@@ -63,11 +65,14 @@
                   <VBox spacing="8.0">
                     <children>
                       <Label styleClass="help-description" text="Marks deliverables as complete." wrapText="true" />
-                      <Label styleClass="help-command" text="mark /id ID or /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="mark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
                       <Label styleClass="help-description" text="Marks deliverables as incomplete." wrapText="true" />
-                      <Label styleClass="help-command" text="unmark /id ID or /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
+                      <Label styleClass="help-command" text="unmark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]..." wrapText="true" />
                       <Label styleClass="help-description" text="Displays a student's deliverable progress." wrapText="true" />
-                      <Label styleClass="help-command" text="view /id ID   or   view /name NAME" />
+                      <Label styleClass="help-command" text="view /id ID" />
+                      <Label styleClass="help-command" text="view /name NAME" />
                     </children>
                   </VBox>
 
