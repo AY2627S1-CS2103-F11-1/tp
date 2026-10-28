@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -216,6 +217,7 @@ class JsonSerializableAddressBook {
     }
 
     /** Returns whether loading repaired any progress records. */
+    @JsonIgnore
     public boolean wasReconciled() {
         return wasReconciled;
     }

@@ -63,6 +63,7 @@ public class JsonAddressBookStorage {
         try {
             ReadOnlyAddressBook addressBook = jsonAddressBook.get().toModelType();
             if (jsonAddressBook.get().wasReconciled()) {
+                logger.warning("Reconciled inconsistent progress data in " + filePath + ".");
                 saveAddressBook(addressBook, filePath);
             }
             return Optional.of(addressBook);

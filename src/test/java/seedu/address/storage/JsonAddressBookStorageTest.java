@@ -104,6 +104,18 @@ public class JsonAddressBookStorageTest {
     }
 
     @Test
+    public void readAddressBook_consistentData_doesNotRewriteFile() throws Exception {
+        Path filePath = testFolder.resolve("consistentAddressBook.json");
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        storage.saveAddressBook(getTypicalAddressBook(), filePath);
+        String originalContent = Files.readString(filePath);
+
+        storage.readAddressBook(filePath);
+
+        assertEquals(originalContent, Files.readString(filePath));
+    }
+
+    @Test
     public void readAndSaveAddressBook_allInOrder_success() throws Exception {
         Path filePath = testFolder.resolve("TempAddressBook.json");
         AddressBook original = getTypicalAddressBook();
