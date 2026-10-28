@@ -362,7 +362,7 @@ Low (unlikely to have) - `*`
 | Priority | As a … | I want to … | So that I can … |
 | -------- | ------ | ------------ | --------------- |
 | `***` | TA | view all students under my supervision | keep track of the students I manage |
-| `***` | TA | add a student with their name, student ID, email address and tutorial class | maintain accurate student records |
+| `***` | TA | add a student with their name, student ID, email address and course enrolments | maintain accurate student records |
 | `***` | TA | search for a student by name or student ID | quickly retrieve the relevant student’s information |
 | `***` | TA | update a student’s details | keep student information up to date |
 | `***` | TA | delete a student who is no longer under my supervision | maintain an up-to-date student list |
@@ -400,38 +400,42 @@ Low (unlikely to have) - `*`
 
 **Use case: Add a student**
 
+**Preconditions**: Each course-semester in which the student will be enrolled
+has been initialised in TAssist.
+
 **MSS**
 
 1. TA requests to add a student.
-2. TAssist prompts the TA for the student's name, student ID, email address, tutorial class and optional notes.
-3. TA enters the required student information.
-4. TAssist validates the entered information.
-5. TAssist adds the student record.
-6. TAssist displays a confirmation message and the updated student list.
+2. TA enters the student's name, student ID, email address, and one or more
+   matching course, semester and tutorial-class values.
+3. TAssist validates the student details and requested course-semester enrolments.
+4. TAssist adds the student record, enrolments and initial deliverable-progress records.
+5. TAssist displays a confirmation message and the updated student list.
 
    Use case ends.
 
 **Extensions**
 
-* 3a. One or more required fields are missing.
+* 2a. One or more required fields are missing, or the numbers of courses,
+  semesters and tutorial classes do not match.
+
+  * 2a1. TAssist displays an error message.
+
+  * 2a2. TA enters the corrected information.
+
+    Use case resumes at step 3.
+
+* 3a. The student ID or email address is already in use.
 
   * 3a1. TAssist displays an error message.
 
-  * 3a2. TA enters the missing information.
+    Use case resumes at step 2.
 
-    Use case resumes at step 4.
+* 3b. A requested course-semester has not been initialised.
 
-* 4a. The student ID is already in use.
+  * 3b1. TAssist displays an error message.
 
-  * 4a1. TAssist displays an error message.
-
-    Use case resumes at step 3.
-
-* 4b. The email address is invalid.
-
-  * 4b1. TAssist displays an error message.
-
-    Use case resumes at step 3.
+    Use case resumes at step 2.
 
 ---
 
@@ -492,24 +496,27 @@ Low (unlikely to have) - `*`
 
 **Use case: Record a project-work note**
 
-**Preconditions**: The student is recorded in TAssist.
+**Preconditions**: The student is enrolled in the specified course-semester,
+and the specified deliverable belongs to that course-semester.
 
 **MSS**
 
 1. TA requests to add a project-work note for a specific student.
-2. TAssist validates the student and note details.
-3. TAssist saves the note in the student's record.
-4. TAssist displays a confirmation.
+2. TA supplies the student's ID, course, semester, deliverable and note text.
+3. TAssist validates the student, course-semester enrolment, deliverable and note details.
+4. TAssist saves the note against the student's course-semester enrolment and deliverable.
+5. TAssist displays a confirmation.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The student cannot be found or the note is invalid.
+* 3a. The student, course-semester enrolment or deliverable cannot be found,
+  or the note is invalid.
 
-  * 2a1. TAssist displays an error message.
+  * 3a1. TAssist displays an error message.
 
-    Use case resumes at step 1.
+    Use case resumes at step 2.
 
 ---
 
@@ -587,7 +594,7 @@ Low (unlikely to have) - `*`
   level of stress. The team should later define the allowed levels.
 
 * **Student record**: The information TAssist stores for one student,
-  including their personal details, tutorial class, and tracked progress.
+  including their personal details and associated course enrolments.
 
 * **TA**: A university teaching assistant who uses TAssist to manage
   students and monitor their project progress.
@@ -598,7 +605,8 @@ Low (unlikely to have) - `*`
 * **Technical weakness**: A programming-related area in which a student
   needs additional support.
 
-* **Tutorial class**: A class group supervised by one or more TAs.
+* **Tutorial class**: A class group in which a student is enrolled for a
+  particular course-semester.
 
 --------------------------------------------------------------------------------------------------------------------
 
