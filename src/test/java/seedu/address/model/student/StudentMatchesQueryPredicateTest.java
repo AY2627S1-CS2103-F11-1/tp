@@ -40,10 +40,8 @@ public class StudentMatchesQueryPredicateTest {
 
     @Test
     public void constructor_emptyQueries_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new StudentMatchesQueryPredicate(List.of()));
-        assertThrows(IllegalArgumentException.class,
-                () -> StudentMatchesQueryPredicate.forIds(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> new StudentMatchesQueryPredicate(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> StudentMatchesQueryPredicate.forIds(List.of()));
     }
 
     @Test
