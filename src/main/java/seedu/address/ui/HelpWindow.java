@@ -1,13 +1,9 @@
 package seedu.address.ui;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.stage.Stage;
@@ -20,15 +16,12 @@ public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL =
             "https://github.com/AY2627S1-CS2103-F11-1/tp/blob/master/docs/UserGuide.md";
-    private static final String HELP_CONTENT_PATH = "/view/HelpContent.txt";
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
+    private static final String LOG_MESSAGE = "Showing help page about the application.";
     private static final String FXML = "HelpWindow.fxml";
 
     @FXML
     private Button copyButton;
-
-    @FXML
-    private TextArea helpMessage;
 
     /**
      * Creates a new HelpWindow.
@@ -37,7 +30,6 @@ public class HelpWindow extends UiPart<Stage> {
      */
     public HelpWindow(Stage root) {
         super(FXML, root);
-        helpMessage.setText(loadHelpContent());
     }
 
     /**
@@ -45,21 +37,6 @@ public class HelpWindow extends UiPart<Stage> {
      */
     public HelpWindow() {
         this(new Stage());
-    }
-
-    /**
-     * Loads the command reference from the help resource.
-     */
-    private static String loadHelpContent() {
-        try (InputStream input = HelpWindow.class.getResourceAsStream(HELP_CONTENT_PATH)) {
-            if (input == null) {
-                throw new IllegalStateException("Help content resource not found: " + HELP_CONTENT_PATH);
-            }
-
-            return new String(input.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to load help content.", e);
-        }
     }
 
     /**
@@ -84,7 +61,7 @@ public class HelpWindow extends UiPart<Stage> {
      *                               </ul>
      */
     public void show() {
-        logger.fine("Showing help page about the application.");
+        logger.fine(LOG_MESSAGE);
         getRoot().show();
         getRoot().centerOnScreen();
     }
