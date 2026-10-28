@@ -16,6 +16,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 
 public class HelpCommandTest {
+    private Model model = new ModelManager();
+    private Model expectedModel = new ModelManager();
 
     @Test
     public void helpContent_containsSupportedDeliverableSyntax() throws IOException {
@@ -28,9 +30,6 @@ public class HelpCommandTest {
             assertFalse(content.contains("/task"));
         }
     }
-
-    private Model model = new ModelManager();
-    private Model expectedModel = new ModelManager();
 
     @Test
     public void execute_help_success() {

@@ -41,6 +41,13 @@ public class HelpWindow extends UiPart<Stage> {
     }
 
     /**
+     * Creates a new HelpWindow.
+     */
+    public HelpWindow() {
+        this(new Stage());
+    }
+
+    /**
      * Loads the command reference from the help resource.
      */
     private static String loadHelpContent() {
@@ -56,15 +63,8 @@ public class HelpWindow extends UiPart<Stage> {
     }
 
     /**
-     * Creates a new HelpWindow.
-     */
-    public HelpWindow() {
-        this(new Stage());
-    }
-
-    /**
      * Shows the help window.
-     * 
+     *
      * @throws IllegalStateException
      *                               <ul>
      *                               <li>
