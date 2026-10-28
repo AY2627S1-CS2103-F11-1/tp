@@ -44,6 +44,9 @@ unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP
 unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP
 view /id A1234567Z
 view /name John Doe
+help
+clear
+exit
 ```
 
 ## Acknowledgements

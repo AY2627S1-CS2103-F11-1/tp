@@ -1,19 +1,60 @@
-#copyButton, #helpMessage {
-    -fx-text-fill: white;
+#helpMessageContainer {
+  -fx-background-color: #1d1d1d;
+}
+
+.help-content {
+  -fx-background-color: #252525;
+  -fx-padding: 24px;
+}
+
+.help-title {
+  -fx-font-size: 22px;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+}
+
+.help-intro,
+.help-description {
+  -fx-text-fill: #d6d6d6;
+  -fx-font-size: 13px;
+}
+
+.help-link {
+  -fx-text-fill: #9fd3ff;
+  -fx-font-size: 13px;
+}
+
+.help-section {
+  -fx-background-color: #374b63;
+  -fx-font-size: 15px;
+  -fx-font-weight: bold;
+  -fx-padding: 8px 10px;
+  -fx-text-fill: white;
+}
+
+.help-command {
+  -fx-font-family: monospace;
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #9fd3ff;
 }
 
 #copyButton {
-    -fx-background-color: dimgray;
+  -fx-background-color: #1565c0;
+  -fx-text-fill: white;
+  -fx-border-radius: 5px;
 }
 
 #copyButton:hover {
-    -fx-background-color: gray;
+  -fx-text-fill: white;
+  -fx-background-color: #1565c0;
 }
 
 #copyButton:armed {
-    -fx-background-color: darkgray;
+  -fx-background-color: darkgray;
 }
 
-#helpMessageContainer {
-    -fx-background-color: derive(#1d1d1d, 20%);
+.scroll-pane,
+.scroll-pane .viewport {
+  -fx-background-color: #252525;
 }
