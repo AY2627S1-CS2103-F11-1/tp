@@ -33,6 +33,8 @@ import seedu.address.model.student.Student;
  */
 public class AddCommand extends Command {
 
+    private static final String MESSAGE_NO_ENROLMENTS = "A student must have at least one enrolment.";
+
     public static final String COMMAND_WORD = "add";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -57,8 +59,6 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New student added: %1$s";
 
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
-
-    private static final String MESSAGE_NO_ENROLMENTS = "A student must have at least one enrolment.";
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";

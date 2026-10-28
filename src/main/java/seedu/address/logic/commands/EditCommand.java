@@ -30,6 +30,13 @@ import seedu.address.model.student.Student;
  */
 public class EditCommand extends Command {
 
+    private static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
+    private static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
+            + " to the existing student details.";
+    private static final String FIELD_NAME = "Name";
+    private static final String FIELD_STUDENT_ID = "Student ID";
+    private static final String FIELD_EMAIL = "Email";
+
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -51,14 +58,7 @@ public class EditCommand extends Command {
             "At least one field to edit must be provided.\nAllowed fields: %s, %s, %s",
             PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
-    private static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "Student with ID %s was not found.";
-    private static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
-            + " to the existing student details.";
-
-    private static final String FIELD_NAME = "Name";
-    private static final String FIELD_STUDENT_ID = "Student ID";
-    private static final String FIELD_EMAIL = "Email";
 
     private final Id studentId;
     private final EditStudentDescriptor descriptor;
