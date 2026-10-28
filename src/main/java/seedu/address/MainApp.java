@@ -40,6 +40,8 @@ public class MainApp extends Application {
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private static final Path USER_PREFS_FILE_PATH = Paths.get("preferences.json");
     private static final Path ADDRESS_BOOK_FILE_PATH = Paths.get("data", "addressbook.json");
+    private static final String INVALID_COMPLETION_STATUS_MESSAGE =
+            "Invalid completion status. Use DONE or NOT_DONE.";
 
     protected Ui ui;
     protected Logic logic;
@@ -98,6 +100,9 @@ public class MainApp extends Application {
                     causeMessage = causeMessage.substring(0, sourcePreviewStart);
                 }
                 causeMessage = causeMessage.trim();
+                if (causeMessage.contains("CompletionStatus")) {
+                    causeMessage = INVALID_COMPLETION_STATUS_MESSAGE;
+                }
                 if (causeMessage.length() > 500) {
                     causeMessage = causeMessage.substring(0, 500) + "...";
                 }
