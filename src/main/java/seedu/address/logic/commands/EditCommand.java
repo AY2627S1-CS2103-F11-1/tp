@@ -51,9 +51,9 @@ public class EditCommand extends Command {
             "At least one field to edit must be provided.\nAllowed fields: %s, %s, %s",
             PREFIX_NAME, PREFIX_NEW_ID, PREFIX_EMAIL);
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
-    public static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
+    private static final String MESSAGE_UNCHANGED_FIELDS = "Fields already match current values: %s";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "Student with ID %s was not found.";
-    public static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
+    private static final String MESSAGE_NO_CHANGES = "No changes made. The provided values are identical"
             + " to the existing student details.";
 
     private static final String FIELD_NAME = "Name";
