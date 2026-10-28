@@ -100,6 +100,41 @@ public class SearchCommandParserTest {
     }
 
     @Test
+    public void parse_malformedCommaSeparatedValues_failure() {
+        String[] malformedNameQueries = {
+            " /name ,",
+            " /name Alice,",
+            " /name ,Alice",
+            " /name Alice,,Bob",
+            " /name Alice, ,Bob",
+            " /name , ,"
+        };
+        for (String query : malformedNameQueries) {
+            assertParseFailure(parser, query, "Empty parameter value(s): /name");
+        }
+
+        String[] malformedIdQueries = {
+            " /id ,",
+            " /id A1234567Z,",
+            " /id ,A1234567Z",
+            " /id A1234567Z,,A2345678X",
+            " /id A1234567Z, ,A2345678X"
+        };
+        for (String query : malformedIdQueries) {
+            assertParseFailure(parser, query, "Empty parameter value(s): /id");
+        }
+    }
+
+    @Test
+    public void parse_invalidIdEntry_failure() {
+        String[] invalidIds = {"invalid", "A123", "A1234567", "A1234567ZZ", "@@@", "A-1234567Z"};
+        for (String id : invalidIds) {
+            assertParseFailure(parser, " /id " + id, Id.MESSAGE_CONSTRAINTS);
+        }
+        assertParseFailure(parser, " /id A1234567Z, invalid", Id.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_duplicateOrConflictingIdentifier_failure() {
         assertParseFailure(parser, " /name John /name Jane",
                 "Multiple values specified for the following single-valued field(s): /name");
