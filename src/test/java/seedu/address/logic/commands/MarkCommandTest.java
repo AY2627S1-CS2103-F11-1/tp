@@ -60,6 +60,22 @@ public class MarkCommandTest {
     }
 
     @Test
+    public void execute_deliverableWithDifferentCasing_usesCanonicalDeliverableInFeedback() {
+        Model model = modelWithCourse();
+        MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
+                List.of(new Deliverable("mvp")));
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        StudentCourseProgress originalProgress = findAliceProgress(expectedModel);
+        expectedModel.setStudentCourseProgress(originalProgress,
+                originalProgress.withStatus(MVP, CompletionStatus.DONE));
+
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
+    }
+
+    @Test
     public void execute_unknownDeliverable_throwsCommandException() {
         Model model = modelWithCourse();
         MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),

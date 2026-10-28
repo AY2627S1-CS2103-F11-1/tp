@@ -63,12 +63,12 @@ public abstract class StudentProgressCommand extends Command {
 
         Student student = findStudent(model, studentId, studentName);
         Course course = findCourse(model);
-        validateDeliverables(course);
+        List<Deliverable> resolvedDeliverables = resolveDeliverables(course);
         StudentCourseProgress progress = findProgress(model, student);
-        validateCurrentStatuses(progress);
+        validateCurrentStatuses(progress, resolvedDeliverables);
 
         StudentCourseProgress updatedProgress = progress;
-        for (Deliverable deliverable : deliverables) {
+        for (Deliverable deliverable : resolvedDeliverables) {
             updatedProgress = updatedProgress.withStatus(deliverable, targetStatus);
         }
         model.setStudentCourseProgress(progress, updatedProgress);
@@ -76,7 +76,7 @@ public abstract class StudentProgressCommand extends Command {
                 .filter(candidate -> candidate.getStudentId().equals(student.getId()))
                 .toList();
         return new CommandResult(
-                String.format(getSuccessMessage(), formatDeliverables(), student.getName()),
+                String.format(getSuccessMessage(), formatDeliverables(resolvedDeliverables), student.getName()),
                 new StudentDeliverablesView(student, allProgress));
     }
 
@@ -111,13 +111,18 @@ public abstract class StudentProgressCommand extends Command {
                 .orElseThrow(() -> new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode, semester)));
     }
 
-    private void validateDeliverables(Course course) throws CommandException {
+    /** Resolves requested deliverables to the canonical objects recorded in the course. */
+    private List<Deliverable> resolveDeliverables(Course course) throws CommandException {
+        java.util.ArrayList<Deliverable> resolvedDeliverables = new java.util.ArrayList<>();
         for (Deliverable deliverable : deliverables) {
-            if (!course.getDeliverables().contains(deliverable)) {
-                throw new CommandException(String.format(MESSAGE_DELIVERABLE_NOT_FOUND,
-                        deliverable, courseCode, semester));
-            }
+            Deliverable courseDeliverable = course.getDeliverables().stream()
+                    .filter(deliverable::equals)
+                    .findFirst()
+                    .orElseThrow(() -> new CommandException(String.format(MESSAGE_DELIVERABLE_NOT_FOUND,
+                            deliverable, courseCode, semester)));
+            resolvedDeliverables.add(courseDeliverable);
         }
+        return resolvedDeliverables;
     }
 
     private StudentCourseProgress findProgress(Model model, Student student) throws CommandException {
@@ -127,16 +132,17 @@ public abstract class StudentProgressCommand extends Command {
                 .orElseThrow(() -> new CommandException(MESSAGE_PROGRESS_NOT_FOUND));
     }
 
-    private void validateCurrentStatuses(StudentCourseProgress progress) throws CommandException {
-        for (Deliverable deliverable : deliverables) {
+    private void validateCurrentStatuses(StudentCourseProgress progress, List<Deliverable> resolvedDeliverables)
+            throws CommandException {
+        for (Deliverable deliverable : resolvedDeliverables) {
             if (progress.getStatus(deliverable) == targetStatus) {
                 throw new CommandException(String.format(getAlreadyInStatusMessage(), deliverable));
             }
         }
     }
 
-    private String formatDeliverables() {
-        return deliverables.stream().map(Deliverable::toString).reduce((first, second) -> first + ", " + second)
+    private String formatDeliverables(List<Deliverable> resolvedDeliverables) {
+        return resolvedDeliverables.stream().map(Deliverable::toString).reduce((first, second) -> first + ", " + second)
                 .orElseThrow();
     }
 
