@@ -93,6 +93,14 @@ public class MainApp extends Application {
                 String causeMessage = cause == null || cause.getMessage() == null
                         ? "No further details are available."
                         : cause.getMessage();
+                int sourcePreviewStart = causeMessage.indexOf(" at [Source:");
+                if (sourcePreviewStart >= 0) {
+                    causeMessage = causeMessage.substring(0, sourcePreviewStart);
+                }
+                causeMessage = causeMessage.trim();
+                if (causeMessage.length() > 500) {
+                    causeMessage = causeMessage.substring(0, 500) + "...";
+                }
                 String failureType = cause instanceof IllegalValueException
                         ? "The saved data is invalid."
                         : "The saved data could not be read.";
