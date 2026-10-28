@@ -49,9 +49,31 @@ public class SearchCommandTest {
     }
 
     @Test
+    public void execute_multipleNameQueries_usesOrSemantics() {
+        StudentMatchesQueryPredicate predicate =
+                new StudentMatchesQueryPredicate(List.of("Alice", "Benson"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 2 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE, BENSON), model.getFilteredStudentList());
+    }
+
+    @Test
     public void execute_overlappingNameQueries_doesNotDuplicateStudents() {
         StudentMatchesQueryPredicate predicate =
                 new StudentMatchesQueryPredicate(List.of("Ali", "Alice"));
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredStudentList(predicate);
+
+        assertCommandSuccess(command, model, "Found 1 matching student(s).", expectedModel);
+        assertEquals(List.of(ALICE), model.getFilteredStudentList());
+    }
+
+    @Test
+    public void execute_duplicateIdQueries_doesNotDuplicateStudents() {
+        StudentMatchesQueryPredicate predicate = StudentMatchesQueryPredicate.forIds(
+                List.of(new Id("A1234567Y"), new Id("a1234567y")));
         SearchCommand command = new SearchCommand(predicate);
         expectedModel.updateFilteredStudentList(predicate);
 
@@ -106,6 +128,8 @@ public class SearchCommandTest {
     public void execute_emptyAddressBook_throwsCommandException() {
         assertCommandFailure(new SearchCommand(new StudentMatchesQueryPredicate("Alice")), new ModelManager(),
                 SearchCommand.MESSAGE_NO_STUDENTS);
+        assertCommandFailure(new SearchCommand(StudentMatchesQueryPredicate.forIds(
+                List.of(new Id("A1234567Y")))), new ModelManager(), SearchCommand.MESSAGE_NO_STUDENTS);
     }
 
     @Test

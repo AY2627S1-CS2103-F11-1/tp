@@ -135,6 +135,12 @@ public class SearchCommandParserTest {
     }
 
     @Test
+    public void parse_unknownParameterWithInvalidValue_failure() {
+        assertParseFailure(parser, " /name Alice /class T07", "Unknown parameter: /class");
+        assertParseFailure(parser, " /id A1234567Z, invalid /foo x", "Unknown parameter: /foo");
+    }
+
+    @Test
     public void parse_duplicateOrConflictingIdentifier_failure() {
         assertParseFailure(parser, " /name John /name Jane",
                 "Multiple values specified for the following single-valued field(s): /name");
