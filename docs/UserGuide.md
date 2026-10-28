@@ -177,8 +177,8 @@ Format:
 
 Examples:
 
-* `search /name John Doe` shows student whose names contain `John Doe`.
-* `search /id A1234567Z` shows students with the respective ID.
+* `search /name John Doe` shows student whose name contain `John Doe`.
+* `search /id A1234567Z` shows student with the respective ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
