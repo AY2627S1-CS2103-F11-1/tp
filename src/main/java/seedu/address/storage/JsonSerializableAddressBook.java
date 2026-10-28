@@ -14,6 +14,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.course.Course;
 import seedu.address.model.course.Deliverable;
+import seedu.address.model.enrolment.Notes;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.CompletionStatus;
 import seedu.address.model.progress.StudentCourseProgress;
@@ -34,6 +35,8 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_INVALID_ENROLMENT =
             "Enrolment references a student or course that does not exist.";
     public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
+    public static final String MESSAGE_INVALID_NOTE_DELIVERABLE =
+            "Note references a deliverable that does not belong to its course.";
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();
@@ -136,6 +139,15 @@ class JsonSerializableAddressBook {
 
             if (!studentExists || !courseExists) {
                 throw new IllegalValueException(MESSAGE_INVALID_ENROLMENT);
+            }
+
+            Course course = addressBook.getCourse(enrolment.getCourseCode(), enrolment.getSemester()).orElseThrow();
+            for (Notes note : enrolment.getNotes().getNotes()) {
+                if (!course.getDeliverables().contains(note.getDeliverable())) {
+                    throw new IllegalValueException(String.format(
+                            "%s Invalid deliverable: %s.", MESSAGE_INVALID_NOTE_DELIVERABLE,
+                            note.getDeliverable()));
+                }
             }
 
             modelEnrolments.add(enrolment);

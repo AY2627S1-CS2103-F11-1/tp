@@ -1,11 +1,5 @@
 package seedu.address.storage;
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -93,6 +87,20 @@ public class JsonAddressBookStorageTest {
         String savedContent = Files.readString(filePath);
         assertTrue(savedContent.contains("\"MVP\" : \"NOT_DONE\""));
         assertFalse(savedContent.contains("\"ABC\""));
+    }
+
+    @Test
+    public void readAddressBook_invalidNoteDeliverable_rejectsWithoutOverwriting() throws Exception {
+        Path filePath = testFolder.resolve("invalidNoteDeliverableAddressBook.json");
+        Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest",
+                "invalidNoteDeliverableAddressBook.json");
+        Files.copy(sourcePath, filePath);
+        String originalContent = Files.readString(filePath);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        assertThrows(DataLoadingException.class, storage::readAddressBook);
+
+        assertEquals(originalContent, Files.readString(filePath));
     }
 
     @Test

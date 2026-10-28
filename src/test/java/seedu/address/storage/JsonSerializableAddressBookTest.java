@@ -1,11 +1,5 @@
 package seedu.address.storage;
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -33,8 +27,9 @@ public class JsonSerializableAddressBookTest {
     private static final Path TYPICAL_STUDENTS_FILE = TEST_DATA_FOLDER.resolve("typicalStudentsAddressBook.json");
     private static final Path INVALID_STUDENT_FILE = TEST_DATA_FOLDER.resolve("invalidStudentAddressBook.json");
     private static final Path DUPLICATE_STUDENT_FILE = TEST_DATA_FOLDER.resolve("duplicateStudentAddressBook.json");
-    private static final Path MISMATCHED_PROGRESS_FILE =
-            TEST_DATA_FOLDER.resolve("mismatchedProgressAddressBook.json");
+    private static final Path MISMATCHED_PROGRESS_FILE = TEST_DATA_FOLDER.resolve("mismatchedProgressAddressBook.json");
+    private static final Path INVALID_NOTE_DELIVERABLE_FILE = TEST_DATA_FOLDER
+            .resolve("invalidNoteDeliverableAddressBook.json");
 
     @Test
     public void toModelType_typicalStudentsFile_success() throws Exception {
@@ -68,6 +63,13 @@ public class JsonSerializableAddressBookTest {
         assertEquals(List.of(new Deliverable("MVP"), new Deliverable("Final")),
                 addressBook.getStudentCourseProgressList().getFirst().getDeliverableStatuses().keySet()
                         .stream().toList());
+    }
+
+    @Test
+    public void toModelType_noteDeliverableNotInCourse_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(INVALID_NOTE_DELIVERABLE_FILE,
+                JsonSerializableAddressBook.class).get();
+        assertThrows(IllegalValueException.class, dataFromFile::toModelType);
     }
 
     @Test
