@@ -98,6 +98,7 @@ class JsonSerializableAddressBook {
      */
     public AddressBook toModelType() throws IllegalValueException {
         AddressBook addressBook = new AddressBook();
+        boolean reconciliationOccurred = false;
 
         for (JsonAdaptedStudent jsonStudent : students) {
             Student student = jsonStudent.toModelType();
@@ -192,7 +193,7 @@ class JsonSerializableAddressBook {
 
             StudentCourseProgress progress = loadedProgress;
             if (!reconciledStatuses.equals(loadedProgress.getDeliverableStatuses())) {
-                wasReconciled = true;
+                reconciliationOccurred = true;
                 progress = StudentCourseProgress.fromStatuses(
                         loadedProgress.getStudentId(), loadedProgress.getCourseCode(), loadedProgress.getSemester(),
                         reconciledStatuses);
@@ -216,6 +217,7 @@ class JsonSerializableAddressBook {
 
         addressBook.setEnrolments(modelEnrolments);
         addressBook.setStudentCourseProgresses(modelProgresses);
+        wasReconciled = reconciliationOccurred;
 
         return addressBook;
     }

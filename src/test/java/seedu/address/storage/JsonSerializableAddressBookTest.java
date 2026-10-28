@@ -68,6 +68,24 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
+    public void toModelType_caseOnlyDeliverableDifference_preservesStatusWithoutReconciliation() throws Exception {
+        JsonSerializableAddressBook dataFromFile = readTestFile("caseOnlyProgressAddressBook.json");
+        AddressBook addressBook = dataFromFile.toModelType();
+
+        assertEquals(CompletionStatus.DONE,
+                addressBook.getStudentCourseProgressList().getFirst()
+                        .getDeliverableStatuses().get(new Deliverable("MVP")));
+        dataFromFile.toModelType();
+        assertEquals(false, dataFromFile.wasReconciled());
+    }
+
+    @Test
+    public void toModelType_invalidCompletionStatus_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = readTestFile("invalidCompletionStatusAddressBook.json");
+        assertThrows(IllegalValueException.class, dataFromFile::toModelType);
+    }
+
+    @Test
     public void toModelType_noteDeliverableNotInCourse_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(INVALID_NOTE_DELIVERABLE_FILE,
                 JsonSerializableAddressBook.class).get();

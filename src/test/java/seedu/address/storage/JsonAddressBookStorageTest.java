@@ -159,7 +159,8 @@ public class JsonAddressBookStorageTest {
                 "invalidEnrolmentCourseAddressBook.json",
                 "invalidProgressEnrolmentAddressBook.json",
                 "invalidProgressCourseAddressBook.json",
-                "invalidNoteAndProgressAddressBook.json"
+            "invalidNoteAndProgressAddressBook.json",
+            "invalidCompletionStatusAddressBook.json"
         };
 
         for (String fileName : fileNames) {
@@ -191,6 +192,19 @@ public class JsonAddressBookStorageTest {
         assertFalse(savedContent.contains("\"Obsolete\""));
         assertFalse(savedContent.contains("\"Old\""));
         assertFalse(savedContent.contains("\"mvp\""));
+    }
+
+    @Test
+    public void readAddressBook_caseOnlyProgressDifference_doesNotRewriteFile() throws Exception {
+        Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest",
+                "caseOnlyProgressAddressBook.json");
+        Path filePath = testFolder.resolve("caseOnlyProgressAddressBook.json");
+        Files.copy(sourcePath, filePath);
+        String originalContent = Files.readString(filePath);
+
+        new JsonAddressBookStorage(filePath).readAddressBook();
+
+        assertEquals(originalContent, Files.readString(filePath));
     }
 
     @Test
