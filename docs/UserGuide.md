@@ -109,11 +109,29 @@ Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[
 
 Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
 
-### Listing all students: `list`
+### Listing students: `list`
 
-Shows a list of all students in the address book.
+Shows all students, or only students enrolled in a selected course-semester.
+The filtered list can be narrowed further by tutorial class or by a deliverable
+that is still incomplete.
 
 Format: `list`
+
+Filtered formats:
+
+* `list /course COURSE /sem SEMESTER`
+* `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`
+
+Examples:
+
+* `list /course CS2103T /sem AY26/27-S1` shows students enrolled in CS2103T for the selected semester.
+* `list /course CS2103T /sem AY26/27-S1 /class T07` shows only students from tutorial T07 in that course-semester.
+* `list /course CS2103T /sem AY26/27-S1 /deliverable MVP` shows enrolled students whose MVP is still incomplete.
+* `list /course CS2103T /sem AY26/27-S1 /class T07 /deliverable MVP` combines the tutorial and incomplete-deliverable filters.
+
+`/course` and `/sem` must be supplied together. `/class` and `/deliverable` can be used
+only with both of them. `/deliverable` accepts exactly one deliverable tracked by that
+course-semester. Students appear once even if they have other enrolments.
 
 ### Viewing a course progress overview: `overview`
 
@@ -191,20 +209,26 @@ Example:
 
 ### Searching students by name or ID: `search`
 
-Searches student records by case-insensitive partial name queries or exact student IDs.
+Searches student records by one or more names or student IDs. Name queries use
+case-insensitive partial-substring matching with OR semantics: a student is
+returned when their name contains at least one comma-separated query. Each
+name query may contain spaces.
 
-Format: `search /name NAME[, NAME]...` or `search /id ID[, ID]...`
+Format:
+
+* `search /name NAME[, NAME]...`
+* `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name Alex Yeoh, Bernice Yu` shows students whose names contain
-  `Alex Yeoh` or `Bernice Yu`.
-* Name queries are case-insensitive partial matches. Commas separate queries;
-  spaces within one name query are preserved.
-* `search /id A1234567Z, A2345678X` searches for either exact student ID.
+* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
+* `search /id A1234567Z, A2345678X` shows students with either ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
-Student ID matching is case-insensitive.
+Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
+
+Command words and parameter prefixes are case-sensitive. Use the documented
+lowercase syntax, such as `search` and `/name`.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
@@ -347,7 +371,7 @@ Action | Format, Examples
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
-**List** | `list`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`

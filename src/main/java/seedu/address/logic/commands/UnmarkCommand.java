@@ -37,7 +37,7 @@ public class UnmarkCommand extends StudentProgressCommand {
             + " " + PREFIX_ID + " " + EXAMPLE_ID + " " + PREFIX_COURSE + " " + EXAMPLE_COURSE + " "
             + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER + " " + PREFIX_DELIVERABLE + " " + EXAMPLE_DELIVERABLE;
     public static final String MESSAGE_SUCCESS = "Marked %s as incomplete for %s.";
-    public static final String MESSAGE_ALREADY_INCOMPLETE = "%s is already marked as incomplete.";
+    private static final String MESSAGE_ALREADY_INCOMPLETE = "%s is already marked as incomplete.";
 
     public UnmarkCommand(Id studentId, CourseCode courseCode, Semester semester, List<Deliverable> deliverables) {
         super(studentId, courseCode, semester, deliverables, CompletionStatus.NOT_DONE);

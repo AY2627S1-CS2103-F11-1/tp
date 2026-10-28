@@ -52,7 +52,7 @@ public class NotesCommand extends Command {
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";
-    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
+    private static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
             "The specified deliverable is not part of the course.";
 
     private final Id studentId;

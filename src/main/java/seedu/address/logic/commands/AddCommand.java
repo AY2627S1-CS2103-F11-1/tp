@@ -58,10 +58,10 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_DUPLICATE_STUDENT = "This student already exists in TAssist.";
 
-    public static final String MESSAGE_NO_ENROLMENTS = "A student must have at least one enrolment.";
-
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
             + "Initialise it first.";
+
+    private static final String MESSAGE_NO_ENROLMENTS = "A student must have at least one enrolment.";
 
     private final Student student;
     private final List<StudentCourseEnrolment> initialEnrolments;
