@@ -16,6 +16,12 @@ package "Students" #F4F6F6 {
 Class UniqueStudentList
 Class Student
 Class Id
+Class TutorialClass
+}
+
+package "Enrolments" #F4F6F6 {
+Class UniqueStudentCourseEnrolment
+Class StudentCourseEnrolment
 Class NotesList
 Class Notes
 }
@@ -50,14 +56,20 @@ ModelManager --> "~* filtered" Student
 
 AddressBook *-down-> "1" UniqueStudentList
 AddressBook *-down-> "1" UniqueCourseList
+AddressBook *-down-> "1" UniqueStudentCourseEnrolment
 AddressBook *-down-> "1" UniqueStudentCourseProgressList
 
 UniqueStudentList --> "~* all" Student
 UniqueCourseList --> "~* all" Course
+UniqueStudentCourseEnrolment --> "~* all" StudentCourseEnrolment
 UniqueStudentCourseProgressList --> "~* all" StudentCourseProgress
 
 Student *--> "1" Id
-Student *--> "1" NotesList
+StudentCourseEnrolment --> "1" Id : studentId
+StudentCourseEnrolment --> "1" CourseCode
+StudentCourseEnrolment --> "1" Semester
+StudentCourseEnrolment --> "1" TutorialClass
+StudentCourseEnrolment *--> "1" NotesList
 NotesList *--> "*" Notes
 
 Course *--> "1" CourseCode
@@ -71,8 +83,10 @@ StudentCourseProgress --> "1" Semester
 StudentCourseProgress --> "1..*" Deliverable : status for
 StudentCourseProgress --> CompletionStatus
 
-UniqueStudentList -[hidden]right- UniqueCourseList
+UniqueStudentList -[hidden]right- UniqueStudentCourseEnrolment
+UniqueStudentCourseEnrolment -[hidden]right- UniqueCourseList
 UniqueCourseList -[hidden]right- UniqueStudentCourseProgressList
-Student -[hidden]right- Course
+Student -[hidden]right- StudentCourseEnrolment
+StudentCourseEnrolment -[hidden]right- Course
 Course -[hidden]right- StudentCourseProgress
 @enduml
