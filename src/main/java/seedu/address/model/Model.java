@@ -10,6 +10,7 @@ import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CourseProgressOverview;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -128,6 +129,12 @@ public interface Model {
      * main student-list order.
      */
     List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester);
+
+    /**
+     * Returns the selected course's deliverable total and each enrolled student's
+     * completed-deliverable count, or empty if the course is not initialised.
+     */
+    Optional<CourseProgressOverview> getCourseProgressOverview(CourseCode courseCode, Semester semester);
 
     /**
      * Adds a student with their initial enrolment and deliverable progress.

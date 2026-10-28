@@ -28,6 +28,7 @@ import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CourseProgressOverview;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -171,6 +172,12 @@ public class AddCommandTest {
 
         @Override
         public List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Optional<CourseProgressOverview> getCourseProgressOverview(
+                CourseCode courseCode, Semester semester) {
             throw new AssertionError("This method should not be called.");
         }
 

@@ -4,21 +4,14 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
-import seedu.address.model.progress.CompletionStatus;
-import seedu.address.model.progress.StudentCourseProgress;
-import seedu.address.model.student.Id;
-import seedu.address.model.student.Student;
+import seedu.address.model.progress.CourseProgressOverview;
 
 /** Displays completed and total deliverable counts for students in one course-semester. */
 public class CourseProgressOverviewCommand extends Command {
@@ -47,38 +40,24 @@ public class CourseProgressOverviewCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        Course course = model.getCourse(courseCode, semester)
+        CourseProgressOverview overview = model.getCourseProgressOverview(courseCode, semester)
                 .orElseThrow(() -> new CommandException(String.format(
                         MESSAGE_COURSE_NOT_FOUND, courseCode, semester)));
 
-        List<Student> enrolledStudents = model.getStudentsEnrolledIn(courseCode, semester);
-        if (enrolledStudents.isEmpty()) {
+        if (overview.getStudentProgressSummaries().isEmpty()) {
             return new CommandResult(String.format(MESSAGE_NO_ENROLMENTS, courseCode, semester));
         }
 
-        Map<Id, StudentCourseProgress> progressByStudentId = model.getStudentCourseProgressList().stream()
-                .filter(progress -> progress.getCourseCode().equals(courseCode)
-                        && progress.getSemester().equals(semester))
-                .collect(Collectors.toMap(StudentCourseProgress::getStudentId, Function.identity()));
-        String rows = enrolledStudents.stream()
-                .map(student -> formatStudentProgress(student, course, progressByStudentId))
+        String rows = overview.getStudentProgressSummaries().stream()
+                .map(summary -> formatStudentProgress(summary, overview.getTotalDeliverables()))
                 .collect(Collectors.joining("\n"));
         return new CommandResult(String.format(MESSAGE_HEADER, courseCode, semester, rows));
     }
 
-    private String formatStudentProgress(Student student, Course course,
-            Map<Id, StudentCourseProgress> progressByStudentId) {
-        int completed = java.util.Optional.ofNullable(progressByStudentId.get(student.getId()))
-                .map(this::countCompletedDeliverables)
-                .orElse(0);
-        return String.format("%s (%s): %d/%d completed", student.getName(), student.getId(),
-                completed, course.getDeliverables().size());
-    }
-
-    private int countCompletedDeliverables(StudentCourseProgress progress) {
-        return (int) progress.getDeliverableStatuses().values().stream()
-                .filter(status -> status == CompletionStatus.DONE)
-                .count();
+    private String formatStudentProgress(CourseProgressOverview.StudentProgressSummary summary,
+            int totalDeliverables) {
+        return String.format("%s (%s): %d/%d completed", summary.getStudent().getName(),
+                summary.getStudent().getId(), summary.getCompletedDeliverables(), totalDeliverables);
     }
 
     @Override

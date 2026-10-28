@@ -95,6 +95,23 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void getCourseProgressOverview_returnsStudentCountsInMainListOrder() {
+        modelManager = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        CourseCode courseCode = new CourseCode("CS2103T");
+        Semester semester = new Semester("AY26/27-S1");
+
+        var overview = modelManager.getCourseProgressOverview(courseCode, semester).orElseThrow();
+
+        assertEquals(2, overview.getTotalDeliverables());
+        assertEquals(List.of(ALICE, BENSON, CARL, DANIEL), overview.getStudentProgressSummaries().stream()
+                .map(summary -> summary.getStudent()).toList());
+        assertEquals(List.of(0, 0, 0, 0), overview.getStudentProgressSummaries().stream()
+                .map(summary -> summary.getCompletedDeliverables()).toList());
+        assertTrue(modelManager.getCourseProgressOverview(
+                new CourseCode("CS2105"), semester).isEmpty());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withStudent(ALICE).withStudent(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
