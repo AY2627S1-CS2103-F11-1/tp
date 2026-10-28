@@ -58,7 +58,8 @@ notes, and project-deliverable progress.
   `edit /id A1234567Z /email john@u.nus.edu`.
 
 * Items followed by `...` accept multiple comma-separated values.<br>
-  For example, `/task TASK[, TASK]...` can be `/task v1.4` or `/task v1.4, v1.5`.
+  For example, `/deliverable DELIVERABLE[, DELIVERABLE]...` can be
+  `/deliverable v1.4` or `/deliverable v1.4, v1.5`.
 
 * Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
   The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
@@ -167,20 +168,17 @@ Example:
 
 ### Searching students by name or ID: `search`
 
-Searches student records by one or more names or student IDs. Name queries use
-case-insensitive partial-substring matching with OR semantics: a student is
-returned when their name contains at least one comma-separated query. Each
-name query may contain spaces.
+Searches student records by a name or student ID.
 
 Format:
 
-* `search /name NAME[, NAME]...`
-* `search /id ID[, ID]...`
+* `search /name NAME`
+* `search /id ID`
 
 Examples:
 
-* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
-* `search /id A1234567Z, A2345678X` shows students with either ID.
+* `search /name John Doe` shows student whose names contain `John Doe`.
+* `search /id A1234567Z` shows students with the respective ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
 Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
