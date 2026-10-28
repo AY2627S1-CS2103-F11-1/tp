@@ -77,12 +77,6 @@ class JsonSerializableAddressBook {
         }
     }
 
-    private static void rejectNullRecords(List<?> records) {
-        if (records.contains(null)) {
-            throw new IllegalArgumentException(MESSAGE_NULL_RECORD);
-        }
-    }
-
     /**
      * Converts a {@code ReadOnlyAddressBook} into a JSON-serializable
      * representation.
@@ -105,6 +99,12 @@ class JsonSerializableAddressBook {
         enrolments.addAll(source.getEnrolmentList().stream()
                 .map(JsonAdaptedStudentCourseEnrolment::new)
                 .toList());
+    }
+
+    private static void rejectNullRecords(List<?> records) {
+        if (records.contains(null)) {
+            throw new IllegalArgumentException(MESSAGE_NULL_RECORD);
+        }
     }
 
     /**
