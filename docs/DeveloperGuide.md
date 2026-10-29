@@ -15,15 +15,33 @@ title: Developer Guide
    - [Glossary](#glossary)
 4. [Design](#design)
    - [Architecture](#architecture)
+      - [Component interactions](#component-interactions)
+      - [Component interfaces and implementations](#component-interfaces-and-implementations)
    - [UI Component](#ui-component)
    - [Logic Component](#logic-component)
+      - [Command execution](#command-execution)
+      - [Command parsing](#command-parsing)
    - [Model Component](#model-component)
+      - [Multiple course enrolments and independent progress](#multiple-course-enrolments-and-independent-progress)
    - [Storage Component](#storage-component)
+      - [Loading address-book data](#loading-address-book-data)
+      - [Storage loading outcomes](#storage-loading-outcomes)
+      - [Progress reconciliation](#progress-reconciliation)
+      - [Persistence safety and failure handling](#persistence-safety-and-failure-handling)
 5. [Implementation](#implementation)
-6. [Testing](#testing)
-7. [DevOps](#devops)
-8. [Documentation, logging and team contributions](#documentation-logging-and-team-contributions)
-9. [Appendix](#appendix)
+   - [Course initialisation](#course-initialisation)
+   - [Updating deliverable progress](#updating-deliverable-progress)
+   - [Viewing student deliverables](#viewing-student-deliverables)
+     - [Design consideration: structured UI data](#design-consideration-structured-ui-data)
+6. [Common classes](#common-classes)
+7. [Documentation, logging, testing, dev-ops](#documentation-logging-testing-dev-ops)
+8. [Appendix: Requirements](#appendix-requirements)
+   - [Product scope](#product-scope)
+   - [User stories](#user-stories)
+   - [Use cases](#use-cases)
+   - [Non-Functional Requirements](#non-functional-requirements)
+   - [Glossary](#glossary)
+9. [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -40,197 +58,387 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Design**
+# Design
 
-<div markdown="span" class="alert alert-primary">
+This section describes TAssist's architecture and the responsibilities of its main components. It also explains how the components collaborate to support student management, course enrolments, deliverable tracking, and data persistence.
 
-:bulb: **Tip:** The `.puml` files used to create diagrams are in `docs/diagrams`. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
-</div>
+The PlantUML source files for the diagrams are located in `docs/diagrams`.
 
-### Architecture
+## Architecture
 
-<img src="images/ArchitectureDiagram.png" width="280" />
+TAssist follows a component-based architecture comprising `Main`, `UI`, `Logic`, `Model`, and `Storage`. The `Commons` package provides shared utilities used across components.
 
-The ***Architecture Diagram*** given above explains the high-level design of the App.
+The following architecture diagram illustrates the main components and their dependencies.
 
-The following provides a quick overview of the main components and their interactions.
+![Architecture diagram](images/ArchitectureDiagram.png)
 
-**Main components of the architecture**
+The **`Main`** component consists of `Main` and `MainApp`. It is responsible for launching TAssist, initializing and connecting the other components, and coordinating application shutdown.
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+The four main components have distinct responsibilities:
 
-The bulk of the app's work is done by the following four components:
+| Component | Responsibility |
+|---|---|
+| `UI` | Handles user interaction and presents application data. |
+| `Logic` | Parses and executes user commands. |
+| `Model` | Maintains application data and enforces domain constraints. |
+| `Storage` | Loads and persists application data in JSON files. |
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+`Commons` contains shared functionality, including logging, file utilities, and common exceptions.
 
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
+### Component interactions
 
-**How the architecture components interact with each other**
+The following sequence diagram illustrates how the main components collaborate when executing `delete /id A1234567B`.
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete /id A1234567B`.
+![Architecture sequence diagram](images/ArchitectureSequenceDiagram.png)
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+The `UI` forwards the command to `Logic`, which executes the corresponding operation against `Model`. After successful command execution, `Logic` requests `Storage` to persist the address book before returning the result to `UI`.
 
-Each of the four main components (also shown in the diagram above),
+The diagram intentionally abstracts the internal parsing, command execution, and JSON serialization steps. These are explained in the component-specific sections.
 
-* defines its *API* in an `interface` with the same name as the Component.
-* provides its functionality through a concrete `{Component Name}Manager` class that implements the corresponding API interface.
+### Component interfaces and implementations
 
-For example, the `Logic` component defines its API in `Logic.java` and implements it in `LogicManager.java`. Other components interact with a component through its interface rather than its concrete class, preventing them from coupling to that component's implementation, as illustrated in the following partial class diagram.
+Each major component exposes its functionality through an interface and provides a concrete manager implementation.
 
-<img src="images/ComponentManagers.png" width="300" />
+For example, `LogicManager` implements the `Logic` interface, while `ModelManager` and `StorageManager` implement `Model` and `Storage` respectively.
 
-The sections below give more details of each component.
+![Component managers class diagram](images/ComponentManagersClassDiagram.png)
 
-### UI component
+This separation allows components to depend on public APIs rather than the internal implementation of another component. It also supports testing by allowing alternative implementations of component interfaces.
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
+## UI component
 
-![Structure of the UI Component](images/UiClassDiagram.png)
+**API:** `Ui.java`
 
-The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `StudentListPanel`, `DeliverablesPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
+The `UI` component uses JavaFX to handle user interaction and display information maintained by TAssist.
 
-The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
+The following class diagram illustrates the structure of the UI component.
 
-The `UI` component,
+![UI class diagram](images/UiClassDiagram.png)
 
-* executes user commands using the `Logic` component.
-* listens for changes to `Model` data so that the UI can be updated with the modified data.
-* keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component because it displays `Student` objects from the model.
+`UiManager` implements the `Ui` interface and manages the application's main window.
 
-### Logic component
+`MainWindow` coordinates several UI parts, including:
 
-**API** : [`Logic.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
+- `CommandBox`, which accepts user commands.
+- `ResultDisplay`, which displays command feedback.
+- `StudentListPanel`, which displays student records through `StudentCard` instances.
+- `DeliverablesPanel`, which displays structured deliverable-progress information.
+- `StatusBarFooter`, which displays application status information.
+- `HelpWindow`, which provides command guidance.
 
-Here's a (partial) class diagram of the `Logic` component:
+These UI classes inherit from the abstract `UiPart` class, which provides shared functionality for JavaFX UI components.
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+UI layouts are defined using FXML resources, while their corresponding Java classes handle interaction and presentation logic.
 
-The sequence diagram below illustrates the high-level interactions in the `Logic` component and its interaction with `Model`, using the `execute("delete /id A1234567B")` API call as an example.
+The `UI` component communicates with `Logic` to execute commands and retrieve application data. It also uses Model types when rendering students and deliverable-progress information.
 
-![High-level interactions for deleting a student by ID](images/DeleteSequenceDiagram.png)
+## Logic component
 
-How the `Logic` component works:
+**API:** `Logic.java`
 
-1. When `Logic` is called upon to execute a command, the command is passed to an `AddressBookParser` object, which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a student).<br>
-   Note that although this is shown as a single step in the diagram above for simplicity, the code can require several interactions between the command object and the `Model` to complete the operation.
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned from `Logic`.
+The `Logic` component interprets user commands, executes the corresponding operations, and returns their results.
 
-Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
+The following class diagram shows the main structural relationships within Logic.
 
-<img src="images/ParserClasses.png" width="600"/>
+![Logic class diagram](images/LogicClassDiagram.png)
 
-How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name, e.g., `AddCommandParser`). The parser uses the other classes shown above to parse the user command and create an `XYZCommand` object (e.g., `AddCommand`). The `AddressBookParser` returns that object as a `Command` object.
-* All `XYZCommandParser` classes, such as `AddCommandParser` and `DeleteCommandParser`, implement the `Parser` interface so they can be treated similarly where appropriate, for example during testing.
+`LogicManager` implements the `Logic` interface and coordinates command execution.
 
-### Model component
-**API** : [`Model.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
+It uses `AddressBookParser` to convert command text into a `Command` object. The command is then executed against `Model`, producing a `CommandResult`.
 
-<img src="images/ModelClassDiagram.png" width="1000" />
+`LogicManager` also interacts with `Storage` to persist the address book after successful command execution.
 
+### Command execution
 
-The `Model` component,
+The following sequence diagram illustrates the execution of `delete /id A1234567B`.
 
-* stores students, course-semester offerings, student-course enrolments, and deliverable-progress records.
-* keeps those objects in `UniqueStudentList`, `UniqueCourseList`, `UniqueStudentCourseEnrolment`, and `UniqueStudentCourseProgressList` respectively.
-* stores the students selected by the current filter, such as search results, in a separate filtered list. It exposes this list as an unmodifiable `ObservableList<Student>` that the UI can observe and bind to, so the UI updates when the list changes.
-* stores a `UserPrefs` object that represents the user’s preferences (currently, just the GUI settings). This is exposed to the outside as a `ReadOnlyUserPrefs` object.
-* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+![Delete sequence diagram](images/DeleteSequenceDiagram.png)
 
-The object diagram below gives a concrete snapshot of the stored model. Alex has one global student record and separate progress records for two courses. The progress records refer to the student and course-semester using their identifying values, allowing one student to be tracked across multiple courses without duplicating the student object.
+The command execution proceeds as follows:
 
-![Example objects for one student's multi-course progress](images/StudentCourseProgressObjectDiagram.png)
+1. `LogicManager` passes the command text to `AddressBookParser`.
+2. `AddressBookParser` creates the appropriate command-specific parser, `DeleteCommandParser`.
+3. `DeleteCommandParser` parses the arguments and creates a `DeleteCommand`.
+4. `LogicManager` executes the returned command against `Model`.
+5. `DeleteCommand` identifies the target student and invokes `Model.deleteStudent(...)`.
+6. The command creates and returns a `CommandResult`.
 
+The diagram focuses on the internal Logic execution path. Student lookup details, exception handling, and persistence are omitted to keep the interaction focused. Persistence is represented in the architecture sequence diagram.
 
-### Storage component
+### Command parsing
 
-**API** : [`Storage.java`](https://github.com/AY2627S1-CS2103-F11-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
+The parser subsystem separates command identification from command-specific argument parsing.
 
-<img src="images/StorageClassDiagram.png" width="800" />
+The following partial class diagram illustrates the shared parsing architecture.
 
-The `Storage` component,
-* can save students, courses, deliverable-progress records, and user preferences in JSON format, and read them back into corresponding model objects.
-* is implemented by `StorageManager`, which delegates the actual JSON file access to `JsonAddressBookStorage` and `JsonUserPrefsStorage` (one class per data file).
-* uses separate JSON adapter classes for `Student`, `Course`, and `StudentCourseProgress`.
-* depends on some classes in the `Model` component because its responsibility is to save and retrieve model objects.
+![Parser class diagram](images/ParserClassDiagram.png)
 
-### Common classes
+`AddressBookParser` identifies the command word and delegates argument parsing to the appropriate parser.
 
-Classes used by multiple components are in the `seedu.address.commons` package.
+Command-specific parsers use shared infrastructure such as:
 
---------------------------------------------------------------------------------------------------------------------
+- `ArgumentTokenizer` to separate arguments into prefixed values.
+- `ArgumentMultimap` to store and retrieve tokenized arguments.
+- `ParserUtil` to validate and convert argument values.
+- `CliSyntax` and `Prefix` to define command parameter syntax.
 
-## **Implementation**
+In the diagram, **`XYZCommandParser` and `XYZCommand` are representative placeholders**, not actual Java classes. They illustrate the general relationship between a command-specific parser and the command it creates. For example, `SearchCommandParser` creates a `SearchCommand`.
 
-This section describes some noteworthy details on how certain features are implemented.
+The diagram intentionally omits specialized parser inheritance relationships. For example, progress commands share parsing behavior through `StudentProgressCommandParser`, which is extended by `MarkCommandParser` and `UnmarkCommandParser`.
 
-### Course initialisation feature
+This design allows common parsing and validation behavior to be reused while retaining command-specific parsing responsibilities.
 
-The `init course` command creates the course and deliverable foundation used by later progress-tracking features.
-`InitCourseCommandParser` parses the course code, semester, and comma-separated deliverables, then creates an
-`InitCourseCommand`. Invalid, missing, or duplicate deliverable names are rejected before the command changes the
-model.
+## Model component
 
-`Course` is identified by its `CourseCode` and `Semester`, while its `Deliverable` objects represent the project
-milestones for that course. `UniqueCourseList` prevents duplicate course-semester pairs. The `Model` exposes
-`hasCourse` and `addCourse` so that `InitCourseCommand` can reject a duplicate without depending on
-`ModelManager`'s concrete implementation.
+**API:** `Model.java`
 
-Courses are kept alongside students in `AddressBook`. `JsonSerializableAddressBook` and `JsonAdaptedCourse` save and
-restore them with the existing JSON data file, so a successfully initialised course remains available after a normal
-application restart.
+The `Model` component maintains TAssist's in-memory application data and provides operations for managing students, courses, enrolments, and deliverable progress.
 
-### Updating deliverable progress
+The following class diagram illustrates its main structural relationships.
 
-`MarkCommand` and `UnmarkCommand` share the workflow implemented by `StudentProgressCommand`. The command first
-identifies one student and one course-semester, verifies that every requested deliverable exists, and retrieves the
-matching `StudentCourseProgress` record. Because progress records are immutable, the command creates updated copies
-and replaces the original record in the model only after all validation succeeds.
+![Model class diagram](images/ModelClassDiagram.png)
 
-The following activity diagram summarizes that workflow. Any failed lookup or validation returns the corresponding
-`CommandException` without modifying the stored progress.
+`ModelManager` implements the `Model` interface and maintains an `AddressBook` and a `UserPrefs` object.
 
-![Workflow for marking or unmarking deliverables](images/UpdateProgressActivityDiagram.png)
+`AddressBook` organizes domain records through four specialized collections:
 
-### Viewing deliverables feature
+| Collection | Stored records |
+|---|---|
+| `UniqueStudentList` | `Student` |
+| `UniqueCourseList` | `Course` |
+| `UniqueStudentCourseEnrolment` | `StudentCourseEnrolment` |
+| `UniqueStudentCourseProgressList` | `StudentCourseProgress` |
 
-The `view` command displays all tracked deliverables for one student. The command accepts either a student ID or a
-name. `ViewProgressCommand` first identifies exactly one student, then filters the model's
-`StudentCourseProgress` records by that student's ID. This lets one command display progress from every course and
-semester associated with the student.
+These collection classes encapsulate record management and enforce uniqueness constraints.
 
-The command returns two forms of output in one `CommandResult`:
+The `Model` interface exposes read-only interfaces such as `ReadOnlyAddressBook` and `ReadOnlyUserPrefs`. This separates data access from the mutable operations provided by their concrete implementations.
 
-* a textual summary for `ResultDisplay`; and
-* an immutable `StudentDeliverablesView` containing the selected `Student` and their progress records.
+The Model also maintains a filtered student list, exposed through an unmodifiable observable list. This allows the UI to observe changes without directly modifying the underlying student collection.
 
-Using a structured view object keeps the UI independent of the wording and formatting of the textual feedback.
-`ViewProgressCommand` restores the full student list before returning. `MainWindow` can then focus the selected
-student's card and pass the view object to `DeliverablesPanel`. The panel creates one group per course-semester, shows
-the completed/total count, and renders each deliverable with a filled or empty status box.
+### Multiple course enrolments and independent progress
 
-The following sequence diagram shows the successful `view /id A1234567B` flow. Parser interactions are omitted so
-the diagram can focus on how the command result reaches both sides of the split-screen UI.
+TAssist separates student identity from course enrolment and deliverable progress.
 
-![Interactions for viewing a student's deliverables](images/ViewDeliverablesSequenceDiagram.png)
+A `Student` represents a student independently of their course registrations. Each `StudentCourseEnrolment` identifies the student and a particular course-semester, while a corresponding `StudentCourseProgress` records completion statuses for that course's deliverables.
 
-#### Design consideration: passing UI data
+The following object diagram shows a concrete snapshot of one student enrolled in two courses.
 
-**Alternative 1: Parse the feedback string in the UI.** This avoids adding another result type, but couples
-`DeliverablesPanel` to presentation text and makes wording changes likely to break the panel.
+![Student-course progress object diagram](images/StudentCourseProgressObjectDiagram.png)
 
-**Alternative 2 (current choice): Attach a structured payload to `CommandResult`.** This requires the small
-`StudentDeliverablesView` class, but preserves component boundaries and gives the UI strongly typed, immutable data.
-This approach was chosen because it is safer to extend and easier to test.
+The snapshot demonstrates that:
+
+- One student record can be associated with multiple enrolments.
+- Each enrolment belongs to a particular course-semester.
+- Each course defines its own deliverables.
+- Progress is tracked independently for each student-course-semester combination.
+
+The model uses identifying values such as student ID, course code, and semester to associate these records, rather than storing direct references between all domain entities.
+
+This separation avoids duplicating student information across courses and allows progress to be maintained independently for each enrolment.
+
+## Storage component
+
+**API:** `Storage.java`
+
+The `Storage` component manages the persistence of TAssist's address-book data and user preferences.
+
+The following class diagram illustrates its structure.
+
+![Storage class diagram](images/StorageClassDiagram.png)
+
+`StorageManager` implements the `Storage` interface and delegates file operations to two specialized storage classes:
+
+- `JsonAddressBookStorage`, which manages address-book data.
+- `JsonUserPrefsStorage`, which manages user preferences.
+
+`JsonAddressBookStorage` uses `JsonSerializableAddressBook` to convert between JSON data and the Model representation.
+
+The JSON representation includes adapters for students, courses, enrolments, and progress records.
+
+### Loading address-book data
+
+When TAssist starts, `MainApp` requests the saved address book through `StorageManager`.
+
+The following sequence diagram illustrates the successful loading interaction.
+
+![Address-book loading sequence diagram](images/AddressBookLoadingSequenceDiagram.png)
+
+`StorageManager` delegates loading to `JsonAddressBookStorage`, which uses `JsonUtil` to deserialize the JSON file into `JsonSerializableAddressBook`.
+
+The deserialized data is then converted into an `AddressBook` through `toModelType()`, which validates the persisted records and their relationships.
+
+The sequence diagram intentionally focuses on successful object collaboration. Missing files, invalid data, and startup failure handling are explained separately below.
+
+### Storage loading outcomes
+
+TAssist distinguishes a missing data file from an existing file that cannot be loaded safely.
+
+The following activity diagram summarizes the startup outcomes.
+
+![Address-book loading activity diagram](images/AddressBookLoadingActivityDiagram.png)
+
+| Storage condition | Behaviour |
+|---|---|
+| Address-book file is missing | Initialize the application with sample data. |
+| Existing file is valid | Load the saved address book. |
+| Existing file contains reconcilable progress differences | Reconcile and persist the corrected progress before normal startup. |
+| Existing file is malformed or contains invalid records | Reject loading and stop normal startup. |
+| Existing file cannot be read | Stop normal startup and report the loading failure. |
+
+An invalid existing file is **never treated as a missing file**.
+
+This distinction prevents TAssist from silently replacing user data with sample data when loading fails.
+
+When loading fails, TAssist displays a JavaFX error dialog and exits after the user dismisses it. Normal command execution is not initialized, preventing subsequent commands from overwriting the invalid address-book file.
+
+### Progress reconciliation
+
+TAssist applies a limited reconciliation policy to progress records whose deliverables differ from those currently defined by their course.
+
+The following activity diagram illustrates the reconciliation workflow and its persistence safeguards.
+
+![Progress reconciliation activity diagram](images/ProgressReconciliationActivityDiagram.png)
+
+During conversion, progress statuses are aligned with the deliverables defined by the corresponding course.
+
+| Situation | Reconciliation behaviour |
+|---|---|
+| Stored deliverable matches a course deliverable | Preserve its existing completion status. |
+| Course deliverable is missing from progress | Add it with status `NOT_DONE`. |
+| Stored progress contains an unknown deliverable | Exclude it from the reconciled record. |
+| Deliverable differs only in capitalization | Match case-insensitively and preserve its status. |
+| Progress records are already consistent | Do not unnecessarily rewrite the storage file. |
+
+For example, suppose a course defines `MVP` and `Final`, but the saved progress contains:
+
+```json
+{
+  "mvp": "DONE",
+  "Old": "NOT_DONE"
+}
+```
+
+The reconciled progress becomes:
+
+```json
+{
+  "MVP": "DONE",
+  "Final": "NOT_DONE"
+}
+```
+
+The valid `MVP` status is preserved, the missing `Final` status is initialized as `NOT_DONE`, and the obsolete `Old` entry is excluded.
+
+Reconciliation is tracked during conversion, and the final reconciliation state is recorded only after successful validation.
+
+The activity diagram separates validation and reconciliation into conceptual actions for readability. In the implementation, some validation occurs while individual progress records are being reconciled.
+
+**Reconciliation is not a general corruption-recovery mechanism.** Invalid references, duplicate records, invalid notes, and malformed data are rejected rather than silently corrected.
+
+### Persistence safety and failure handling
+
+Reconciled data is saved only after successful model conversion and validation.
+
+If no reconciliation is required, the existing address-book file is not unnecessarily rewritten.
+
+TAssist also uses a temporary-file write strategy to reduce the risk of corrupting existing data during saving:
+
+1. Write the new JSON content to a temporary file in the target directory.
+2. Replace the original file after the temporary content has been written successfully.
+3. Use atomic replacement where supported, with a non-atomic replacement fallback where necessary.
+4. Clean up temporary files after failures where possible.
+
+If saving reconciled data fails, loading reports a `DataLoadingException` instead of treating persistence as successful.
+
+The non-atomic fallback cannot guarantee protection against every interruption. Likewise, reconciliation may intentionally discard completion statuses associated with unknown deliverables, because TAssist cannot safely infer how an obsolete deliverable maps to a current one.
+
+These behaviors are deliberate storage policies that future developers should preserve or explicitly reconsider when modifying persistence logic.
+
+---
+
+# Implementation
+
+This section explains noteworthy TAssist-specific workflows and the design decisions behind them.
+
+## Course initialisation
+
+The `init course` command establishes the course-semester and deliverable definitions used by subsequent enrolment and progress-tracking operations.
+
+`InitCourseCommandParser` parses the course code, semester, and requested deliverables before constructing an `InitCourseCommand`.
+
+A course is identified by its `CourseCode` and `Semester`. Its deliverables define the milestones against which student progress is tracked.
+
+`UniqueCourseList` prevents duplicate course-semester records, while the Model API provides operations such as `hasCourse()` and `addCourse()`.
+
+Persisting course definitions alongside the other address-book records ensures that course information remains available after restarting TAssist.
+
+## Updating deliverable progress
+
+`MarkCommand` and `UnmarkCommand` share their execution workflow through `StudentProgressCommand`.
+
+The commands differ in the target completion status:
+
+- `mark` updates requested deliverables to `DONE`.
+- `unmark` updates requested deliverables to `NOT_DONE`.
+
+The following activity diagram illustrates the shared workflow.
+
+![Update progress activity diagram](images/UpdateProgressActivityDiagram.png)
+
+The command first identifies exactly one student and the requested course-semester. It then validates the requested deliverables, retrieves the matching progress record, and checks its current completion statuses.
+
+`StudentCourseProgress` is immutable. Therefore, the command uses `withStatus(...)` to construct updated progress records rather than mutating the existing stored record.
+
+Only after all required checks and updates succeed does the command replace the original record through the Model API.
+
+This ensures that failed validation does not leave a partially updated progress record in the Model.
+
+The diagram combines the validation outcomes into a single decision for readability. In the actual implementation, a failed lookup or validation throws `CommandException` immediately.
+
+## Viewing student deliverables
+
+The `view` command retrieves the deliverable progress associated with a selected student across their enrolled course-semesters.
+
+`ViewProgressCommand` identifies the student and collects matching `StudentCourseProgress` records.
+
+For students with available progress records, the command constructs a `StudentDeliverablesView` containing the selected student and an immutable list of their progress records.
+
+The view is included in `CommandResult`, alongside the textual feedback.
+
+The following sequence diagram illustrates how this structured result reaches the UI.
+
+![View deliverables sequence diagram](images/ViewDeliverablesSequenceDiagram.png)
+
+`MainWindow` receives the `CommandResult` from Logic and retrieves its optional `StudentDeliverablesView` payload.
+
+When the payload is present, `MainWindow` passes it to `DeliverablesPanel` through `showDeliverables(...)`.
+
+The diagram illustrates a successful view operation with progress records. Parser interactions, Model lookups, Storage persistence, student-list scrolling, and the empty-progress case are intentionally omitted to focus on the structured-result handoff.
+
+### Design consideration: structured UI data
+
+Two approaches were considered for passing deliverable information to the UI.
+
+| Approach | Advantage | Drawback |
+|---|---|---|
+| Parse formatted command feedback in the UI | Avoids introducing another result type | Couples UI behavior to the wording and formatting of feedback messages |
+| Include a structured view in `CommandResult` | Provides strongly typed data independent of feedback formatting | Requires an additional view representation |
+
+TAssist uses the second approach.
+
+This separates the textual feedback shown in `ResultDisplay` from the structured progress data consumed by `DeliverablesPanel`.
+
+As a result, changes to feedback wording do not require the panel to change how it interprets deliverable information.
+
+---
+
+# Common classes
+
+Classes shared by multiple components are located in the `seedu.address.commons` package.
+
+These include utilities and common types supporting logging, file operations, exception handling, and application configuration.
+
+Keeping shared functionality in Commons avoids duplicating cross-cutting infrastructure within the individual components. 
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -583,6 +791,7 @@ testers are expected to do more *exploratory* testing.
    5. In the folder with `TAssist.jar`, a new data folder is created. Open `addressbook.json` located in the data folder.
    6. Scroll down to enrolments and edit `"studentId" : "A1234567B",` to `"studentId" : ,`
    7. Rerun `java -jar TAssist.jar` in your terminal to launch the app.
-   8. Expected: The app will launch with the sample data loaded instead of the corrupted data. Alex Yeoh's display will now show `1 notes` instead.
-   9. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`.
-   10. Relaunching the app using `java -jar TAssist.jar` in your terminal will load the correct data. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`
+   8. Expected: TAssist displays an **Unable to load saved data** error dialog and does not start the normal application interface. The original `data/addressbook.json` file remains unchanged, and sample data is not written over it.
+   9. Dismiss the dialog. Expected: TAssist exits without accepting commands or saving the invalid address-book data.
+   10. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`, or replace it with a valid backup.
+   11. Relaunching the app using `java -jar TAssist.jar` in your terminal should now load the corrected data normally. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`.
