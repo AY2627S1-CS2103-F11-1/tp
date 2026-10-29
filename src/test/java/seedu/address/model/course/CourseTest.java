@@ -1,5 +1,6 @@
 package seedu.address.model.course;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class CourseTest {
                 .mapToObj(number -> new Deliverable("task" + number))
                 .toList();
 
-        assertThrows(IllegalArgumentException.class, () -> new Course(
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Course(
                 new CourseCode("CS2103T"), new Semester("AY26/27-S1"), deliverables));
+        assertEquals(Course.MESSAGE_TOO_MANY_DELIVERABLES, exception.getMessage());
     }
 }

@@ -57,7 +57,7 @@ public class InitCourseCommandParserTest {
                 .toList());
 
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable " + deliverables,
-                Course.MESSAGE_DELIVERABLES);
+                Course.MESSAGE_TOO_MANY_DELIVERABLES);
     }
 
     @Test
