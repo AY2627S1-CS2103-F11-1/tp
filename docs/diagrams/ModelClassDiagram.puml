@@ -1,5 +1,8 @@
 @startuml
 !include style.puml
+show fields
+skinparam classAttributeIconSize 0
+skinparam classAttributeFontColor white
 skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR_T4
 skinparam classBackgroundColor MODEL_COLOR
@@ -17,9 +20,27 @@ package "Model" as ModelPackage <<Rectangle>> {
     class UniqueStudentCourseEnrolment
     class UniqueStudentCourseProgressList
 
-    class Student
-    class Course
-    class StudentCourseEnrolment
+    class Student {
+        Id
+        Name
+        Email
+    }
+
+    class Course {
+        CourseCode courseCode
+        Deliverable deliverable
+        Semester semester
+        List<Deliverable> deliverables
+    }
+
+    class StudentCourseEnrolment {
+        studentId: Id
+        CourseCode
+        Semester
+        TutorialClass
+        NotesList
+    }
+
     class StudentCourseProgress
 }
 
@@ -42,6 +63,9 @@ UniqueStudentList --> "*" Student
 UniqueCourseList --> "*" Course
 UniqueStudentCourseEnrolment --> "*" StudentCourseEnrolment
 UniqueStudentCourseProgressList --> "*" StudentCourseProgress
+
+Student "*" -- "*" Course : enrolled in
+(Student, Course) .. StudentCourseEnrolment
 
 @enduml
 

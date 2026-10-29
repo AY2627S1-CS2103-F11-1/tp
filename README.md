@@ -26,6 +26,7 @@ contextualised support.
 
 ```text
 list
+overview /course CS2103T /sem AY26/27-S1
 list /course CS2103T /sem AY26/27-S1
 list /course CS2103T /sem AY26/27-S1 /class T07
 list /course CS2103T /sem AY26/27-S1 /deliverable MVP
