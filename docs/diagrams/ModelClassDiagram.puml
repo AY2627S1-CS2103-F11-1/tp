@@ -44,3 +44,4 @@ UniqueStudentCourseEnrolment --> "*" StudentCourseEnrolment
 UniqueStudentCourseProgressList --> "*" StudentCourseProgress
 
 @enduml
+
