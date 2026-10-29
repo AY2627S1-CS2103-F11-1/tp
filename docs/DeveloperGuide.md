@@ -586,4 +586,3 @@ testers are expected to do more *exploratory* testing.
    8. Expected: The app will launch with the sample data loaded instead of the corrupted data. Alex Yeoh's display will now show `1 notes` instead.
    9. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`.
    10. Relaunching the app using `java -jar TAssist.jar` in your terminal will load the correct data. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`
-   
