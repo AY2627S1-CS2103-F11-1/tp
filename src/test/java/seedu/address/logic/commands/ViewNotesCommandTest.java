@@ -29,8 +29,8 @@ public class ViewNotesCommandTest {
     public void execute_studentWithNotes_success() {
         ViewNotesCommand command = new ViewNotesCommand(ALICE.getId(), COURSE_CODE, SEMESTER);
 
-        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                ALICE.getName(), ALICE.getId()), false, false, ALICE.getId(),
+        CommandResult expectedResult = new CommandResult(String.format(
+                ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()),
                 new StudentNotesListView(ALICE, new NotesList(new Notes("Needs help with testing", "MVP"))));
 
         assertCommandSuccess(command, model, expectedResult, model);
