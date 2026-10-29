@@ -15,7 +15,7 @@
     <Insets top="16" right="16" bottom="16" left="16" />
   </padding>
 
-  <Label fx:id="emptyState" text="Use view to display a student's deliverables."
+  <Label fx:id="emptyState" text="Use view to display a student's deliverables or notes."
          wrapText="true" styleClass="deliverables-empty-state" />
 
   <VBox fx:id="content" spacing="4">
