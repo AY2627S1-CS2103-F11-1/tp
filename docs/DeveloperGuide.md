@@ -314,7 +314,7 @@ Low (unlikely to have) - `*`
 **MSS**
 
 1. TA requests to add a student.
-2. TAssist prompts the TA for the student's name, student ID, email address, tutorial class and optional notes.
+2. TAssist prompts the TA for the student's name, student ID, email address, course, semester, and tutorial class.
 3. TA enters the required student information.
 4. TAssist validates the entered information.
 5. TAssist adds the student record.
@@ -341,6 +341,12 @@ Low (unlikely to have) - `*`
 * 4b. The email address is invalid.
 
   * 4b1. TAssist displays an error message.
+
+    Use case resumes at step 3.
+
+* 4c. The course for the given semester does not exist.
+
+  * 4c1. TAssist displays error message asking to initialise course for the given semester first.
 
     Use case resumes at step 3.
 
@@ -426,28 +432,38 @@ Low (unlikely to have) - `*`
 
 **Use case: Update a student's deliverable completion status**
 
-**Preconditions**: The course, its deliverables and the student are recorded in TAssist.
+**Preconditions**: The student, course, semester, and specified deliverables are
+recorded in TAssist.
 
 **MSS**
 
-1. TA requests to mark or unmark a specified project deliverable for a student.
-2. TAssist validates the student, course and deliverable details.
-3. TAssist updates the deliverable's completion status for the student.
-4. TAssist displays the updated completion status.
+1. TA requests to mark or unmark specified project deliverables for a student in
+   a course and semester.
+2. TAssist validates the student, course, semester, and deliverable details.
+3. TAssist finds the student's deliverable-progress record for the specified
+   course and semester.
+4. TAssist updates the deliverables' completion statuses.
+5. TAssist displays the updated completion statuses.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The student, course or deliverable cannot be found.
+* 2a. The student, course, semester, or deliverable cannot be found.
 
   * 2a1. TAssist displays an error message.
 
     Use case resumes at step 1.
 
-* 3a. The requested completion status is already recorded.
+* 3a. No deliverable-progress record exists for the student, course, and semester.
 
-  * 3a1. TAssist informs the TA that no change was made.
+  * 3a1. TAssist displays an error message.
+
+    Use case resumes at step 1.
+
+* 4a. A requested completion status is already recorded.
+
+  * 4a1. TAssist informs the TA that no change was made.
 
     Use case ends.
 
@@ -557,8 +573,16 @@ testers are expected to do more *exploratory* testing.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Dealing with corrupted data files
 
-   1. _{Explain how to simulate missing or corrupted data files and state the expected behavior.}_
-
-1. _{ more test cases …​ }_
+   1. Prerequisites: Place `TAssist.jar` in an empty folder. Ensure there is no data folder inside this folder.
+   2. Open a terminal and navigate to the folder containing `TAssist.jar`.
+   3. Run `java -jar TAssist.jar` to launch the app.
+   4. Add a project-work notes using
+   `notes /id A1234567B /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Implemented add and delete but not edit`. Alex Yeoh's display should now say `2 notes`.
+   5. In the folder with `TAssist.jar`, a new data folder is created. Open `addressbook.json` located in the data folder.
+   6. Scroll down to enrolments and edit `"studentId" : "A1234567B",` to `"studentId" : ,`
+   7. Rerun `java -jar TAssist.jar` in your terminal to launch the app.
+   8. Expected: The app will launch with the sample data loaded instead of the corrupted data. Alex Yeoh's display will now show `1 notes` instead.
+   9. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`.
+   10. Relaunching the app using `java -jar TAssist.jar` in your terminal will load the correct data. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`
