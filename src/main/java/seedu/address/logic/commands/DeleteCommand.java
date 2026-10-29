@@ -1,6 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,17 +26,17 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a student from TAssist.\n"
-            + "Parameters: /id ID or /name NAME\n"
-            + "Examples: " + COMMAND_WORD + " /id A1234567Z\n"
-            + "          " + COMMAND_WORD + " /name John Doe";
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " or " + PREFIX_NAME + " " + ARGUMENT_NAME + "\n"
+            + "Examples: " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + "\n"
+            + "          " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
 
     public static final String MESSAGE_DELETE_STUDENT_SUCCESS = "Successfully deleted student %s (%s).";
-    public static final String MESSAGE_STUDENT_ID_NOT_FOUND =
-            "No student found with ID '%s'. Please check the student ID and try again.";
-    public static final String MESSAGE_STUDENT_NAME_NOT_FOUND =
-            "No student found with name '%s'. Please check the student name and try again.";
-    public static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME =
-            "Multiple students found with this name. Please delete the student using their id.";
+    public static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'. "
+            + "Please check the student ID and try again.";
+    public static final String MESSAGE_STUDENT_NAME_NOT_FOUND = "No student found with name '%s'. "
+            + "Please check the student name and try again.";
+    public static final String MESSAGE_MULTIPLE_STUDENTS_WITH_NAME = "Multiple students found with this name. "
+            + "Please delete the student using their id.";
 
     private final Optional<Id> studentId;
     private final Optional<String> studentName;

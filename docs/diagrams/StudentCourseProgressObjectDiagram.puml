@@ -1,0 +1,82 @@
+
+@startuml
+!include style.puml
+
+title Student enrolments and progress
+
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR_T4
+skinparam objectBackgroundColor MODEL_COLOR
+skinparam objectFontColor white
+skinparam objectBorderColor MODEL_COLOR_T4
+
+object "<u>:AddressBook</u>" as AddressBook
+
+object "<u>:UniqueStudentList</u>" as Students MODEL_COLOR_T1
+object "<u>:UniqueCourseList</u>" as Courses MODEL_COLOR_T1
+object "<u>:UniqueStudentCourseEnrolment</u>" as Enrolments MODEL_COLOR_T1
+object "<u>:UniqueStudentCourseProgressList</u>" as Progresses MODEL_COLOR_T1
+
+object "<u>alex:Student</u>" as Alex {
+    id = A1234567B
+    name = Alex Yeoh
+    email = alexyeoh@u.nus.edu
+}
+
+object "<u>cs2103t:Course</u>" as Cs2103 {
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    deliverables = [v1.1, MVP]
+}
+
+object "<u>cs2030s:Course</u>" as Cs2030 {
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    deliverables = [Lab 1, Project]
+}
+
+object "<u>cs2103tEnrolment:StudentCourseEnrolment</u>" as AlexCs2103 {
+    studentId = A1234567B
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    tutorialClass = T07
+}
+
+object "<u>cs2030sEnrolment:StudentCourseEnrolment</u>" as AlexCs2030 {
+    studentId = A1234567B
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    tutorialClass = T02
+}
+
+object "<u>cs2103tProgress:StudentCourseProgress</u>" as Cs2103Progress {
+    studentId = A1234567B
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    deliverableStatuses = {v1.1: DONE, MVP: NOT_DONE}
+}
+
+object "<u>cs2030sProgress:StudentCourseProgress</u>" as Cs2030Progress {
+    studentId = A1234567B
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    deliverableStatuses = {Lab 1: DONE, Project: DONE}
+}
+
+AddressBook *-- Students
+AddressBook *-- Courses
+AddressBook *-- Enrolments
+AddressBook *-- Progresses
+
+Students -- Alex
+
+Courses -- Cs2103
+Courses -- Cs2030
+
+Enrolments -- AlexCs2103
+Enrolments -- AlexCs2030
+
+Progresses -- Cs2103Progress
+Progresses -- Cs2030Progress
+
+@enduml

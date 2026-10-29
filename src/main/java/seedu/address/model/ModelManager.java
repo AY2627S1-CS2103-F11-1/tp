@@ -5,14 +5,21 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CompletionStatus;
+import seedu.address.model.progress.CourseProgressOverview;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -120,6 +127,91 @@ public class ModelManager implements Model {
     @Override
     public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
         addressBook.setStudentCourseProgress(target, updatedProgress);
+    }
+
+    @Override
+    public boolean hasEnrolment(StudentCourseEnrolment enrolment) {
+        requireNonNull(enrolment);
+        return addressBook.hasEnrolment(enrolment);
+    }
+
+    @Override
+    public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
+        requireAllNonNull(courseCode, semester);
+        return addressBook.getCourse(courseCode, semester);
+    }
+
+    @Override
+    public List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester) {
+        requireAllNonNull(courseCode, semester);
+        Set<Id> enrolledStudentIds = addressBook.getEnrolmentList().stream()
+                .filter(enrolment -> enrolment.getCourseCode().equals(courseCode)
+                        && enrolment.getSemester().equals(semester))
+                .map(StudentCourseEnrolment::getStudentId)
+                .collect(Collectors.toSet());
+        return addressBook.getStudentList().stream()
+                .filter(student -> enrolledStudentIds.contains(student.getId()))
+                .toList();
+    }
+
+    @Override
+    public Optional<CourseProgressOverview> getCourseProgressOverview(CourseCode courseCode, Semester semester) {
+        requireAllNonNull(courseCode, semester);
+        Optional<Course> course = addressBook.getCourse(courseCode, semester);
+        if (course.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var progressByStudentId = addressBook.getStudentCourseProgressList().stream()
+                .filter(progress -> progress.getCourseCode().equals(courseCode)
+                        && progress.getSemester().equals(semester))
+                .collect(Collectors.toMap(StudentCourseProgress::getStudentId, progress -> progress));
+        List<CourseProgressOverview.StudentProgressSummary> summaries = getStudentsEnrolledIn(courseCode, semester)
+                .stream()
+                .map(student -> new CourseProgressOverview.StudentProgressSummary(student,
+                        countCompletedDeliverables(progressByStudentId.get(student.getId()))))
+                .toList();
+        return Optional.of(new CourseProgressOverview(course.orElseThrow().getDeliverables().size(), summaries));
+    }
+
+    private int countCompletedDeliverables(StudentCourseProgress progress) {
+        if (progress == null) {
+            return 0;
+        }
+        return (int) progress.getDeliverableStatuses().values().stream()
+                .filter(status -> status == CompletionStatus.DONE)
+                .count();
+    }
+
+    @Override
+    public void addStudentWithEnrolments(
+            Student student, List<StudentCourseEnrolment> enrolments) {
+        requireAllNonNull(student, enrolments);
+        addressBook.addStudentWithEnrolments(student, enrolments);
+    }
+
+    @Override
+    public void addStudentWithEnrolment(Student student, StudentCourseEnrolment enrolment) {
+        requireAllNonNull(student, enrolment);
+        addressBook.addStudentWithEnrolment(student, enrolment);
+    }
+
+    @Override
+    public void addEnrolment(StudentCourseEnrolment enrolment) {
+        requireNonNull(enrolment);
+        addressBook.addEnrolment(enrolment);
+    }
+
+    @Override
+    public void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment) {
+        addressBook.setEnrolment(target, editedEnrolment);
+    }
+
+    @Override
+    public void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester) {
+        requireAllNonNull(studentId, courseCode, semester);
+        addressBook.removeEnrolment(studentId, courseCode, semester);
+        updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
     }
 
     // =========== Filtered Student List Accessors

@@ -1,0 +1,18 @@
+{
+  "students": [
+    {"name":"Alice Pauline","id":"A1234567Y","email":"alice@u.nus.edu"},
+    {"name":"Benson Meier","id":"A2345678X","email":"benson@u.nus.edu"}
+  ],
+  "courses": [
+    {"courseCode":"CS2103T","semester":"AY26/27-S1","deliverables":["MVP","Final"]},
+    {"courseCode":"IS2108","semester":"AY26/27-S1","deliverables":["Proposal","Demo"]}
+  ],
+  "enrolments": [
+    {"studentId":"A1234567Y","courseCode":"CS2103T","semester":"AY26/27-S1","tutorialClass":"T07","notes":"[]"},
+    {"studentId":"A2345678X","courseCode":"IS2108","semester":"AY26/27-S1","tutorialClass":"T08","notes":"[]"}
+  ],
+  "studentCourseProgresses": [
+    {"studentId":"A1234567Y","courseCode":"CS2103T","semester":"AY26/27-S1","deliverableStatuses":{"mvp":"DONE","Obsolete":"NOT_DONE"}},
+    {"studentId":"A2345678X","courseCode":"IS2108","semester":"AY26/27-S1","deliverableStatuses":{"Proposal":"NOT_DONE","Old":"DONE"}}
+  ]
+}

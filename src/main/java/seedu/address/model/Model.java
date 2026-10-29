@@ -7,6 +7,10 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CourseProgressOverview;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -108,4 +112,57 @@ public interface Model {
      * {@code original}.
      */
     boolean hasDuplicateStudent(Student otherStudent, Student currentStudent);
+
+    /**
+     * Returns true if the specified student-course enrolment exists.
+     */
+    boolean hasEnrolment(StudentCourseEnrolment enrolment);
+
+    /**
+     * Returns the course matching the specified course code and semester,
+     * or an empty Optional if no matching course exists.
+     */
+    Optional<Course> getCourse(CourseCode courseCode, Semester semester);
+
+    /**
+     * Returns students enrolled in the specified course-semester, preserving the
+     * main student-list order.
+     */
+    List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester);
+
+    /**
+     * Returns the selected course's deliverable total and each enrolled student's
+     * completed-deliverable count, or empty if the course is not initialised.
+     */
+    Optional<CourseProgressOverview> getCourseProgressOverview(CourseCode courseCode, Semester semester);
+
+    /**
+     * Adds a student with their initial enrolment and deliverable progress.
+     * The student must not already exist, and the course must exist.
+     */
+    void addStudentWithEnrolment(Student student, StudentCourseEnrolment enrolment);
+
+    /**
+     * Adds a student with one or more initial course enrolments.
+     */
+    void addStudentWithEnrolments(
+            Student student, List<StudentCourseEnrolment> enrolments);
+
+    /**
+     * Adds an enrolment for an existing student and initialises its progress.
+     */
+    void addEnrolment(StudentCourseEnrolment enrolment);
+
+    /**
+     * Replaces an existing enrolment while preserving its identity.
+     */
+    void setEnrolment(
+            StudentCourseEnrolment target,
+            StudentCourseEnrolment editedEnrolment);
+
+    /**
+     * Removes a student's enrolment and its associated progress.
+     * Removes the student if they have no remaining enrolments.
+     */
+    void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester);
 }

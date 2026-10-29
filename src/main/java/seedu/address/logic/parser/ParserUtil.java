@@ -2,10 +2,20 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.Messages;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
@@ -14,7 +24,6 @@ import seedu.address.model.course.Semester;
 import seedu.address.model.student.Email;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Name;
-import seedu.address.model.student.Notes;
 import seedu.address.model.student.TutorialClass;
 
 /**
@@ -24,6 +33,7 @@ import seedu.address.model.student.TutorialClass;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer.";
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/(\\S+)");
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
@@ -38,7 +48,11 @@ public class ParserUtil {
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
-        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+        try {
+            return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+        } catch (NumberFormatException exception) {
+            throw new ParseException(MESSAGE_INVALID_INDEX, exception);
+        }
     }
 
     /**
@@ -59,7 +73,7 @@ public class ParserUtil {
     /** Parses a student ID. */
     public static Id parseId(String id) throws ParseException {
         requireNonNull(id);
-        String trimmedId = id.trim();
+        String trimmedId = id.trim().toUpperCase(Locale.ROOT);
         if (!Id.isValidId(trimmedId)) {
             throw new ParseException(Id.MESSAGE_CONSTRAINTS);
         }
@@ -74,16 +88,6 @@ public class ParserUtil {
             throw new ParseException(TutorialClass.MESSAGE_CONSTRAINTS);
         }
         return new TutorialClass(trimmedClass);
-    }
-
-    /** Parses optional student notes. */
-    public static Notes parseNotes(String notes) throws ParseException {
-        requireNonNull(notes);
-        String trimmedNotes = notes.trim();
-        if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
-        }
-        return new Notes(trimmedNotes);
     }
 
     /**
@@ -126,13 +130,37 @@ public class ParserUtil {
     }
 
     /**
+     * Splits a comma-separated value into trimmed, non-blank values.
+     *
+     * @throws ParseException if any value is blank.
+     */
+    public static List<String> parseCommaSeparatedValues(
+            String input, String emptyValueMessage) throws ParseException {
+        requireNonNull(input);
+        requireNonNull(emptyValueMessage);
+
+        List<String> values = Arrays.stream(input.split(",", -1))
+                .map(String::trim)
+                .toList();
+        if (values.stream().anyMatch(String::isBlank)) {
+            throw new ParseException(emptyValueMessage);
+        }
+        return values;
+    }
+
+    /**
      * Parses a comma-separated {@code String} into a list of deliverables.
      */
     public static List<Deliverable> parseDeliverables(String deliverables) throws ParseException {
         requireNonNull(deliverables);
-        List<String> deliverableNames = List.of(deliverables.split(",", -1));
-        if (deliverableNames.isEmpty() || deliverableNames.stream().anyMatch(String::isBlank)) {
-            throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
+        List<String> deliverableNames = parseCommaSeparatedValues(
+                deliverables, Deliverable.MESSAGE_CONSTRAINTS);
+        List<Deliverable> parsedDeliverables = new java.util.ArrayList<>();
+        for (String deliverableName : deliverableNames) {
+            if (!Deliverable.isValidDeliverable(deliverableName)) {
+                throw new ParseException(Deliverable.MESSAGE_CONSTRAINTS);
+            }
+            parsedDeliverables.add(new Deliverable(deliverableName));
         }
         if (deliverableNames.size() > Course.MAX_DELIVERABLES) {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);
@@ -146,4 +174,101 @@ public class ParserUtil {
         }
         return parsedDeliverables;
     }
+
+    /**
+     * Rejects parameters that are not included in {@code allowedPrefixes}.
+     *
+     * @throws ParseException if an unknown parameter is found.
+     */
+    public static void rejectUnknownParameters(
+            String args, Prefix... allowedPrefixes) throws ParseException {
+        requireNonNull(args);
+        requireNonNull(allowedPrefixes);
+
+        Set<String> allowed = Arrays.stream(allowedPrefixes)
+                .map(Objects::requireNonNull)
+                .map(Prefix::toString)
+                .collect(Collectors.toSet());
+
+        Matcher matcher = PARAMETER_PATTERN.matcher(args);
+
+        while (matcher.find()) {
+            String parameter = "/" + matcher.group(2);
+
+            if (!allowed.contains(parameter)) {
+                throw new ParseException(String.format(Messages.MESSAGE_UNKNOWN_PARAMETER, parameter));
+            }
+        }
+    }
+
+    /**
+     * Validates that all required parameters are present and non-blank.
+     *
+     * @throws ParseException if any required parameter is missing or empty.
+     */
+    public static void validateRequiredParameters(
+            ArgumentMultimap argMultimap, Prefix... requiredPrefixes)
+            throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(requiredPrefixes);
+
+        StringJoiner missingParameters = new StringJoiner(", ");
+        StringJoiner emptyParameters = new StringJoiner(", ");
+
+        for (Prefix prefix : requiredPrefixes) {
+            requireNonNull(prefix);
+
+            Optional<String> value = argMultimap.getValue(prefix);
+
+            if (value.isEmpty()) {
+                missingParameters.add(prefix.toString());
+            } else if (value.orElseThrow().isBlank()) {
+                emptyParameters.add(prefix.toString());
+            }
+        }
+
+        StringJoiner errors = new StringJoiner("\n");
+
+        if (missingParameters.length() > 0) {
+            errors.add(String.format(Messages.MESSAGE_MISSING_PARAMETERS, missingParameters));
+        }
+
+        if (emptyParameters.length() > 0) {
+            errors.add(String.format(Messages.MESSAGE_EMPTY_PARAMETERS, emptyParameters));
+        }
+
+        if (errors.length() > 0) {
+            throw new ParseException(errors.toString());
+        }
+    }
+
+    /**
+     * Validates that exactly one of the two prefixes is present and non-blank.
+     *
+     * @throws ParseException if neither or both prefixes are present,
+     *                        or the selected value is blank.
+     */
+    public static void validateExactlyOneOf(
+            ArgumentMultimap argMultimap, Prefix firstPrefix, Prefix secondPrefix)
+            throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(firstPrefix);
+        requireNonNull(secondPrefix);
+
+        boolean hasFirst = argMultimap.getValue(firstPrefix).isPresent();
+        boolean hasSecond = argMultimap.getValue(secondPrefix).isPresent();
+
+        if (!hasFirst && !hasSecond) {
+            throw new ParseException(String.format(
+                    Messages.MESSAGE_MISSING_IDENTIFIER, firstPrefix, secondPrefix));
+        }
+
+        if (hasFirst && hasSecond) {
+            throw new ParseException(String.format(
+                    Messages.MESSAGE_CONFLICTING_IDENTIFIERS, firstPrefix, secondPrefix));
+        }
+
+        validateRequiredParameters(argMultimap, hasFirst ? firstPrefix : secondPrefix);
+    }
+
 }

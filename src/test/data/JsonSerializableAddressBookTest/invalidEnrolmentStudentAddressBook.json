@@ -1,0 +1,6 @@
+{
+  "students": [],
+  "courses": [{"courseCode":"CS2103T","semester":"AY26/27-S1","deliverables":["MVP"]}],
+  "enrolments": [{"studentId":"A1234567Y","courseCode":"CS2103T","semester":"AY26/27-S1","tutorialClass":"T07","notes":"[]"}],
+  "studentCourseProgresses": []
+}

@@ -1,0 +1,387 @@
+.root {
+  -fx-font-family: "Segoe UI";
+  -fx-background-color: #f4f8fc;
+  -fx-focus-color: #1976d2;
+  -fx-faint-focus-color: transparent;
+}
+
+.label {
+  -fx-text-fill: #243447;
+}
+
+.label-bright,
+.label-header {
+  -fx-text-fill: #ffffff;
+}
+
+.label-header {
+  -fx-font-size: 28pt;
+  -fx-font-family: "Segoe UI Light";
+}
+
+.menu-bar {
+  -fx-background-color: #0d47a1;
+  -fx-padding: 4 8 4 8;
+}
+
+.custom-menubar {
+  -fx-background-color: #0d47a1;
+  -fx-padding: 4 8 4 8;
+}
+
+.custom-menubar .menu > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menu .menu-item > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menubar .menu:hover > .label,
+.custom-menubar .menu:showing > .label {
+  -fx-text-fill: white;
+}
+
+.help-menu-button {
+  -fx-background-color: #0d47a1;
+  -fx-text-fill: white;
+  -fx-padding: 6 10 6 10;
+  -fx-background-radius: 0;
+}
+
+.help-menu-button:hover,
+.help-menu-button:focused {
+  -fx-text-fill: white;
+  -fx-background-color: #0d47a1;
+  -fx-font-weight: normal;
+}
+
+.custom-menu .context-menu {
+  -fx-background-color: #2b2b2b;
+  -fx-border-color: #444444;
+}
+
+.custom-menu .menu-item:hover,
+.custom-menu .menu-item:focused {
+  -fx-background-color: #007acc;
+}
+
+.custom-menubar .menu:hover > .label,
+.custom-menubar .menu:focused > .label {
+  -fx-text-fill: rgb(249, 249, 249);
+}
+
+.custom-menu .menu-item:hover > .label,
+.custom-menu .menu-item:focused > .label {
+  -fx-text-fill: rgb(249, 249, 249);
+}
+
+.menu-bar .label,
+.menu-bar .menu-button:hover .label {
+  -fx-text-fill: #1565c0;
+}
+
+.menu-bar .menu-button:hover,
+.menu-bar .menu-button:showing {
+  -fx-background-color: #548fd2;
+  -fx-text-fill: white;
+}
+
+.context-menu {
+  -fx-background-color: white;
+  -fx-border-color: #bbdefb;
+}
+
+.context-menu .label {
+  -fx-text-fill: #243447;
+}
+
+.pane-with-border,
+.stack-pane,
+.grid-pane {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #d9e5f0;
+  -fx-border-width: 1px;
+}
+
+.split-pane {
+  -fx-background-color: #eaf2f9;
+  -fx-border-color: #d9e5f0;
+}
+
+.split-pane:horizontal .split-pane-divider {
+  -fx-background-color: #d9e5f0;
+  -fx-border-color: transparent;
+  -fx-padding: 0 1 0 1;
+}
+
+.text-field,
+.text-area {
+  -fx-background-color: white;
+  -fx-border-color: #b8cbe0;
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+  -fx-padding: 7px 10px;
+  -fx-text-fill: #243447;
+  -fx-prompt-text-fill: #78909c;
+}
+
+.text-field:focused,
+.text-area:focused {
+  -fx-border-color: #1976d2;
+  -fx-effect: dropshadow(gaussian, #90caf9, 5, 0.2, 0, 0);
+}
+
+.button {
+  -fx-background-color: #1976d2;
+  -fx-background-radius: 5px;
+  -fx-border-radius: 5px;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-padding: 7 16 7 16;
+}
+
+.button:hover {
+  -fx-background-color: #1565c0;
+}
+
+.button:pressed {
+  -fx-background-color: #0d47a1;
+}
+
+.button:disabled {
+  -fx-opacity: 0.5;
+}
+
+.list-view {
+  -fx-background-color: #eef5fb;
+  -fx-background-insets: 0;
+  -fx-padding: 6px;
+}
+
+.list-cell {
+  -fx-background-color: transparent;
+  -fx-padding: 4px;
+}
+
+.list-cell:filled:even,
+.list-cell:filled:odd {
+  -fx-background-color: white;
+  -fx-border-color: #d9e5f0;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+}
+
+.list-cell:filled:selected {
+  -fx-background-color: #e3f2fd;
+  -fx-border-color: #64b5f6;
+}
+
+.list-cell .label {
+  -fx-text-fill: #243447;
+}
+
+.cell_big_label {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #0d47a1;
+}
+
+.cell_small_label {
+  -fx-font-size: 13px;
+  -fx-text-fill: #546e7a;
+}
+
+.result-display {
+  -fx-background-color: #f8fbff;
+  -fx-font-size: 13pt;
+  -fx-text-fill: #243447;
+}
+
+.result-display .content {
+  -fx-background-color: transparent;
+}
+
+.status-bar,
+.status-bar-with-border {
+  -fx-background-color: #e3f2fd;
+  -fx-border-color: #bbdefb;
+  -fx-border-width: 1px;
+}
+
+.status-bar .label,
+.status-bar-with-border .label {
+  -fx-text-fill: #456273;
+  -fx-padding: 4px;
+}
+
+#commandTypeLabel {
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1976d2;
+}
+
+#commandTextField {
+  -fx-background-color: white;
+  -fx-border-color: #90caf9;
+  -fx-font-size: 13pt;
+  -fx-text-fill: #243447;
+}
+
+#cardPane {
+  -fx-background-color: white;
+  -fx-background-radius: 8px;
+  -fx-border-color: #d9e5f0;
+  -fx-border-radius: 8px;
+  -fx-border-width: 1px;
+  -fx-padding: 4px;
+}
+
+.student-card-focused {
+  -fx-border-color: #1976d2;
+  -fx-border-width: 2px;
+  -fx-effect: dropshadow(gaussian, rgba(25, 118, 210, 0.25), 8, 0.2, 0, 2);
+}
+
+.student-section-heading {
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #263238;
+}
+
+.student-course-count {
+  -fx-font-size: 12px;
+  -fx-text-fill: #607d8b;
+}
+
+.student-courses {
+  -fx-padding: 2px 0 0 0;
+}
+
+.student-course-row {
+  -fx-background-color: #f1f6fb;
+  -fx-background-radius: 6px;
+  -fx-padding: 9px 11px;
+}
+
+.student-course-code {
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #0d47a1;
+}
+
+.student-course-details {
+  -fx-font-size: 11px;
+  -fx-text-fill: #607d8b;
+}
+
+.student-notes-count {
+  -fx-background-color: #dbeafe;
+  -fx-background-radius: 10px;
+  -fx-padding: 3px 8px;
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #0d47a1;
+}
+
+.scroll-bar {
+  -fx-background-color: #eef5fb;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: #90caf9;
+  -fx-background-radius: 6px;
+}
+
+.dialog-pane {
+  -fx-background-color: white;
+}
+
+.dialog-pane > *.button-bar > *.container {
+  -fx-background-color: #f4f8fc;
+}
+
+/* Keep the menu bar and its popup menus readable in every interaction state. */
+.custom-menubar .menu-button > .label,
+.custom-menubar .menu-button:hover > .label,
+.custom-menubar .menu-button:focused > .label,
+.custom-menubar .menu-button:showing > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menubar .menu-button:hover,
+.custom-menubar .menu-button:focused,
+.custom-menubar .menu-button:showing {
+  -fx-background-color: #1565c0;
+}
+
+.custom-menu .context-menu {
+  -fx-background-color: #2b2b2b;
+  -fx-border-color: #444444;
+}
+
+.custom-menu .menu-item > .label,
+.custom-menu .menu-item:hover > .label,
+.custom-menu .menu-item:focused > .label {
+  -fx-text-fill: white;
+}
+
+.custom-menu .menu-item:hover,
+.custom-menu .menu-item:focused {
+  -fx-background-color: #007acc;
+}
+
+.dialog-pane > *.label.content,
+.dialog-pane:header *.header-panel *.label {
+  -fx-text-fill: #243447;
+}
+
+.deliverables-student-name {
+  -fx-font-weight: bold;
+  -fx-font-size: 15px;
+}
+
+.deliverables-panel {
+  -fx-background-color: #f4f8fc;
+}
+
+.deliverables-course-group {
+  -fx-background-color: white;
+  -fx-padding: 10px;
+  -fx-border-color: #c9dff2;
+}
+
+.deliverables-course-heading {
+  -fx-text-fill: #0d47a1;
+}
+
+.deliverable-status-box-complete {
+  -fx-background-color: #2e7d32;
+  -fx-border-color: #2e7d32;
+  -fx-border-width: 1.5px;
+  -fx-border-radius: 2px;
+}
+
+.deliverable-status-container {
+  -fx-min-width: 16px;
+  -fx-pref-width: 16px;
+  -fx-max-width: 16px;
+  -fx-min-height: 16px;
+  -fx-pref-height: 16px;
+  -fx-max-height: 16px;
+  -fx-alignment: center;
+}
+
+.deliverable-status-box-incomplete {
+  -fx-background-color: white;
+  -fx-border-color: #90a4ae;
+  -fx-border-width: 1.5px;
+  -fx-border-radius: 2px;
+}
+
+.deliverable-status-check {
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+}

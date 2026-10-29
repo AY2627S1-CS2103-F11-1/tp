@@ -1,0 +1,58 @@
+
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box UI UI_COLOR_T1
+participant ":MainWindow" as MainWindow UI_COLOR
+participant ":DeliverablesPanel" as DeliverablesPanel UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant "viewCommand:ViewProgressCommand" as ViewProgressCommand LOGIC_COLOR
+participant "deliverablesView:StudentDeliverablesView" as StudentDeliverablesView LOGIC_COLOR
+participant "commandResult:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+[-> MainWindow : executeCommand("view /id A1234567B")
+activate MainWindow UI_COLOR
+
+MainWindow -> LogicManager : execute("view /id A1234567B")
+activate LogicManager LOGIC_COLOR
+
+LogicManager -> ViewProgressCommand : execute(model)
+activate ViewProgressCommand LOGIC_COLOR
+
+create StudentDeliverablesView
+ViewProgressCommand -> StudentDeliverablesView : StudentDeliverablesView(student, progressRecords)
+activate StudentDeliverablesView LOGIC_COLOR
+StudentDeliverablesView --> ViewProgressCommand : deliverablesView
+deactivate StudentDeliverablesView
+
+create CommandResult
+ViewProgressCommand -> CommandResult : CommandResult(feedback, deliverablesView)
+activate CommandResult LOGIC_COLOR
+CommandResult --> ViewProgressCommand : commandResult
+deactivate CommandResult
+
+ViewProgressCommand --> LogicManager : commandResult
+deactivate ViewProgressCommand
+
+LogicManager --> MainWindow : commandResult
+deactivate LogicManager
+
+MainWindow -> CommandResult : getStudentDeliverablesView()
+activate CommandResult LOGIC_COLOR
+CommandResult --> MainWindow : Optional<StudentDeliverablesView>
+deactivate CommandResult
+
+MainWindow -> DeliverablesPanel : showDeliverables(deliverablesView)
+activate DeliverablesPanel UI_COLOR
+DeliverablesPanel --> MainWindow
+deactivate DeliverablesPanel
+
+[<-- MainWindow
+deactivate MainWindow
+
+@enduml

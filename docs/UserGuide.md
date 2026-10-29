@@ -3,7 +3,10 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop application for managing contacts, optimized for use through a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI). If you type quickly, AB3 can help you manage contacts faster than traditional GUI applications.
+TAssist is a **desktop application for university teaching assistants who manage
+students across project-based computing courses**. It combines a command-line
+workflow for fast data entry with a graphical overview of student enrolments,
+notes, and project-deliverable progress.
 
 * Table of Contents
 {:toc}
@@ -12,27 +15,28 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 
 ## Quick start
 
-1. Ensure that Java `25` or later is installed on your computer.<br>
+1. Ensure that Java `25` is installed on your computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download `TAssist.jar` from the
+   [latest TAssist release](https://github.com/AY2627S1-CS2103-F11-1/tp/releases/latest).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for TAssist.
 
-1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar addressbook.jar`.<br>
+1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar TAssist.jar`.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
 1. Type a command in the command box and press Enter to execute it. For example, type **`help`** and press Enter to open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all students.
 
-   * `add n/John Doe p/98765432 e/johnd@u.nus.edu a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07` : Adds a student with an initial course enrolment.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete /id A1234567Z` : Deletes the student with the specified ID.
 
-   * `clear` : Deletes all contacts.
+   * `clear` : Deletes all students, courses, enrolments, notes, and progress records.
 
    * `exit` : Exits the app.
 
@@ -47,26 +51,30 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  For example, in `add n/NAME`, replace `NAME` with a value such as `John Doe`.
+  For example, in `add /name NAME`, replace `NAME` with a value such as `John Doe`.
 
 * Items in square brackets are optional.<br>
-  For example, `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  For example, `edit /id ID [/email EMAIL]` can be used as
+  `edit /id A1234567Z /email john@u.nus.edu`.
 
-* Items followed by `…`​ can appear zero or more times.<br>
-  For example, `[t/TAG]…​` may be omitted, or written as `t/friend` or `t/friend t/family`.
+* Items followed by `...` accept multiple comma-separated values.<br>
+  For example, `/deliverable DELIVERABLE[, DELIVERABLE]...` can be
+  `/deliverable v1.4` or `/deliverable v1.4, v1.5`.
 
-* Parameters can be in any order.<br>
-  For example, if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+* Parameters can be in any order unless a command explicitly documents an ordering requirement.<br>
+  The `/notes` parameter for the `notes` command must be the final parameter because its value is free text.
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `exit`, and `clear`, are ignored.<br>
-  For example, `help 123` is interpreted as `help`.
+* Commands reject unsupported or extraneous parameters with an error message. Commands such as `help`, `exit`, and
+  `clear` do not take parameters, while `list` also rejects unexpected text or parameters.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
 ### Viewing help: `help`
 
-Shows a message explaining how to access the help page.
+Opens a read-only command reference containing the available commands, syntax,
+short descriptions, and examples. For detailed explanations, refer to this User
+Guide.
 
 ![help message](images/helpMessage.png)
 
@@ -75,13 +83,21 @@ Format: `help`
 
 ### Adding a student: `add`
 
-Adds a student to the address book.
+Adds a student to TAssist with at least one course enrolment.
 
-Format: `add /name NAME /id ID /email EMAIL /class CLASS​`
+Format: `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
+
+The course, semester and tutorial-class values are matched by position. At least
+one complete enrolment is required. The referenced course-semester must already
+have been initialised with `init course`.
 
 
 Examples:
-* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /class T07`
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07`
+
+Multiple enrolments can be added in one command:
+
+* `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02`
 
 ### Initialising a course: `init course`
 
@@ -89,25 +105,64 @@ Initialises one course for a semester and records its project deliverables. A co
 per semester, regardless of letter case. Provide between one and 20 unique deliverables, and separate deliverable
 names with commas.
 
-Format: `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`
+Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
-Example: `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP, PE-D`
+Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
 
-### Listing all students: `list`
+### Listing students: `list`
 
-Shows a list of all students in the address book.
+Shows all students, or only students enrolled in a selected course-semester.
+The filtered list can be narrowed further by tutorial class or by a deliverable
+that is still incomplete.
 
 Format: `list`
+
+Filtered formats:
+
+* `list /course COURSE /sem SEMESTER`
+* `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`
+
+Examples:
+
+* `list /course CS2103T /sem AY26/27-S1` shows students enrolled in CS2103T for the selected semester.
+* `list /course CS2103T /sem AY26/27-S1 /class T07` shows only students from tutorial T07 in that course-semester.
+* `list /course CS2103T /sem AY26/27-S1 /deliverable MVP` shows enrolled students whose MVP is still incomplete.
+* `list /course CS2103T /sem AY26/27-S1 /class T07 /deliverable MVP` combines the tutorial and incomplete-deliverable filters.
+
+`/course` and `/sem` must be supplied together. `/class` and `/deliverable` can be used
+only with both of them. `/deliverable` accepts exactly one deliverable tracked by that
+course-semester. Students appear once even if they have other enrolments.
+
+### Viewing a course progress overview: `overview`
+
+Shows every student enrolled in a course-semester together with the number of
+completed deliverables out of the total tracked deliverables. Students are
+shown in the same order as the main student list.
+
+Format: `overview /course COURSE /sem SEMESTER`
+
+Example: `overview /course CS2103T /sem AY26/27-S1`
+
+Example output:
+
+```text
+Progress overview for CS2103T (AY26/27-S1):
+Alice Pauline (A1234567Y): 2/5 completed
+Benson Meier (A2345678X): 4/5 completed
+```
+
+The selected course must already be initialised. This command reports progress
+only and does not change students, enrolments, or completion statuses.
 
 ### Editing a student: `edit`
 
 Edits the details of an existing student identified by their current student ID.
 
-Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
+Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
 
 * `/id CURRENT_ID` is **required** and identifies the student whose details are to be edited.
 
-* At least one of the optional fields (`/name`, `/newid`, `/email`, `/class`) must be provided.
+* At least one of the optional fields (`/name`, `/newid`, `/email`) must be provided.
 
 * Only the specified fields will be updated. All unspecified fields, including existing project notes, will remain unchanged.
 
@@ -122,8 +177,8 @@ Format: `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]
 Examples:
 * `edit /id A1234567Z /email johndoe@u.nus.edu` Updates the email address of the student with ID `A1234567Z` to `johndoe@u.nus.edu`.
 
-* `edit /id A1234567Z /name John Tan /class T07`
-Updates the student's name to `John Tan` and tutorial class to `T07`.
+* `edit /id A1234567Z /name John Tan /email johntan@u.nus.edu`
+Updates the student's name and email address.
 
 * `edit /id A1234567Z /newid A7654321B`
 Changes the student's ID from `A1234567Z` to `A7654321B`.
@@ -131,66 +186,82 @@ Changes the student's ID from `A1234567Z` to `A7654321B`.
 * `edit /id A1234567Z /newid A7654321B /email johntan@u.nus.edu`
 Updates both the student's ID and email address.
 
-### Locating persons by name: `find`
+### Managing course enrolments: `enrol`, `unenrol`
 
-Finds persons whose names contain any of the given keywords.
+Use `enrol` to add an existing student to another course-semester. The course
+must have been initialised first.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`
 
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Keyword order does not matter; for example, `Hans Bo` matches `Bo Hans`.
-* The search considers only names.
-* Only full words match; for example, `Han` does not match `Hans`.
-* Persons matching at least one keyword are returned (an `OR` search); for example, `Hans Bo` returns `Hans Gruber` and `Bo Yang`.
+Example:
 
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+
+Use `unenrol` to remove one course-semester enrolment. Its deliverable progress
+is removed as well. If it was the student's final enrolment, the student record
+is removed too.
+
+Format: `unenrol /id ID /course COURSE /sem SEMESTER`
+
+Example:
+
+* `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 
 ### Searching students by name or ID: `search`
 
-Searches student records by a case-insensitive name fragment or an exact student ID.
+Searches student records by one or more names or student IDs. Name queries use
+case-insensitive partial-substring matching with OR semantics: a student is
+returned when their name contains at least one comma-separated query. Each
+name query may contain spaces.
 
-Format: `search /name NAME` or `search /id ID`
+Format:
+
+* `search /name NAME[, NAME]...`
+* `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name John Doe` shows students whose names contain `John Doe`.
-* `search /id A1234567Z` shows the student with ID `A1234567Z`.
+* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
+* `search /id A1234567Z, A2345678X` shows students with either ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
-Student ID matching is case-insensitive.
+Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
 
-### Managing student notes: `notes`, `viewnotes`, `deletenotes`
+Command words and parameter prefixes are case-sensitive. Use the documented
+lowercase syntax, such as `search` and `/name`.
 
-Add or replace, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
+### Managing student notes: `notes`, `view notes`, `delete notes`
+
+Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
 Formats:
 
-* `notes /id ID /notes NOTES`
-* `viewnotes /id ID`
-* `deletenotes /id ID`
+* `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`
+* `view notes /id ID /course COURSE /sem SEMESTER`
+* `delete notes /id ID /course COURSE /sem SEMESTER`
+
+The `/notes` value consumes the remaining text. Standalone slash-prefixed parameter-like
+tokens after `/notes` are rejected to prevent malformed commands from being treated as note text.
 
 Examples:
 
-* `notes /id A1234567Z /notes Struggled with inheritance during consultation` adds or replaces the student's notes.
-* `viewnotes /id A1234567Z` displays the notes currently recorded for the student.
-* `deletenotes /id A1234567Z` deletes all notes recorded for the student.
+* `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
+* `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
+* `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes all notes for the selected enrolment.
 
 ### Marking deliverables as complete: `mark`
 
 Marks one or more deliverables as complete for a student in a course-semester.
 
-Format: `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`mark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`mark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `mark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
-Use `/id` when several students have the same name. Every task must belong to
+Use `/id` when several students have the same name. Every deliverable must belong to
 the specified course-semester and must currently be Not Done.
 
 ### Marking deliverables as incomplete: `unmark`
@@ -198,26 +269,26 @@ the specified course-semester and must currently be Not Done.
 Marks one or more completed deliverables as incomplete for a student in a
 course-semester.
 
-Format: `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...` or
-`unmark /name NAME /course COURSE /sem SEMESTER /task TASK[, TASK]...`
+Format: `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...` or
+`unmark /name NAME /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
 
 Examples:
 
-* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /task v1.1, MVP`
+* `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+* `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
 ### Viewing a student's deliverable progress: `view`
 
-Shows every deliverable and its completion status for one student in a
-course-semester.
+Shows every deliverable and its completion status for one student across all
+their course-semester enrolments. The deliverables panel expands to display
+the grouped progress details.
 
-Format: `view /id ID /course COURSE /sem SEMESTER` or
-`view /name NAME /course COURSE /sem SEMESTER`
+Format: `view /id ID` or `view /name NAME`
 
 Examples:
 
-* `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
-* `view /name John Doe /course CS2103T /sem AY26/27-S1`
+* `view /id A1234567Z`
+* `view /name John Doe`
 
 Use `/id` when several students have the same name. The result lists each
 deliverable as `Done` or `Not Done` in the order it was initialised.
@@ -250,16 +321,49 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook automatically saves data after every command. You do not need to save manually.
+TAssist automatically saves data after every successful command. You do not need to save manually.
 
 ### Editing the data file
 
-AddressBook data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+TAssist data is saved automatically as `[JAR file location]/data/addressbook.json`.
+Advanced users may update the JSON file directly, but should make a backup first.
+
+**Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes make the data file invalid, AddressBook starts with an empty address book at the next run. The invalid file remains on disk until you run a command (AddressBook saves after every command). Still, we recommend backing up the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+Do not edit or replace the data file unless you have made a backup first. If
+TAssist cannot load an existing file, it stops normal startup and does not
+replace the file with sample data. This protects your saved student records.<br>
 </div>
+
+### Loading and recovering saved data
+
+TAssist handles the address-book data file in three ways:
+
+| Storage condition | TAssist behaviour |
+| --- | --- |
+| The data file does not exist | TAssist starts with sample data for first-time exploration. |
+| The data file exists and is valid | TAssist loads your saved data normally. |
+| The data file exists but is invalid or cannot be read | TAssist displays an **Unable to load saved data** error dialog, reports the loading problem, and stops normal startup. The original file is not replaced. |
+
+Sample data is for initial demonstration only. TAssist does not replace invalid
+saved data with sample data because this could overwrite important student
+records. It also does not automatically reassign or delete notes that refer to
+course deliverables that do not exist, because the intended deliverable cannot
+be determined reliably. After you dismiss the startup error dialog, TAssist
+exits without opening the normal application interface.
+
+If TAssist cannot load your saved data:
+
+1. Read the error message to identify the problem.
+2. Locate the file at `[JAR file location]/data/addressbook.json`.
+3. Make a backup copy of the original file before editing it.
+4. Restore a valid backup or carefully correct the invalid data.
+5. Restart TAssist.
+
+A valid but empty address book is different from a missing file: it is loaded as
+your saved data and is not replaced with sample data. Do not delete or
+overwrite the existing file unless you intentionally want to reset your data.
 
 ### Archiving data files `[coming in v2.0]`
 
@@ -270,7 +374,8 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?<br>
-**A**: Install the app on the other computer and overwrite the data file it creates with the data file from your previous AddressBook home folder.
+**A**: Install TAssist on the other computer and replace its generated data file
+with the `data/addressbook.json` file from your previous TAssist home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -285,15 +390,21 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add /name NAME /id ID /email EMAIL /class CLASS​` 
+**Add** | `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
-**Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL] [/class NEW_CLASS]​`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**Search** | `search /name NAME` or `search /id ID`<br> e.g., `search /id A1234567Z`
-**Mark** | `mark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /task TASK[, TASK]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /task MVP`
-**View progress** | `view /id ID /course COURSE /sem SEMESTER`<br> e.g., `view /id A1234567Z /course CS2103T /sem AY26/27-S1`
-**List** | `list`
-**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /task DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP`
+**Delete notes** | `delete notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
+**Exit** | `exit`
+**Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
+**Notes** | `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`<br> e.g., `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance`
+**Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
+**Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
+**View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
+**Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+**Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 **Help** | `help`

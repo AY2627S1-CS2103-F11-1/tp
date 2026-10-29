@@ -1,107 +1,92 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.course.CourseCode;
-import seedu.address.model.course.Semester;
 import seedu.address.model.progress.CompletionStatus;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
 
 /**
- * Displays a student's deliverable completion status for one course-semester.
+ * Displays a student's deliverable completion status for every tracked
+ * course-semester.
  */
 public class ViewProgressCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Displays a student's deliverable progress for a "
-            + "course-semester.\n"
-            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME " + PREFIX_COURSE + " COURSE "
-            + PREFIX_SEMESTER + " SEMESTER\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Displays all deliverable progress for a student.\n"
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " or "
+            + PREFIX_NAME + " " + ARGUMENT_NAME + "\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_ID + " A1234567Z " + PREFIX_COURSE + " CS2103T "
-            + PREFIX_SEMESTER + " AY26/27-S1\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " John Doe " + PREFIX_COURSE + " CS2103T "
-            + PREFIX_SEMESTER + " AY26/27-S1";
+            + "  " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + "\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
+    private static final String MESSAGE_NO_PROGRESS = "No deliverable progress found for %s (%s).";
 
     private final Optional<Id> studentId;
     private final Optional<String> studentName;
-    private final CourseCode courseCode;
-    private final Semester semester;
 
     /**
      * Creates a command that identifies a student by ID.
      */
-    public ViewProgressCommand(Id studentId, CourseCode courseCode, Semester semester) {
+    public ViewProgressCommand(Id studentId) {
         this.studentId = Optional.of(requireNonNull(studentId));
         this.studentName = Optional.empty();
-        this.courseCode = requireNonNull(courseCode);
-        this.semester = requireNonNull(semester);
     }
 
     /**
      * Creates a command that identifies a student by name.
      */
-    public ViewProgressCommand(String studentName, CourseCode courseCode, Semester semester) {
+    public ViewProgressCommand(String studentName) {
         this.studentId = Optional.empty();
         this.studentName = Optional.of(requireNonNull(studentName));
-        this.courseCode = requireNonNull(courseCode);
-        this.semester = requireNonNull(semester);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Student student = findStudent(model);
-        StudentCourseProgress progress = model.getStudentCourseProgressList().stream()
-                .filter(candidate -> candidate.isFor(student.getId(), courseCode, semester))
-                .findFirst()
-                .orElseThrow(() -> new CommandException(String.format(
-                        StudentProgressCommand.MESSAGE_COURSE_NOT_FOUND, courseCode, semester)));
-
-        return new CommandResult(formatProgress(student, progress));
-    }
-
-    private Student findStudent(Model model) throws CommandException {
-        if (studentId.isPresent()) {
-            return model.getAddressBook().getStudentList().stream()
-                    .filter(student -> student.getId().equals(studentId.get()))
-                    .findFirst()
-                    .orElseThrow(() -> new CommandException(String.format(
-                            StudentProgressCommand.MESSAGE_STUDENT_ID_NOT_FOUND, studentId.get())));
-        }
-
-        List<Student> matchingStudents = model.getAddressBook().getStudentList().stream()
-                .filter(student -> student.getName().fullName.equalsIgnoreCase(studentName.orElseThrow()))
+        Student student = StudentProgressCommand.findStudent(model, studentId, studentName);
+        List<StudentCourseProgress> progressRecords = model.getStudentCourseProgressList().stream()
+                .filter(candidate -> candidate.getStudentId().equals(student.getId()))
                 .toList();
-        if (matchingStudents.isEmpty()) {
-            throw new CommandException(String.format(StudentProgressCommand.MESSAGE_STUDENT_NAME_NOT_FOUND,
-                    studentName.orElseThrow()));
+
+        model.updateFilteredStudentList(PREDICATE_SHOW_ALL_STUDENTS);
+        if (progressRecords.isEmpty()) {
+            return new CommandResult(formatProgress(student, progressRecords));
         }
-        if (matchingStudents.size() > 1) {
-            throw new CommandException(StudentProgressCommand.MESSAGE_MULTIPLE_STUDENTS_WITH_NAME);
-        }
-        return matchingStudents.getFirst();
+        return new CommandResult(formatProgress(student, progressRecords),
+                new StudentDeliverablesView(student, progressRecords));
     }
 
-    private String formatProgress(Student student, StudentCourseProgress progress) {
+    private String formatProgress(Student student, List<StudentCourseProgress> progressRecords) {
+        if (progressRecords.isEmpty()) {
+            return String.format(MESSAGE_NO_PROGRESS, student.getName(), student.getId());
+        }
+
+        String courseProgress = progressRecords.stream()
+                .map(this::formatCourseProgress)
+                .collect(Collectors.joining("\n\n"));
+        return String.format("Progress for %s (%s):\n%s", student.getName(), student.getId(), courseProgress);
+    }
+
+    private String formatCourseProgress(StudentCourseProgress progress) {
         String statuses = progress.getDeliverableStatuses().entrySet().stream()
                 .map(entry -> String.format("[%s] %s", formatStatus(entry.getValue()), entry.getKey()))
-                .reduce((first, second) -> first + "\n" + second)
-                .orElseThrow();
-        return String.format("Progress for %s (%s) in %s %s:\n%s", student.getName(), student.getId(), courseCode,
-                semester, statuses);
+                .collect(Collectors.joining("\n"));
+        return String.format("%s %s:\n%s", progress.getCourseCode(), progress.getSemester(), statuses);
     }
 
     private String formatStatus(CompletionStatus status) {
@@ -117,13 +102,11 @@ public class ViewProgressCommand extends Command {
             return false;
         }
         return studentId.equals(otherCommand.studentId)
-                && studentName.equals(otherCommand.studentName)
-                && courseCode.equals(otherCommand.courseCode)
-                && semester.equals(otherCommand.semester);
+                && studentName.equals(otherCommand.studentName);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(studentId, studentName, courseCode, semester);
+        return java.util.Objects.hash(studentId, studentName);
     }
 }

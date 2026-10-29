@@ -32,7 +32,17 @@ public class JsonAdaptedStudentTest {
     @Test
     public void toModelType_missingRequiredField_throwsIllegalValueException() {
         JsonAdaptedStudent adaptedStudent = new JsonAdaptedStudent(null, "A1234567Y",
-                "alice@u.nus.edu", "T07", "notes");
+                "alice@u.nus.edu");
         assertThrows(IllegalValueException.class, adaptedStudent::toModelType);
+    }
+
+    @Test
+    public void toModelType_legacyCourseFields_throwsMigrationError() {
+        JsonAdaptedStudent adaptedStudent = new JsonAdaptedStudent(
+                "Alice Pauline", "A1234567Y", "alice@u.nus.edu", "T07", "[]");
+
+        IllegalValueException exception = assertThrows(IllegalValueException.class,
+                adaptedStudent::toModelType);
+        assertEquals(JsonAdaptedStudent.LEGACY_FIELDS_MESSAGE, exception.getMessage());
     }
 }

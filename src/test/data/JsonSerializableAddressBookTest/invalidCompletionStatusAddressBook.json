@@ -1,0 +1,6 @@
+{
+  "students": [{"name":"Alice Pauline","id":"A1234567Y","email":"alice@u.nus.edu"}],
+  "courses": [{"courseCode":"IS2108","semester":"AY26/27-S1","deliverables":["Proposal","Presentation"]}],
+  "enrolments": [{"studentId":"A1234567Y","courseCode":"IS2108","semester":"AY26/27-S1","tutorialClass":"T07","notes":"[]"}],
+  "studentCourseProgresses": [{"studentId":"A1234567Y","courseCode":"IS2108","semester":"AY26/27-S1","deliverableStatuses":{"Proposal":"NOT_DONE","Presentation":"FiNAls"}}]
+}

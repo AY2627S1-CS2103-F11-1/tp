@@ -1,0 +1,43 @@
+
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+participant ":MainApp" as MainApp USER_COLOR
+
+box Storage STORAGE_COLOR_T1
+participant "storage:StorageManager" as storage STORAGE_COLOR
+participant "addressBookStorage:JsonAddressBookStorage" as addressBookStorage STORAGE_COLOR
+participant "JsonUtil" as JsonUtil STORAGE_COLOR
+participant "jsonAddressBook:JsonSerializableAddressBook" as jsonAddressBook STORAGE_COLOR
+end box
+
+[-> MainApp : init()
+activate MainApp
+
+MainApp -> storage : readAddressBook()
+activate storage
+
+storage -> addressBookStorage : readAddressBook()
+activate addressBookStorage
+
+addressBookStorage -> JsonUtil : readJsonFile(filePath, JsonSerializableAddressBook.class)
+activate JsonUtil
+JsonUtil --> addressBookStorage : Optional<JsonSerializableAddressBook>
+deactivate JsonUtil
+
+addressBookStorage -> jsonAddressBook : toModelType()
+activate jsonAddressBook
+jsonAddressBook --> addressBookStorage : addressBook
+deactivate jsonAddressBook
+
+addressBookStorage --> storage : Optional.of(addressBook)
+deactivate addressBookStorage
+
+storage --> MainApp : Optional.of(addressBook)
+deactivate storage
+
+[<-- MainApp
+deactivate MainApp
+
+@enduml

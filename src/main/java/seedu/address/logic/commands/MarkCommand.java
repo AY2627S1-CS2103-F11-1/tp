@@ -1,10 +1,19 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_COURSE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_ID;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.ARGUMENT_SEMESTER;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_COURSE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_ID;
+import static seedu.address.logic.parser.CliSyntax.EXAMPLE_SEMESTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.List;
 
@@ -21,13 +30,14 @@ public class MarkCommand extends StudentProgressCommand {
     public static final String COMMAND_WORD = "mark";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Marks student deliverables as complete.\n"
-            + "Parameters: " + PREFIX_ID + " ID or " + PREFIX_NAME + " NAME " + PREFIX_COURSE + " COURSE "
-            + PREFIX_SEMESTER + " SEMESTER " + PREFIX_TASK + " TASK[, TASK]...\n"
+            + "Parameters: " + PREFIX_ID + " " + ARGUMENT_ID + " or " + PREFIX_NAME + " " + ARGUMENT_NAME + " "
+            + PREFIX_COURSE + " " + ARGUMENT_COURSE + " " + PREFIX_SEMESTER + " " + ARGUMENT_SEMESTER + " "
+            + PREFIX_DELIVERABLE + " " + ARGUMENT_DELIVERABLE + "[, " + ARGUMENT_DELIVERABLE + "]...\n"
             + "Example: " + COMMAND_WORD
-            + " " + PREFIX_ID + " A1234567Z " + PREFIX_COURSE + " CS2103T "
-            + PREFIX_SEMESTER + " AY26/27-S1 " + PREFIX_TASK + " MVP";
+            + " " + PREFIX_ID + " " + EXAMPLE_ID + " " + PREFIX_COURSE + " " + EXAMPLE_COURSE + " "
+            + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER + " " + PREFIX_DELIVERABLE + " " + EXAMPLE_DELIVERABLE;
     public static final String MESSAGE_SUCCESS = "Marked %s as completed for %s.";
-    public static final String MESSAGE_ALREADY_COMPLETE = "%s is already marked as complete.";
+    private static final String MESSAGE_ALREADY_COMPLETE = "%s is already marked as complete.";
 
     public MarkCommand(Id studentId, CourseCode courseCode, Semester semester, List<Deliverable> deliverables) {
         super(studentId, courseCode, semester, deliverables, CompletionStatus.DONE);

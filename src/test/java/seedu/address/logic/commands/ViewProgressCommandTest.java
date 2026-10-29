@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
@@ -24,46 +23,52 @@ import seedu.address.model.progress.StudentCourseProgress;
 public class ViewProgressCommandTest {
 
     private static final Course COURSE = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
-            List.of(new Deliverable("v1.1"), new Deliverable("MVP")));
+            List.of(new Deliverable("MVP"), new Deliverable("Final")));
     private static final Deliverable MVP = new Deliverable("MVP");
 
     @Test
     public void execute_validId_displaysProgress() {
         Model model = modelWithCourse();
         markMvpDone(model);
-        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId(), COURSE.getCourseCode(),
-                COURSE.getSemester());
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId());
 
-        String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
-                + "[Not Done] v1.1\n[Done] MVP", ALICE.getId());
+        String expectedMessage = String.format("Progress for Alice Pauline (%s):\nCS2103T AY26/27-S1:\n"
+                + "[Done] MVP\n[Not Done] Final", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        StudentCourseProgress progress = model.getStudentCourseProgressList().stream()
+                .filter(candidate -> candidate.getStudentId().equals(ALICE.getId())).findFirst().orElseThrow();
+        CommandResult expectedResult = new CommandResult(expectedMessage,
+                new StudentDeliverablesView(ALICE, List.of(progress)));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
     public void execute_validUniqueName_displaysProgress() {
         Model model = modelWithCourse();
-        ViewProgressCommand command = new ViewProgressCommand("alice pauline", COURSE.getCourseCode(),
-                COURSE.getSemester());
+        ViewProgressCommand command = new ViewProgressCommand("alice pauline");
 
-        String expectedMessage = String.format("Progress for Alice Pauline (%s) in CS2103T AY26/27-S1:\n"
-                + "[Not Done] v1.1\n[Not Done] MVP", ALICE.getId());
+        String expectedMessage = String.format("Progress for Alice Pauline (%s):\nCS2103T AY26/27-S1:\n"
+                + "[Not Done] MVP\n[Not Done] Final", ALICE.getId());
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        StudentCourseProgress progress = model.getStudentCourseProgressList().stream()
+                .filter(candidate -> candidate.getStudentId().equals(ALICE.getId())).findFirst().orElseThrow();
+        CommandResult expectedResult = new CommandResult(expectedMessage,
+                new StudentDeliverablesView(ALICE, List.of(progress)));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
-    public void execute_unknownCourse_throwsCommandException() {
+    public void execute_studentWithNoProgress_displaysEmptyState() {
         Model model = modelWithCourse();
-        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId(), new CourseCode("CS2030S"),
-                COURSE.getSemester());
-
-        assertCommandFailure(command, model, "Course CS2030S AY26/27-S1 has not been initialised.");
+        model.setStudentCourseProgresses(List.of());
+        ViewProgressCommand command = new ViewProgressCommand(ALICE.getId());
+        assertCommandSuccess(command, model,
+                new CommandResult("No deliverable progress found for Alice Pauline (A1234567Y)."),
+                new ModelManager(model.getAddressBook(), new UserPrefs()));
     }
 
     private Model modelWithCourse() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         return new ModelManager(addressBook, new UserPrefs());
     }
 

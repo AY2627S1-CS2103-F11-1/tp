@@ -1,54 +1,71 @@
 @startuml
 !include style.puml
+show fields
+skinparam classAttributeIconSize 0
+skinparam classAttributeFontColor white
 skinparam arrowThickness 1.1
-skinparam arrowColor MODEL_COLOR
+skinparam arrowColor MODEL_COLOR_T4
 skinparam classBackgroundColor MODEL_COLOR
 
-Package Model as ModelPackage <<Rectangle>>{
-Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
-Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
-Class "<<interface>>\nModel" as Model
-Class AddressBook
-Class ModelManager
-Class UserPrefs
+package "Model" as ModelPackage <<Rectangle>> {
+    class "<<interface>>\nModel" as ModelApi
+    class ModelManager
+    class AddressBook
+    class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
+    class UserPrefs
+    class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
 
-Class UniquePersonList
-Class Person
-Class Address
-Class Email
-Class Name
-Class Phone
-Class Tag
+    class UniqueStudentList
+    class UniqueCourseList
+    class UniqueStudentCourseEnrolment
+    class UniqueStudentCourseProgressList
 
-Class I #FFFFFF
+    class Student {
+        Id
+        Name
+        Email
+    }
+
+    class Course {
+        CourseCode courseCode
+        Deliverable deliverable
+        Semester semester
+        List<Deliverable> deliverables
+    }
+
+    class StudentCourseEnrolment {
+        studentId: Id
+        CourseCode
+        Semester
+        TutorialClass
+        NotesList
+    }
+
+    class StudentCourseProgress
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Model
-
+ModelManager .up.|> ModelApi
 AddressBook .up.|> ReadOnlyAddressBook
-
-ModelManager .up.|> Model
-Model .right.> ReadOnlyUserPrefs
-Model .left.> ReadOnlyAddressBook
-ModelManager -left-> "1" AddressBook
-ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+ModelApi ..> ReadOnlyAddressBook
+ModelApi ..> ReadOnlyUserPrefs
 
-Person -[hidden]up--> I
-UniquePersonList -[hidden]right-> I
+ModelManager -down-> "1" AddressBook
+ModelManager -right-> "1" UserPrefs
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+AddressBook *-- "1" UniqueStudentList
+AddressBook *-- "1" UniqueCourseList
+AddressBook *-- "1" UniqueStudentCourseEnrolment
+AddressBook *-- "1" UniqueStudentCourseProgressList
 
-ModelManager --> "~* filtered" Person
+UniqueStudentList --> "*" Student
+UniqueCourseList --> "*" Course
+UniqueStudentCourseEnrolment --> "*" StudentCourseEnrolment
+UniqueStudentCourseProgressList --> "*" StudentCourseProgress
+
+Student "*" -- "*" Course : enrolled in
+(Student, Course) .. StudentCourseEnrolment
+
 @enduml
+

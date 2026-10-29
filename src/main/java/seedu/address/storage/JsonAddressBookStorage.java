@@ -34,8 +34,11 @@ public class JsonAddressBookStorage {
     /**
      * Returns AddressBook data as a {@link ReadOnlyAddressBook}.
      * Returns {@code Optional.empty()} if storage file is not found.
+     * If progress data is reconciled while loading, the corrected address book
+     * is saved back to the same file before this method returns.
      *
-     * @throws DataLoadingException if loading the data from storage failed.
+     * @throws DataLoadingException if loading the data from storage failed, or
+     *                              if corrected data cannot be saved.
      */
     public Optional<ReadOnlyAddressBook> readAddressBook() throws DataLoadingException {
         return readAddressBook(filePath);
@@ -45,7 +48,8 @@ public class JsonAddressBookStorage {
      * Similar to {@link #readAddressBook()}.
      *
      * @param filePath location of the data. Cannot be null.
-     * @throws DataLoadingException if loading the data from storage failed.
+     * @throws DataLoadingException if loading the data from storage failed, or
+     *                              if corrected data cannot be saved.
      */
     public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
         requireNonNull(filePath);
@@ -57,10 +61,18 @@ public class JsonAddressBookStorage {
         }
 
         try {
-            return Optional.of(jsonAddressBook.get().toModelType());
+            ReadOnlyAddressBook addressBook = jsonAddressBook.get().toModelType();
+            if (jsonAddressBook.get().wasReconciled()) {
+                logger.warning("Reconciled inconsistent progress data in " + filePath + ".");
+                saveAddressBook(addressBook, filePath);
+            }
+            return Optional.of(addressBook);
         } catch (IllegalValueException ive) {
             logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
             throw new DataLoadingException(ive);
+        } catch (IOException ioe) {
+            logger.warning("Could not persist repaired data to " + filePath + ": " + ioe.getMessage());
+            throw new DataLoadingException(ioe);
         }
     }
 

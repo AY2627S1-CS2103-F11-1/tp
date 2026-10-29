@@ -1,0 +1,34 @@
+@startuml
+!include style.puml
+skinparam activity {
+  BackgroundColor STORAGE_COLOR_T1
+  BorderColor STORAGE_COLOR_T3
+  DiamondBackgroundColor STORAGE_COLOR_T2
+  DiamondBorderColor STORAGE_COLOR_T3
+  FontName Arial
+  FontSize 15
+}
+skinparam ArrowColor STORAGE_COLOR_T3
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 12
+
+start
+
+:Load address-book data;
+
+if () then ([file missing])
+    :Use sample address-book data;
+else ([else])
+    if () then ([data invalid or unreadable])
+        :Display startup error dialog;
+        :User dismisses dialog;
+        stop
+    else ([else])
+        :Use validated address-book data;
+    endif
+endif
+
+:Initialize model;
+stop
+
+@enduml

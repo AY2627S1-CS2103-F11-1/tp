@@ -23,16 +23,29 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
+import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CourseProgressOverview;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.testutil.StudentBuilder;
 
 public class AddCommandTest {
 
+    private static StudentCourseEnrolment enrolment(Student student) {
+        Id id = student == null ? new Id("A1234567Y") : student.getId();
+        return new StudentCourseEnrolment(id, new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1"), new TutorialClass("T07"), new NotesList());
+    }
+
     @Test
     public void constructor_nullStudent_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new AddCommand(null));
+        assertThrows(NullPointerException.class, () -> new AddCommand(null, List.of(enrolment(null))));
     }
 
     @Test
@@ -40,7 +53,7 @@ public class AddCommandTest {
         ModelStubAcceptingStudentAdded modelStub = new ModelStubAcceptingStudentAdded();
         Student validStudent = new StudentBuilder().build();
 
-        CommandResult commandResult = new AddCommand(validStudent).execute(modelStub);
+        CommandResult commandResult = new AddCommand(validStudent, List.of(enrolment(validStudent))).execute(modelStub);
 
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validStudent)),
                 commandResult.getFeedbackToUser());
@@ -50,7 +63,7 @@ public class AddCommandTest {
     @Test
     public void execute_duplicateStudent_throwsCommandException() {
         Student validStudent = new StudentBuilder().build();
-        AddCommand addCommand = new AddCommand(validStudent);
+        AddCommand addCommand = new AddCommand(validStudent, List.of(enrolment(validStudent)));
         ModelStub modelStub = new ModelStubWithStudent(validStudent);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> addCommand.execute(modelStub));
@@ -60,14 +73,14 @@ public class AddCommandTest {
     public void equals() {
         Student alice = new StudentBuilder().withName("Alice").build();
         Student bob = new StudentBuilder().withName("Bob").build();
-        AddCommand addAliceCommand = new AddCommand(alice);
-        AddCommand addBobCommand = new AddCommand(bob);
+        AddCommand addAliceCommand = new AddCommand(alice, List.of(enrolment(alice)));
+        AddCommand addBobCommand = new AddCommand(bob, List.of(enrolment(bob)));
 
         // same object -> returns true
         assertTrue(addAliceCommand.equals(addAliceCommand));
 
         // same values -> returns true
-        AddCommand addAliceCommandCopy = new AddCommand(alice);
+        AddCommand addAliceCommandCopy = new AddCommand(alice, List.of(enrolment(alice)));
         assertTrue(addAliceCommand.equals(addAliceCommandCopy));
 
         // different types -> returns false
@@ -82,8 +95,9 @@ public class AddCommandTest {
 
     @Test
     public void toStringMethod() {
-        AddCommand addCommand = new AddCommand(ALICE);
-        String expected = AddCommand.class.getCanonicalName() + "{student=" + ALICE + "}";
+        AddCommand addCommand = new AddCommand(ALICE, List.of(enrolment(ALICE)));
+        String expected = AddCommand.class.getCanonicalName() + "{student=" + ALICE
+                + ", initialEnrolments=" + List.of(enrolment(ALICE)) + "}";
         assertEquals(expected, addCommand.toString());
     }
 
@@ -147,6 +161,27 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasEnrolment(StudentCourseEnrolment enrolment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public List<Student> getStudentsEnrolledIn(CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Optional<CourseProgressOverview> getCourseProgressOverview(
+                CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addCourse(Course course) {
             throw new AssertionError("This method should not be called.");
         }
@@ -158,6 +193,32 @@ public class AddCommandTest {
 
         @Override
         public void setStudentCourseProgress(StudentCourseProgress target, StudentCourseProgress updatedProgress) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void removeEnrolment(Id studentId, CourseCode courseCode, Semester semester) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setEnrolment(StudentCourseEnrolment target, StudentCourseEnrolment editedEnrolment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addEnrolment(StudentCourseEnrolment enrolment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addStudentWithEnrolments(Student student,
+                List<StudentCourseEnrolment> enrolments) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addStudentWithEnrolment(Student student, StudentCourseEnrolment enrolment) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -213,7 +274,19 @@ public class AddCommandTest {
         }
 
         @Override
+        public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
+            return Optional.of(new Course(courseCode, semester, List.of(new Deliverable("MVP"))));
+        }
+
+        @Override
         public void addStudent(Student student) {
+            requireNonNull(student);
+            studentsAdded.add(student);
+        }
+
+        @Override
+        public void addStudentWithEnrolments(Student student,
+                List<StudentCourseEnrolment> enrolments) {
             requireNonNull(student);
             studentsAdded.add(student);
         }

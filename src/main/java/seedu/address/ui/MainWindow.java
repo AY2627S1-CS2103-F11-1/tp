@@ -3,10 +3,8 @@ package seedu.address.ui;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -34,6 +32,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private StudentListPanel studentListPanel;
+    private DeliverablesPanel deliverablesPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -41,10 +40,13 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane commandBoxPlaceholder;
 
     @FXML
-    private MenuItem helpMenuItem;
+    private StackPane studentListPanelPlaceholder;
 
     @FXML
-    private StackPane studentListPanelPlaceholder;
+    private StackPane deliverablesPanelPlaceholder;
+
+    @FXML
+    private SplitPane mainContentPane;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -77,36 +79,10 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     private void setAccelerators() {
-        setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
-    }
-
-    /**
-     * Sets the accelerator of a MenuItem.
-     *
-     * @param keyCombination the KeyCombination value of the accelerator
-     */
-    private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
-        menuItem.setAccelerator(keyCombination);
-
-        /*
-         * TODO: the code below can be removed once the bug reported here
-         * https://bugs.openjdk.java.net/browse/JDK-8131666
-         * is fixed in a later version of the SDK.
-         *
-         * According to the bug report, TextInputControl (TextField, TextArea) will
-         * consume function-key events. Because CommandBox contains a TextField and
-         * ResultDisplay contains a TextArea, some accelerators (e.g., F1) will
-         * not work when the focus is in them because the key event is consumed by
-         * the TextInputControl(s).
-         *
-         * For now, we add the following event filter to capture such key events and
-         * open
-         * the help window purposely so as to support accelerators even when focus is
-         * in CommandBox or ResultDisplay.
-         */
+        KeyCombination helpShortcut = KeyCombination.valueOf("F1");
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
-                menuItem.getOnAction().handle(new ActionEvent());
+            if (helpShortcut.match(event)) {
+                handleHelp();
                 event.consume();
             }
         });
@@ -116,8 +92,12 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        studentListPanel = new StudentListPanel(logic.getFilteredStudentList(),
+                logic.getAddressBook().getEnrolmentList());
         studentListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
+
+        deliverablesPanel = new DeliverablesPanel();
+        deliverablesPanelPlaceholder.getChildren().add(deliverablesPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -184,9 +164,18 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-            commandResult.getstudentIdToFocus().ifPresent(id -> {
-                studentListPanel.scrollToStudentId(id);
-            });
+            if (commandResult.getStudentDeliverablesView().isPresent()) {
+                mainContentPane.setDividerPositions(0.48);
+                commandResult.getStudentDeliverablesView()
+                        .ifPresent(deliverablesPanel::showDeliverables);
+            } else {
+                deliverablesPanel.clear();
+                mainContentPane.setDividerPositions(0.86);
+            }
+
+            commandResult.getStudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
+            commandResult.getStudentDeliverablesView()
+                    .ifPresent(view -> studentListPanel.scrollToStudentId(view.getStudent().getId()));
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -203,4 +192,5 @@ public class MainWindow extends UiPart<Stage> {
             throw e;
         }
     }
+
 }

@@ -1,0 +1,37 @@
+
+@startuml
+!include style.puml
+
+skinparam activity {
+  BackgroundColor LOGIC_COLOR_T1
+  BorderColor LOGIC_COLOR_T4
+  DiamondBackgroundColor LOGIC_COLOR_T2
+  DiamondBorderColor LOGIC_COLOR_T4
+  FontName Arial
+  FontSize 15
+}
+
+skinparam ArrowColor LOGIC_COLOR_T4
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 14
+
+start
+
+:Find exactly one student;
+:Find the requested course-semester;
+:Validate requested deliverables;
+:Find the student's matching progress record;
+:Validate current completion statuses;
+
+if () then ([validation successful])
+    :Create updated progress record with
+    requested deliverable statuses;
+    :Replace stored progress record;
+    :Return successful CommandResult;
+else ([else])
+    :Throw CommandException;
+    stop
+endif
+
+stop
+@enduml

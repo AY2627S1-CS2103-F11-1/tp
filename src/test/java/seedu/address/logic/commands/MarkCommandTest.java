@@ -24,7 +24,7 @@ import seedu.address.model.progress.StudentCourseProgress;
 public class MarkCommandTest {
 
     private static final Course COURSE = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
-            List.of(new Deliverable("v1.1"), new Deliverable("MVP")));
+            List.of(new Deliverable("MVP"), new Deliverable("Final")));
     private static final Deliverable MVP = new Deliverable("MVP");
 
     @Test
@@ -37,7 +37,10 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
@@ -50,16 +53,35 @@ public class MarkCommandTest {
         expectedModel.setStudentCourseProgress(originalProgress,
                 originalProgress.withStatus(MVP, CompletionStatus.DONE));
 
-        assertCommandSuccess(command, model, "Marked MVP as completed for Alice Pauline.", expectedModel);
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
     }
 
     @Test
-    public void execute_unknownTask_throwsCommandException() {
+    public void execute_deliverableWithDifferentCasing_usesCanonicalDeliverableInFeedback() {
+        Model model = modelWithCourse();
+        MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
+                List.of(new Deliverable("mvp")));
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        StudentCourseProgress originalProgress = findAliceProgress(expectedModel);
+        expectedModel.setStudentCourseProgress(originalProgress,
+                originalProgress.withStatus(MVP, CompletionStatus.DONE));
+
+        CommandResult expectedResult = new CommandResult("Marked MVP as completed for Alice Pauline.",
+                new StudentDeliverablesView(ALICE, expectedModel.getStudentCourseProgressList().stream()
+                        .filter(progress -> progress.getStudentId().equals(ALICE.getId())).toList()));
+        assertCommandSuccess(command, model, expectedResult, expectedModel);
+    }
+
+    @Test
+    public void execute_unknownDeliverable_throwsCommandException() {
         Model model = modelWithCourse();
         MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(new Deliverable("PE-D")));
 
-        assertCommandFailure(command, model, "Task 'PE-D' does not exist in CS2103T AY26/27-S1.");
+        assertCommandFailure(command, model, "Deliverable 'PE-D' does not exist in CS2103T AY26/27-S1.");
     }
 
     @Test
@@ -75,7 +97,6 @@ public class MarkCommandTest {
 
     private Model modelWithCourse() {
         AddressBook addressBook = getTypicalAddressBook();
-        addressBook.addCourse(COURSE);
         return new ModelManager(addressBook, new UserPrefs());
     }
 

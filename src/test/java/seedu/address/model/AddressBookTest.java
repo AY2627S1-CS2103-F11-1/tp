@@ -3,8 +3,6 @@ package seedu.address.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_CLASS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_PARTICIPATIVE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
@@ -21,8 +19,10 @@ import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.course.exceptions.DuplicateCourseException;
+import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
+import seedu.address.model.student.TutorialClass;
 import seedu.address.model.student.exceptions.DuplicateStudentException;
 import seedu.address.testutil.StudentBuilder;
 
@@ -55,9 +55,7 @@ public class AddressBookTest {
     @Test
     public void resetData_withDuplicateStudents_throwsDuplicateStudentException() {
         // Two students with the same identity fields
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).build();
         List<Student> newStudents = List.of(ALICE, editedAlice);
         AddressBookStub newData = new AddressBookStub(newStudents);
 
@@ -83,9 +81,7 @@ public class AddressBookTest {
     @Test
     public void hasStudent_studentWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addStudent(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withTutorialClass(VALID_CLASS_BOB)
-                .withNotes(VALID_NOTES_PARTICIPATIVE)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).build();
         assertTrue(addressBook.hasStudent(editedAlice));
     }
 
@@ -132,8 +128,7 @@ public class AddressBookTest {
 
         addressBook.addStudent(ALICE);
 
-        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
-                addressBook.getStudentCourseProgressList());
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
     }
 
     @Test
@@ -142,8 +137,24 @@ public class AddressBookTest {
 
         addressBook.addCourse(CS2103);
 
-        assertEquals(List.of(new StudentCourseProgress(ALICE.getId(), CS2103)),
-                addressBook.getStudentCourseProgressList());
+        assertTrue(addressBook.getStudentCourseProgressList().isEmpty());
+    }
+
+    @Test
+    public void setStudentCourseProgress_identityChange_throwsIllegalArgumentException() {
+        Course secondCourse = new Course(new CourseCode("IS2108"), new Semester("AY26/27-S1"),
+                List.of(new Deliverable("Project")));
+        addressBook.addCourse(CS2103);
+        addressBook.addCourse(secondCourse);
+        addressBook.addStudentWithEnrolment(ALICE, new StudentCourseEnrolment(
+                ALICE.getId(), CS2103.getCourseCode(), CS2103.getSemester(),
+                new TutorialClass("T07"), new seedu.address.model.enrolment.NotesList()));
+
+        StudentCourseProgress target = addressBook.getStudentCourseProgressList().getFirst();
+        StudentCourseProgress differentIdentity = new StudentCourseProgress(ALICE.getId(), secondCourse);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook
+                .setStudentCourseProgress(target, differentIdentity));
     }
 
     @Test
@@ -164,7 +175,8 @@ public class AddressBookTest {
     @Test
     public void toStringMethod() {
         String expected = AddressBook.class.getCanonicalName() + "{students=" + addressBook.getStudentList()
-                + ", courses=" + addressBook.getCourseList() + ", studentCourseProgresses="
+                + ", courses=" + addressBook.getCourseList() + ", enrolments="
+                + addressBook.getEnrolmentList() + ", studentCourseProgresses="
                 + addressBook.getStudentCourseProgressList() + "}";
         assertEquals(expected, addressBook.toString());
     }
@@ -192,6 +204,11 @@ public class AddressBookTest {
 
         @Override
         public ObservableList<StudentCourseProgress> getStudentCourseProgressList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<seedu.address.model.enrolment.StudentCourseEnrolment> getEnrolmentList() {
             return FXCollections.observableArrayList();
         }
     }

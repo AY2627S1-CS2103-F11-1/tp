@@ -5,6 +5,8 @@ import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -44,6 +46,20 @@ public class ParserUtilTest {
 
         // Leading and trailing whitespaces
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+    }
+
+    @Test
+    public void parseCommaSeparatedValues_validInput_returnsTrimmedValues() throws Exception {
+        assertEquals(List.of("Alice", "Bob Smith", "Carol"),
+                ParserUtil.parseCommaSeparatedValues(" Alice, Bob Smith ,Carol ", "empty"));
+    }
+
+    @Test
+    public void parseCommaSeparatedValues_blankEntry_throwsParseException() {
+        assertThrows(ParseException.class, "empty", () ->
+                ParserUtil.parseCommaSeparatedValues("Alice,, Bob", "empty"));
+        assertThrows(ParseException.class, "empty", () ->
+                ParserUtil.parseCommaSeparatedValues("Alice,", "empty"));
     }
 
     @Test
@@ -90,6 +106,12 @@ public class ParserUtilTest {
         String idWithWhitespace = WHITESPACE + VALID_ID + WHITESPACE;
         Id expectedId = new Id(VALID_ID);
         assertEquals(expectedId, ParserUtil.parseId(idWithWhitespace));
+    }
+
+    @Test
+    public void parseId_lowercaseValue_returnsUppercaseId() throws Exception {
+        Id expectedId = new Id(VALID_ID);
+        assertEquals(expectedId, ParserUtil.parseId("a1234567y"));
     }
 
     @Test

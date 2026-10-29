@@ -22,31 +22,31 @@ public class InitCourseCommandParserTest {
     public void parse_allFieldsPresent_success() {
         Course course = new Course(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
                 List.of(new Deliverable("v1.2"), new Deliverable("MVP")));
-        assertParseSuccess(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, MVP",
+        assertParseSuccess(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP",
                 new InitCourseCommand(course));
     }
 
     @Test
     public void parse_missingRequiredPrefix_failure() {
         assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
+                "Missing required parameter(s): /deliverable");
     }
 
     @Test
     public void parse_invalidSubcommand_failure() {
-        assertParseFailure(parser, "student /course CS2103T /sem AY26/27-S1 /task v1.2",
+        assertParseFailure(parser, "student /course CS2103T /sem AY26/27-S1 /deliverable v1.2",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, InitCourseCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_blankDeliverable_failure() {
-        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, ",
-                "Deliverable name must not be blank.");
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, ",
+                Deliverable.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_duplicateDeliverable_failure() {
-        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task v1.2, V1.2",
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, V1.2",
                 Course.MESSAGE_DELIVERABLES);
     }
 
@@ -56,7 +56,19 @@ public class InitCourseCommandParserTest {
                 .mapToObj(number -> "task" + number)
                 .toList());
 
-        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /task " + deliverables,
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable " + deliverables,
                 Course.MESSAGE_DELIVERABLES);
+    }
+
+    @Test
+    public void parse_deliverableContainsColon_failure() {
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable MVP:Review",
+                Deliverable.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_unknownParameter_failure() {
+        assertParseFailure(parser, "course /course CS2103T /sem AY26/27-S1 /deliverable MVP /foo value",
+                "Unknown parameter: /foo");
     }
 }

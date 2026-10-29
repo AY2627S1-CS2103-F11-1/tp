@@ -1,0 +1,45 @@
+
+@startuml
+!include style.puml
+
+skinparam nodesep 60
+skinparam ranksep 40
+
+skinparam activity {
+  BackgroundColor STORAGE_COLOR_T1
+  BorderColor STORAGE_COLOR_T3
+  DiamondBackgroundColor STORAGE_COLOR_T2
+  DiamondBorderColor STORAGE_COLOR_T3
+  FontName Arial
+  FontSize 15
+}
+
+skinparam ArrowColor STORAGE_COLOR_T3
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 14
+
+start
+
+:Obtain course and progress records;
+:Validate progress records;
+:Construct reconciled statuses;
+:Complete address-book validation;
+
+if () then ([validation failed])
+    :Reject invalid stored data;
+    stop
+else ([else])
+    if () then ([progress data changed])
+        :Save reconciled address book;
+
+        if () then ([save failed])
+            :Reject loading with a storage error;
+            stop
+        endif
+    endif
+
+    :Return address book;
+endif
+
+stop
+@enduml
