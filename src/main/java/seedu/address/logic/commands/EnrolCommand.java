@@ -79,10 +79,7 @@ public class EnrolCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        boolean studentExists = model.getAddressBook().getStudentList().stream()
-                .anyMatch(student -> student.getId().equals(studentId));
-
-        if (!studentExists) {
+        if (model.getStudentById(studentId).isEmpty()) {
             throw new CommandException(
                     String.format(MESSAGE_STUDENT_NOT_FOUND, studentId));
         }
