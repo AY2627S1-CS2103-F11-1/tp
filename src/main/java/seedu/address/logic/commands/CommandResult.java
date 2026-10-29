@@ -17,7 +17,7 @@ public class CommandResult {
     public static final String NOT_STUDENT_NOTES_LIST_VIEW_MESSAGE =
             "Current View is not a StudentNotesListView";
     public static final String NO_STUDENT_ITERABLE_VIEW_MESSAGE =
-            "Does not contain a StudentIterableView";
+            "Does not contain a StudentSplitView";
 
     private final String feedbackToUser;
 
@@ -28,7 +28,7 @@ public class CommandResult {
     private final boolean exit;
 
     private final Id studentIdToFocus;
-    private final StudentIterableView studentIterableView;
+    private final StudentSplitView studentSplitView;
 
     /**
      * Constructs a CommandResult with an optional added student ID.
@@ -39,15 +39,15 @@ public class CommandResult {
     }
 
     /**
-     * Constructs a CommandResult with an optional added student ID and studentIterableView
+     * Constructs a CommandResult with an optional added student ID and studentSplitView
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
-            Id studentIdToFocus, StudentIterableView studentIterableView) {
+            Id studentIdToFocus, StudentSplitView studentSplitView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
         this.studentIdToFocus = studentIdToFocus;
-        this.studentIterableView = studentIterableView;
+        this.studentSplitView = studentSplitView;
     }
 
     /**
@@ -65,9 +65,9 @@ public class CommandResult {
     }
 
     /** Constructs a result containing the deliverables view for a student. */
-    public CommandResult(String feedbackToUser, StudentIterableView studentIterableView) {
+    public CommandResult(String feedbackToUser, StudentSplitView studentSplitView) {
         this(feedbackToUser, false, false,
-                requireNonNull(studentIterableView).getStudent().getId(), studentIterableView);
+                requireNonNull(studentSplitView).getStudent().getId(), studentSplitView);
     }
 
     public String getFeedbackToUser() {
@@ -91,7 +91,7 @@ public class CommandResult {
         assert containsStudentDeliverablesView()
                 : NOT_STUDENT_DELIVERABLES_VIEW_MESSAGE;
 
-        return (StudentDeliverablesView) studentIterableView;
+        return (StudentDeliverablesView) studentSplitView;
     }
 
     /**
@@ -103,34 +103,34 @@ public class CommandResult {
         assert containsStudentNotesListView()
                 : NOT_STUDENT_NOTES_LIST_VIEW_MESSAGE;
 
-        return (StudentNotesListView) studentIterableView;
+        return (StudentNotesListView) studentSplitView;
     }
 
     /**
-     * Returns the StudentIterableView produced by the command.
-     * Assumes CommandResult contains a StudentIterableView.
-     * Use {@code containsStudentIterableView} to check before using.
+     * Returns the StudentSplitView produced by the command.
+     * Assumes CommandResult contains a StudentSplitView.
+     * Use {@code containsStudentSplitView} to check before using.
      */
-    public StudentIterableView getStudentIterableView() {
-        assert containsStudentIterableView()
+    public StudentSplitView getStudentSplitView() {
+        assert containsStudentSplitView()
                 : NO_STUDENT_ITERABLE_VIEW_MESSAGE;
 
-        return studentIterableView;
+        return studentSplitView;
     }
 
-    /** Checks if CommandResult contains a StudentIterableView */
-    public boolean containsStudentIterableView() {
-        return studentIterableView != null;
+    /** Checks if CommandResult contains a StudentSplitView */
+    public boolean containsStudentSplitView() {
+        return studentSplitView != null;
     }
 
     /** Checks if CommandResult contains a StudentNotesListView */
     public boolean containsStudentDeliverablesView() {
-        return studentIterableView instanceof StudentDeliverablesView;
+        return studentSplitView instanceof StudentDeliverablesView;
     }
 
     /** Checks if CommandResult contains a StudentNotesListView */
     public boolean containsStudentNotesListView() {
-        return studentIterableView instanceof StudentNotesListView;
+        return studentSplitView instanceof StudentNotesListView;
     }
 
     @Override
@@ -148,12 +148,12 @@ public class CommandResult {
                 && showHelp == otherCommandResult.showHelp
                 && exit == otherCommandResult.exit
                 && Objects.equals(studentIdToFocus, otherCommandResult.studentIdToFocus)
-                && Objects.equals(studentIterableView, otherCommandResult.studentIterableView);
+                && Objects.equals(studentSplitView, otherCommandResult.studentSplitView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus, studentIterableView);
+        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus, studentSplitView);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class CommandResult {
                 .add("showHelp", showHelp)
                 .add("exit", exit)
                 .add("studentIdToFocus", studentIdToFocus)
-                .add("studentIterableView", studentIterableView)
+                .add("studentSplitView", studentSplitView)
                 .toString();
     }
 

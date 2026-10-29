@@ -13,7 +13,7 @@ import seedu.address.model.student.Student;
 /**
  * Immutable data required to display one student's deliverables in the UI.
  */
-public class StudentDeliverablesView extends StudentIterableView {
+public class StudentDeliverablesView extends StudentSplitView {
     private final List<StudentCourseProgress> courseProgresses;
 
     /**

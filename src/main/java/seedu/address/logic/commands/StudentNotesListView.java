@@ -11,7 +11,7 @@ import seedu.address.model.student.Student;
 /**
  * Immutable data required to display one student's NotesList in the UI.
  */
-public class StudentNotesListView extends StudentIterableView {
+public class StudentNotesListView extends StudentSplitView {
     private final NotesList notesList;
 
     /**

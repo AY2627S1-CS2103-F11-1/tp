@@ -7,10 +7,10 @@ import seedu.address.model.student.Student;
 /**
  * Abstract class to use for split display of Student information in the UI
  */
-public abstract class StudentIterableView {
+public abstract class StudentSplitView {
     private final Student student;
 
-    protected StudentIterableView(Student student) {
+    protected StudentSplitView(Student student) {
         this.student = requireNonNull(student);
     }
 

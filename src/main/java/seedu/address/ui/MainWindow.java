@@ -208,9 +208,9 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             commandResult.getStudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
-            if (commandResult.containsStudentIterableView()) {
+            if (commandResult.containsStudentSplitView()) {
                 studentListPanel.scrollToStudentId(
-                        commandResult.getStudentIterableView().getStudent().getId());
+                        commandResult.getStudentSplitView().getStudent().getId());
             }
 
             if (commandResult.isShowHelp()) {
