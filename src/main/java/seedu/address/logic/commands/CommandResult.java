@@ -12,9 +12,9 @@ import seedu.address.model.student.Id;
  * Represents the result of a command execution.
  */
 public class CommandResult {
-    public static final String NO_STUDENT_DELIVERABLES_VIEW_MESSAGE =
+    public static final String NOT_STUDENT_DELIVERABLES_VIEW_MESSAGE =
             "Current View is not a StudentDeliverablesListView";
-    public static final String NO_STUDENT_NOTES_LIST_VIEW_MESSAGE =
+    public static final String NOT_STUDENT_NOTES_LIST_VIEW_MESSAGE =
             "Current View is not a StudentNotesListView";
     public static final String NO_STUDENT_ITERABLE_VIEW_MESSAGE =
             "Does not contain a StudentIterableView";
@@ -38,6 +38,9 @@ public class CommandResult {
         this(feedbackToUser, showHelp, exit, studentIdToFocus, null);
     }
 
+    /**
+     * Constructs a CommandResult with an optional added student ID and studentIterableView
+     */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
             Id studentIdToFocus, StudentIterableView studentIterableView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
@@ -83,24 +86,32 @@ public class CommandResult {
         return Optional.ofNullable(studentIdToFocus);
     }
 
-    /** Returns the optional deliverables view produced by the command. */
-    public Optional<StudentDeliverablesView> getStudentDeliverablesView() {
+    /** Returns the deliverables view produced by the command. */
+    public StudentDeliverablesView getStudentDeliverablesView() {
         assert containsStudentDeliverablesView()
-                : NO_STUDENT_DELIVERABLES_VIEW_MESSAGE;
+                : NOT_STUDENT_DELIVERABLES_VIEW_MESSAGE;
 
-        return Optional.ofNullable((StudentDeliverablesView) studentIterableView);
+        return (StudentDeliverablesView) studentIterableView;
     }
 
-    /** Returns the optional NotesList view produced by the command. */
-    public Optional<StudentNotesListView> getStudentNotesListView() {
+    /**
+     * Returns the StudentNotesListView produced by the command.
+     * Assumes CommandResult contains a StudentNotesListView.
+     * Use {@code containsStudentNotesListView} to check before using.
+     */
+    public StudentNotesListView getStudentNotesListView() {
         assert containsStudentNotesListView()
-                : NO_STUDENT_NOTES_LIST_VIEW_MESSAGE;
+                : NOT_STUDENT_NOTES_LIST_VIEW_MESSAGE;
 
-        return Optional.ofNullable((StudentNotesListView) studentIterableView);
+        return (StudentNotesListView) studentIterableView;
     }
 
-    /** Returns the StudentIterableView produced by the command. */
-    public StudentIterableView getStudentIterableListView() {
+    /**
+     * Returns the StudentIterableView produced by the command.
+     * Assumes CommandResult contains a StudentIterableView.
+     * Use {@code containsStudentIterableView} to check before using.
+     */
+    public StudentIterableView getStudentIterableView() {
         assert containsStudentIterableView()
                 : NO_STUDENT_ITERABLE_VIEW_MESSAGE;
 

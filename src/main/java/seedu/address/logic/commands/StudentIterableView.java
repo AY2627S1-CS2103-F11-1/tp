@@ -4,6 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.model.student.Student;
 
+/**
+ * Abstract class to use for split display of Student information in the UI
+ */
 public abstract class StudentIterableView {
     private final Student student;
 

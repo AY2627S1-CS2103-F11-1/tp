@@ -41,7 +41,7 @@ public class ViewNotesCommandTest {
         ViewNotesCommand command = new ViewNotesCommand(BENSON.getId(), COURSE_CODE, SEMESTER);
 
         CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                BENSON.getName(), BENSON.getId(), ViewNotesCommand.MESSAGE_NO_NOTES), false, false, BENSON.getId(),
+                BENSON.getName(), BENSON.getId(), ViewNotesCommand.MESSAGE_NO_NOTES),
                 new StudentNotesListView(BENSON, new NotesList()));
 
         assertCommandSuccess(command, model, expectedResult, model);

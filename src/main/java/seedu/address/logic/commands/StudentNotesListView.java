@@ -1,14 +1,16 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
+import java.util.Objects;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.student.Student;
 
-import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-
+/**
+ * Immutable data required to display one student's NotesList in the UI.
+ */
 public class StudentNotesListView extends StudentIterableView {
     private final NotesList notesList;
 
