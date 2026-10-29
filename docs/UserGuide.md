@@ -133,6 +133,27 @@ Examples:
 only with both of them. `/deliverable` accepts exactly one deliverable tracked by that
 course-semester. Students appear once even if they have other enrolments.
 
+### Viewing a course progress overview: `overview`
+
+Shows every student enrolled in a course-semester together with the number of
+completed deliverables out of the total tracked deliverables. Students are
+shown in the same order as the main student list.
+
+Format: `overview /course COURSE /sem SEMESTER`
+
+Example: `overview /course CS2103T /sem AY26/27-S1`
+
+Example output:
+
+```text
+Progress overview for CS2103T (AY26/27-S1):
+Alice Pauline (A1234567Y): 2/5 completed
+Benson Meier (A2345678X): 4/5 completed
+```
+
+The selected course must already be initialised. This command reports progress
+only and does not change students, enrolments, or completion statuses.
+
 ### Editing a student: `edit`
 
 Edits the details of an existing student identified by their current student ID.
@@ -352,6 +373,7 @@ Action | Format, Examples
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
+**Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
 **View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
