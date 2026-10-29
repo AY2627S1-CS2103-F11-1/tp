@@ -33,7 +33,7 @@ public class ViewProgressCommand extends Command {
             + "Examples:\n"
             + "  " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + "\n"
             + "  " + COMMAND_WORD + " " + PREFIX_NAME + " " + EXAMPLE_NAME;
-    public static final String MESSAGE_NO_PROGRESS = "No deliverable progress found for %s (%s).";
+    private static final String MESSAGE_NO_PROGRESS = "No deliverable progress found for %s (%s).";
 
     private final Optional<Id> studentId;
     private final Optional<String> studentName;

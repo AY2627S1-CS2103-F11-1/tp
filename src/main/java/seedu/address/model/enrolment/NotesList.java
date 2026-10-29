@@ -1,9 +1,11 @@
+//@@author mizzfain
 package seedu.address.model.enrolment;
 
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ public class NotesList {
 
     /**
      * Creates a NotesList of only the provided Notes.
+     *
      * @param notes Notes to be added into NotesList.
      */
     public NotesList(Notes notes) {
@@ -41,6 +44,7 @@ public class NotesList {
 
     /**
      * Creates a NotesList given a List of Notes.
+     *
      * @param notesList List of Notes to be converted into NotesList.
      */
     public NotesList(List<Notes> notesList) {
@@ -51,7 +55,9 @@ public class NotesList {
 
     /**
      * Creates a NotesList from JSON String representation.
-     * @param notesListJsonString NotesList JSON String to be converted into NotesList.
+     *
+     * @param notesListJsonString NotesList JSON String to be converted into
+     *                            NotesList.
      */
     public NotesList(String notesListJsonString) {
         requireNonNull(notesListJsonString);
@@ -84,6 +90,7 @@ public class NotesList {
      * Adds a Notes to the NotesList.
      * Adds Notes to a copy and returns the copy.
      * Does not change old NotesList, ensuring immutability.
+     *
      * @param notes
      */
     public NotesList add(Notes notes) {
@@ -105,6 +112,11 @@ public class NotesList {
      */
     public boolean isEmpty() {
         return notesList.isEmpty();
+    }
+
+    /** Returns an unmodifiable view of the notes. */
+    public List<Notes> getNotes() {
+        return Collections.unmodifiableList(notesList);
     }
 
     /**

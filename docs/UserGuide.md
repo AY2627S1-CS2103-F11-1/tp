@@ -109,11 +109,50 @@ Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[
 
 Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
 
-### Listing all students: `list`
+### Listing students: `list`
 
-Shows a list of all students in the address book.
+Shows all students, or only students enrolled in a selected course-semester.
+The filtered list can be narrowed further by tutorial class or by a deliverable
+that is still incomplete.
 
 Format: `list`
+
+Filtered formats:
+
+* `list /course COURSE /sem SEMESTER`
+* `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`
+
+Examples:
+
+* `list /course CS2103T /sem AY26/27-S1` shows students enrolled in CS2103T for the selected semester.
+* `list /course CS2103T /sem AY26/27-S1 /class T07` shows only students from tutorial T07 in that course-semester.
+* `list /course CS2103T /sem AY26/27-S1 /deliverable MVP` shows enrolled students whose MVP is still incomplete.
+* `list /course CS2103T /sem AY26/27-S1 /class T07 /deliverable MVP` combines the tutorial and incomplete-deliverable filters.
+
+`/course` and `/sem` must be supplied together. `/class` and `/deliverable` can be used
+only with both of them. `/deliverable` accepts exactly one deliverable tracked by that
+course-semester. Students appear once even if they have other enrolments.
+
+### Viewing a course progress overview: `overview`
+
+Shows every student enrolled in a course-semester together with the number of
+completed deliverables out of the total tracked deliverables. Students are
+shown in the same order as the main student list.
+
+Format: `overview /course COURSE /sem SEMESTER`
+
+Example: `overview /course CS2103T /sem AY26/27-S1`
+
+Example output:
+
+```text
+Progress overview for CS2103T (AY26/27-S1):
+Alice Pauline (A1234567Y): 2/5 completed
+Benson Meier (A2345678X): 4/5 completed
+```
+
+The selected course must already be initialised. This command reports progress
+only and does not change students, enrolments, or completion statuses.
 
 ### Editing a student: `edit`
 
@@ -170,20 +209,26 @@ Example:
 
 ### Searching students by name or ID: `search`
 
-Searches student records by case-insensitive partial name queries or exact student IDs.
+Searches student records by one or more names or student IDs. Name queries use
+case-insensitive partial-substring matching with OR semantics: a student is
+returned when their name contains at least one comma-separated query. Each
+name query may contain spaces.
 
-Format: `search /name NAME[, NAME]...` or `search /id ID[, ID]...`
+Format:
+
+* `search /name NAME[, NAME]...`
+* `search /id ID[, ID]...`
 
 Examples:
 
-* `search /name Alex Yeoh, Bernice Yu` shows students whose names contain
-  `Alex Yeoh` or `Bernice Yu`.
-* Name queries are case-insensitive partial matches. Commas separate queries;
-  spaces within one name query are preserved.
-* `search /id A1234567Z, A2345678X` searches for either exact student ID.
+* `search /name John Doe, Alex` shows students whose names contain either `John Doe` or `Alex`.
+* `search /id A1234567Z, A2345678X` shows students with either ID.
 
 Only one of `/name` and `/id` may be supplied. The command rejects missing, repeated, or unknown parameters.
-Student ID matching is case-insensitive.
+Student ID matching is exact after the supplied IDs are trimmed and normalized to uppercase.
+
+Command words and parameter prefixes are case-sensitive. Use the documented
+lowercase syntax, such as `search` and `/name`.
 
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
@@ -286,11 +331,39 @@ Advanced users may update the JSON file directly, but should make a backup first
 **Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes make the data file invalid, TAssist starts with sample data at
-the next run. The invalid file remains on disk until a command is run, at which
-point TAssist saves its current data. Edit the file only if you are confident
-that the resulting values follow the documented formats.<br>
+Do not edit or replace the data file unless you have made a backup first. If
+TAssist cannot load an existing file, it stops normal startup and does not
+replace the file with sample data. This protects your saved student records.<br>
 </div>
+
+### Loading and recovering saved data
+
+TAssist handles the address-book data file in three ways:
+
+| Storage condition | TAssist behaviour |
+| --- | --- |
+| The data file does not exist | TAssist starts with sample data for first-time exploration. |
+| The data file exists and is valid | TAssist loads your saved data normally. |
+| The data file exists but is invalid or cannot be read | TAssist displays an **Unable to load saved data** error dialog, reports the loading problem, and stops normal startup. The original file is not replaced. |
+
+Sample data is for initial demonstration only. TAssist does not replace invalid
+saved data with sample data because this could overwrite important student
+records. It also does not automatically reassign or delete notes that refer to
+course deliverables that do not exist, because the intended deliverable cannot
+be determined reliably. After you dismiss the startup error dialog, TAssist
+exits without opening the normal application interface.
+
+If TAssist cannot load your saved data:
+
+1. Read the error message to identify the problem.
+2. Locate the file at `[JAR file location]/data/addressbook.json`.
+3. Make a backup copy of the original file before editing it.
+4. Restore a valid backup or carefully correct the invalid data.
+5. Restart TAssist.
+
+A valid but empty address book is different from a missing file: it is loaded as
+your saved data and is not replaced with sample data. Do not delete or
+overwrite the existing file unless you intentionally want to reset your data.
 
 ### Archiving data files `[coming in v2.0]`
 
@@ -320,12 +393,17 @@ Action | Format, Examples
 **Add** | `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
 **Clear** | `clear`
 **Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
+**Delete notes** | `delete notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
+**Exit** | `exit`
 **Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
+**Notes** | `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`<br> e.g., `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
-**List** | `list`
+**Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
+**View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
 **Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`

@@ -24,6 +24,11 @@
   -fx-padding: 4 8 4 8;
 }
 
+.custom-menubar {
+  -fx-background-color: #0d47a1;
+  -fx-padding: 4 8 4 8;
+}
+
 .custom-menubar .menu > .label {
   -fx-text-fill: white;
 }
@@ -35,6 +40,20 @@
 .custom-menubar .menu:hover > .label,
 .custom-menubar .menu:showing > .label {
   -fx-text-fill: white;
+}
+
+.help-menu-button {
+  -fx-background-color: #0d47a1;
+  -fx-text-fill: white;
+  -fx-padding: 6 10 6 10;
+  -fx-background-radius: 0;
+}
+
+.help-menu-button:hover,
+.help-menu-button:focused {
+  -fx-text-fill: white;
+  -fx-background-color: #0d47a1;
+  -fx-font-weight: normal;
 }
 
 .custom-menu .context-menu {

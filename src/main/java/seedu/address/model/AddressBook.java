@@ -37,14 +37,15 @@ public class AddressBook implements ReadOnlyAddressBook {
     private static final String MESSAGE_PROGRESS_EXISTS = "Progress record already exists.";
     private static final String MESSAGE_PROGRESS_FOR_ENROLMENT_EXISTS =
             "Progress record already exists for this enrolment.";
-    private static final String MESSAGE_PROGRESS_ID_CHANGE =
-            "Progress record identity cannot be changed.";
+    private static final String MESSAGE_PROGRESS_ID_CHANGE = "Progress record identity cannot be changed.";
     private static final String MESSAGE_NO_ENROLMENT = "A student must have at least one enrolment.";
-    private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH = "Enrolment student ID does not match.";
+    private static final String MESSAGE_ENROLMENT_STUDENT_MISMATCH =
+            "Enrolment student ID does not match.";
     private static final String MESSAGE_INVALID_ENROLMENT =
             "Enrolment references a student or course that does not exist.";
-    private static final String MESSAGE_PROGRESS_NOT_FOUND =
-            "Progress record for the enrolment does not exist.";
+    private static final String MESSAGE_INVALID_NOTE_DELIVERABLE =
+            "Note references a deliverable that does not belong to its course.";
+    private static final String MESSAGE_PROGRESS_NOT_FOUND = "Progress record for the enrolment does not exist.";
     private static final String MESSAGE_ENROLMENT_ID_CHANGE =
             "Enrolment identity cannot be changed through setEnrolment.";
 
@@ -88,11 +89,10 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
 
-        students.setStudents(newData.getStudentList());
-        courses.setCourses(newData.getCourseList());
-        enrolments.setEnrolments(newData.getEnrolmentList());
-        studentCourseProgresses.setProgresses(
-                newData.getStudentCourseProgressList());
+        setStudents(newData.getStudentList());
+        setCourses(newData.getCourseList());
+        setEnrolments(newData.getEnrolmentList());
+        setStudentCourseProgresses(newData.getStudentCourseProgressList());
     }
 
     // ===== Student operations =====
@@ -355,6 +355,7 @@ public class AddressBook implements ReadOnlyAddressBook {
                     MESSAGE_ENROLMENT_ID_CHANGE);
         }
 
+        validateNoteDeliverables(editedEnrolment);
         enrolments.setEnrolment(target, editedEnrolment);
     }
 
@@ -419,7 +420,18 @@ public class AddressBook implements ReadOnlyAddressBook {
                 || !hasCourseFor(enrolment))) {
             throw new IllegalArgumentException(MESSAGE_INVALID_ENROLMENT);
         }
+        enrolments.forEach(this::validateNoteDeliverables);
         this.enrolments.setEnrolments(enrolments);
+    }
+
+    private void validateNoteDeliverables(StudentCourseEnrolment enrolment) {
+        Course course = getCourse(enrolment.getCourseCode(), enrolment.getSemester())
+                .orElseThrow(() -> new IllegalArgumentException(MESSAGE_INVALID_ENROLMENT));
+        boolean hasInvalidNote = enrolment.getNotes().getNotes().stream()
+                .anyMatch(note -> !course.getDeliverables().contains(note.getDeliverable()));
+        if (hasInvalidNote) {
+            throw new IllegalArgumentException(MESSAGE_INVALID_NOTE_DELIVERABLE);
+        }
     }
 
     /**

@@ -55,11 +55,11 @@ public class MultiCourseWorkflowTest {
         initialiseCoursesAndStudent();
 
         execute("notes /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER
-                + " /task v1.4 /notes Reviewed inheritance design");
+                + " /deliverable v1.4 /notes Reviewed inheritance design");
         execute("notes /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER
-                + " /task v1.5 /notes Follow up on exception handling");
+                + " /deliverable v1.5 /notes Follow up on exception handling");
         execute("notes /id " + ORIGINAL_ID + " /course CS2105 /sem " + SEMESTER
-                + " /task Assignment 1 /notes Check socket implementation");
+                + " /deliverable Assignment 1 /notes Check socket implementation");
         CommandResult notesResult = execute("view notes /id " + ORIGINAL_ID
                 + " /course CS2103T /sem " + SEMESTER);
         assertTrue(notesResult.getFeedbackToUser().contains("v1.4: Reviewed inheritance design"));
@@ -68,9 +68,9 @@ public class MultiCourseWorkflowTest {
                 + " /course CS2105 /sem " + SEMESTER);
         assertTrue(secondCourseNotes.getFeedbackToUser().contains("Assignment 1: Check socket implementation"));
 
-        execute("mark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /task v1.4");
-        execute("mark /id " + ORIGINAL_ID + " /course CS2105 /sem " + SEMESTER + " /task Assignment 1");
-        execute("unmark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /task v1.4");
+        execute("mark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /deliverable v1.4");
+        execute("mark /id " + ORIGINAL_ID + " /course CS2105 /sem " + SEMESTER + " /deliverable Assignment 1");
+        execute("unmark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /deliverable v1.4");
         CommandResult viewResult = execute("view /id " + ORIGINAL_ID);
         assertTrue(viewResult.getStudentDeliverablesView().isPresent());
         assertEquals(2, viewResult.getStudentDeliverablesView().orElseThrow().getCourseProgresses().size());
@@ -120,7 +120,7 @@ public class MultiCourseWorkflowTest {
         String expectedFile = Files.readString(dataFile);
 
         assertThrows(CommandException.class, () -> execute("mark /id " + ORIGINAL_ID
-                + " /course CS2103T /sem " + SEMESTER + " /task Final Demo"));
+                + " /course CS2103T /sem " + SEMESTER + " /deliverable Final Demo"));
 
         assertEquals(expectedModel, model.getAddressBook());
         assertEquals(expectedFile, Files.readString(dataFile));
@@ -154,8 +154,8 @@ public class MultiCourseWorkflowTest {
     }
 
     private void initialiseCoursesAndStudent() throws CommandException, ParseException {
-        execute("init course /course CS2103T /sem " + SEMESTER + " /task v1.4, v1.5");
-        execute("init course /course CS2105 /sem " + SEMESTER + " /task Assignment 1, Assignment 2");
+        execute("init course /course CS2103T /sem " + SEMESTER + " /deliverable v1.4, v1.5");
+        execute("init course /course CS2105 /sem " + SEMESTER + " /deliverable Assignment 1, Assignment 2");
         execute("add /name Alex Tan /id " + ORIGINAL_ID
                 + " /email alex@u.nus.edu /course CS2103T /sem " + SEMESTER + " /class T01");
         execute("enrol /id " + ORIGINAL_ID + " /course CS2105 /sem " + SEMESTER + " /class T02");

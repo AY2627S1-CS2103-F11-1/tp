@@ -66,6 +66,12 @@ public class JsonUtil {
             throw new DataLoadingException(e);
         }
 
+        if (jsonFile == null) {
+            IOException exception = new IOException("JSON file contains null instead of an address book object.");
+            logger.warning("Error reading from jsonFile file " + filePath + ": " + exception.getMessage());
+            throw new DataLoadingException(exception);
+        }
+
         return Optional.of(jsonFile);
     }
 

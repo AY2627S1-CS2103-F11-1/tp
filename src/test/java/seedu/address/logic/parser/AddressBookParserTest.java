@@ -7,12 +7,14 @@ import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CourseProgressOverviewCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteNotesCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -27,6 +29,7 @@ import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.ViewNotesCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.enrolment.Notes;
 import seedu.address.model.enrolment.NotesList;
@@ -105,8 +108,23 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_list() throws Exception {
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
+        assertEquals(new ListCommand(), parser.parseCommand(ListCommand.COMMAND_WORD));
+        assertEquals(new ListCommand(new CourseCode("CS2103T"), new Semester("AY26/27-S1"), Optional.empty()),
+                parser.parseCommand("list /course CS2103T /sem AY26/27-S1"));
+        assertEquals(new ListCommand(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                        Optional.of(new TutorialClass("T07"))),
+                parser.parseCommand("list /course CS2103T /sem AY26/27-S1 /class T07"));
+        assertEquals(new ListCommand(new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                        Optional.empty(), Optional.of(new Deliverable("MVP"))),
+                parser.parseCommand("list /course CS2103T /sem AY26/27-S1 /deliverable MVP"));
         assertThrows(ParseException.class, () -> parser.parseCommand(ListCommand.COMMAND_WORD + " 3"));
+    }
+
+    @Test
+    public void parseCommand_courseProgressOverview() throws Exception {
+        assertEquals(new CourseProgressOverviewCommand(
+                        new CourseCode("CS2103T"), new Semester("AY26/27-S1")),
+                parser.parseCommand("overview /course CS2103T /sem AY26/27-S1"));
     }
 
     @Test
