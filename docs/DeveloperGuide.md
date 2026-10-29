@@ -403,7 +403,7 @@ Low (unlikely to have) - `*`
 **MSS**
 
 1. TA requests to add a student.
-2. TAssist prompts the TA for the student's name, student ID, email address, tutorial class and optional notes.
+2. TAssist prompts the TA for the student's name, student ID, email address, course, semester, and tutorial class.
 3. TA enters the required student information.
 4. TAssist validates the entered information.
 5. TAssist adds the student record.
@@ -431,6 +431,12 @@ Low (unlikely to have) - `*`
 
   * 4b1. TAssist displays an error message.
 
+    Use case resumes at step 3.
+
+* 4c. The course for the given semester does not exist.
+
+  * 4c1. TAssist displays error message asking to initialise course for the given semester first.
+  
     Use case resumes at step 3.
 
 ---
@@ -650,6 +656,6 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{Explain how to simulate missing or corrupted data files and state the expected behavior.}_
+   1. Data
 
 1. _{ more test cases …​ }_
