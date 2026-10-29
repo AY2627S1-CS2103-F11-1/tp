@@ -654,8 +654,16 @@ testers are expected to do more *exploratory* testing.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Dealing with corrupted data files
 
-   1. Data
-
-1. _{ more test cases …​ }_
+   1. Prerequisites: Place `TAssist.jar` in an empty folder. Ensure there is no data folder inside this folder.
+   2. Open a terminal and navigate to the folder containing `TAssist.jar`.
+   3. Run `java -jar TAssist.jar` to launch the app.
+   4. Add a project-work notes using
+   `notes /id A1234567B /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Implemented add and delete but not edit`. Alex Yeoh's display should now say `2 notes`.
+   5. In the folder with `TAssist.jar`, a new data folder is created. Open `addressbook.json` located in the data folder.
+   6. Scroll down to enrolments and edit `"studentId" : "A1234567B",` to `"studentId" : ,`
+   7. Rerun `java -jar TAssist.jar` in your terminal to launch the app.
+   8. Expected: The app will launch with the sample data loaded instead of the corrupted data. Alex Yeoh's display will now show `1 notes` instead.
+   9. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`.
+   10. Relaunching the app using `java -jar TAssist.jar` in your terminal will load the correct data. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`
