@@ -41,7 +41,7 @@ public class CommandResult {
     /**
      * Constructs a CommandResult with an optional added student ID and studentSplitView
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
+    private CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
             Id studentIdToFocus, StudentSplitView studentSplitView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
