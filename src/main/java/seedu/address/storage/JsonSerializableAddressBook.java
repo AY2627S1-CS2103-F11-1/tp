@@ -1,9 +1,12 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -11,7 +14,9 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.progress.CompletionStatus;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 
@@ -30,11 +35,11 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_INVALID_ENROLMENT =
             "Enrolment references a student or course that does not exist.";
     public static final String MESSAGE_INVALID_PROGRESS = "Progress record does not match an existing enrolment.";
-
     private final List<JsonAdaptedStudent> students = new ArrayList<>();
     private final List<JsonAdaptedCourse> courses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseProgress> studentCourseProgresses = new ArrayList<>();
     private final List<JsonAdaptedStudentCourseEnrolment> enrolments = new ArrayList<>();
+    private boolean wasReconciled;
 
     /**
      * Constructs a serializable address book from the supplied JSON data.
@@ -140,21 +145,41 @@ class JsonSerializableAddressBook {
         List<StudentCourseProgress> modelProgresses = new ArrayList<>();
 
         for (JsonAdaptedStudentCourseProgress jsonProgress : studentCourseProgresses) {
-            StudentCourseProgress progress = jsonProgress.toModelType();
+            StudentCourseProgress loadedProgress = jsonProgress.toModelType();
 
             if (modelProgresses.stream().anyMatch(existing -> existing.isFor(
-                    progress.getStudentId(), progress.getCourseCode(), progress.getSemester()))) {
+                    loadedProgress.getStudentId(), loadedProgress.getCourseCode(), loadedProgress.getSemester()))) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PROGRESS);
             }
 
             boolean hasEnrolment = modelEnrolments.stream()
                     .anyMatch(enrolment -> enrolment.isFor(
-                            progress.getStudentId(),
-                            progress.getCourseCode(),
-                            progress.getSemester()));
+                            loadedProgress.getStudentId(),
+                            loadedProgress.getCourseCode(),
+                            loadedProgress.getSemester()));
 
             if (!hasEnrolment) {
                 throw new IllegalValueException(MESSAGE_INVALID_PROGRESS);
+            }
+
+            Course course = addressBook.getCourse(
+                    loadedProgress.getCourseCode(), loadedProgress.getSemester()).orElseThrow();
+            Map<Deliverable, CompletionStatus> reconciledStatuses = new LinkedHashMap<>();
+            for (Deliverable deliverable : course.getDeliverables()) {
+                CompletionStatus status = loadedProgress.getDeliverableStatuses().entrySet().stream()
+                        .filter(entry -> entry.getKey().equals(deliverable))
+                        .map(Map.Entry::getValue)
+                        .findFirst()
+                        .orElse(CompletionStatus.NOT_DONE);
+                reconciledStatuses.put(deliverable, status);
+            }
+
+            StudentCourseProgress progress = loadedProgress;
+            if (!reconciledStatuses.equals(loadedProgress.getDeliverableStatuses())) {
+                wasReconciled = true;
+                progress = StudentCourseProgress.fromStatuses(
+                        loadedProgress.getStudentId(), loadedProgress.getCourseCode(), loadedProgress.getSemester(),
+                        reconciledStatuses);
             }
 
             modelProgresses.add(progress);
@@ -177,5 +202,11 @@ class JsonSerializableAddressBook {
         addressBook.setStudentCourseProgresses(modelProgresses);
 
         return addressBook;
+    }
+
+    /** Returns whether loading repaired any progress records. */
+    @JsonIgnore
+    public boolean wasReconciled() {
+        return wasReconciled;
     }
 }

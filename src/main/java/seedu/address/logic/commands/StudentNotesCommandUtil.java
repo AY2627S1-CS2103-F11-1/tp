@@ -14,9 +14,10 @@ import seedu.address.model.student.Student;
 /** Utility methods shared by commands that operate on a student's notes. */
 final class StudentNotesCommandUtil {
 
-    public static final String MESSAGE_ENROLMENT_NOT_FOUND = "Student %s is not enrolled in %s (%s).";
     static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'. "
             + "Please check the student ID and try again.";
+
+    private static final String MESSAGE_ENROLMENT_NOT_FOUND = "Student %s is not enrolled in %s (%s).";
 
     private StudentNotesCommandUtil() {
     }
@@ -37,7 +38,7 @@ final class StudentNotesCommandUtil {
      *
      * @throws CommandException if no matching enrolment exists.
      */
-    public static StudentCourseEnrolment findEnrolment(
+    static StudentCourseEnrolment findEnrolment(
             Model model, Id studentId, CourseCode courseCode,
             Semester semester) throws CommandException {
 

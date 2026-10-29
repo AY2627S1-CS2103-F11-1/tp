@@ -8,6 +8,7 @@ package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 import static seedu.address.testutil.TypicalStudents.HOON;
@@ -15,6 +16,7 @@ import static seedu.address.testutil.TypicalStudents.IDA;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -79,6 +81,30 @@ public class JsonAddressBookStorageTest {
     @Test
     public void readAddressBook_legacyStudentFormat_throwDataLoadingException() {
         assertThrows(DataLoadingException.class, () -> readAddressBook("legacyStudentAddressBook.json"));
+    }
+
+    @Test
+    public void readAddressBook_mismatchedProgressDeliverable_repairsAndSaves() throws Exception {
+        Path filePath = testFolder.resolve("mismatchedProgressAddressBook.json");
+        Files.copy(TEST_DATA_FOLDER.resolve("mismatchedProgressAddressBook.json"), filePath);
+
+        new JsonAddressBookStorage(filePath).readAddressBook();
+
+        String savedContent = Files.readString(filePath);
+        assertTrue(savedContent.contains("\"MVP\" : \"NOT_DONE\""));
+        assertFalse(savedContent.contains("\"ABC\""));
+    }
+
+    @Test
+    public void readAddressBook_consistentData_doesNotRewriteFile() throws Exception {
+        Path filePath = testFolder.resolve("consistentAddressBook.json");
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        storage.saveAddressBook(getTypicalAddressBook(), filePath);
+        String originalContent = Files.readString(filePath);
+
+        storage.readAddressBook(filePath);
+
+        assertEquals(originalContent, Files.readString(filePath));
     }
 
     @Test

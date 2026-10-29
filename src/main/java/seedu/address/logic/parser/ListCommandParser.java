@@ -1,32 +1,94 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLASS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERABLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SEMESTER;
 
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Optional;
 
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
+import seedu.address.model.course.Semester;
+import seedu.address.model.student.TutorialClass;
 
 /** Parses arguments for the {@code list} command. */
 public class ListCommandParser implements Parser<ListCommand> {
 
-    public static final String MESSAGE_UNKNOWN_PARAMETER =
-            "Unknown parameter. List command does not accept parameters.";
     public static final String MESSAGE_UNEXPECTED_TEXT = "Unexpected text found after list command.";
-    private static final Pattern PARAMETER_PATTERN = Pattern.compile("(^|\\s)/\\S+");
+    public static final String MESSAGE_CLASS_REQUIRES_COURSE = PREFIX_CLASS
+            + " can be used only with " + PREFIX_COURSE + " and " + PREFIX_SEMESTER + ".";
+    public static final String MESSAGE_DELIVERABLE_REQUIRES_COURSE = PREFIX_DELIVERABLE
+            + " can be used only with " + PREFIX_COURSE + " and " + PREFIX_SEMESTER + ".";
+    public static final String MESSAGE_SINGLE_DELIVERABLE =
+            "Specify exactly one deliverable for " + PREFIX_DELIVERABLE + ".";
 
+    /**
+     * Parses list command arguments.
+     *
+     * @param args arguments supplied after the command word
+     * @return a list command
+     * @throws ParseException if arguments do not match the supported filters
+     */
     @Override
     public ListCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        if (PARAMETER_PATTERN.matcher(args).find()) {
-            throw new ParseException(MESSAGE_UNKNOWN_PARAMETER);
+        if (args.trim().isEmpty()) {
+            return new ListCommand();
         }
 
-        if (!args.isBlank()) {
+        ParserUtil.rejectUnknownParameters(args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                args, PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
+        if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
         }
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_COURSE, PREFIX_SEMESTER, PREFIX_CLASS, PREFIX_DELIVERABLE);
 
-        return new ListCommand();
+        boolean hasCourse = argMultimap.getValue(PREFIX_COURSE).isPresent();
+        boolean hasSemester = argMultimap.getValue(PREFIX_SEMESTER).isPresent();
+        boolean hasClass = argMultimap.getValue(PREFIX_CLASS).isPresent();
+        boolean hasDeliverable = argMultimap.getValue(PREFIX_DELIVERABLE).isPresent();
+
+        if (!hasCourse && !hasSemester) {
+            if (hasClass) {
+                throw new ParseException(MESSAGE_CLASS_REQUIRES_COURSE);
+            }
+            if (hasDeliverable) {
+                throw new ParseException(MESSAGE_DELIVERABLE_REQUIRES_COURSE);
+            }
+        }
+        ParserUtil.validateRequiredParameters(argMultimap, PREFIX_COURSE, PREFIX_SEMESTER);
+
+        CourseCode courseCode = ParserUtil.parseCourseCode(
+                argMultimap.getValue(PREFIX_COURSE).orElseThrow());
+        Semester semester = ParserUtil.parseSemester(
+                argMultimap.getValue(PREFIX_SEMESTER).orElseThrow());
+
+        Optional<TutorialClass> tutorialClass = Optional.empty();
+        if (hasClass) {
+            ParserUtil.validateRequiredParameters(argMultimap, PREFIX_CLASS);
+            tutorialClass = Optional.of(ParserUtil.parseTutorialClass(
+                    argMultimap.getValue(PREFIX_CLASS).orElseThrow()));
+        }
+
+        Optional<Deliverable> incompleteDeliverable = Optional.empty();
+        if (hasDeliverable) {
+            ParserUtil.validateRequiredParameters(argMultimap, PREFIX_DELIVERABLE);
+            List<Deliverable> deliverables = ParserUtil.parseDeliverables(
+                    argMultimap.getValue(PREFIX_DELIVERABLE).orElseThrow());
+            if (deliverables.size() != 1) {
+                throw new ParseException(MESSAGE_SINGLE_DELIVERABLE);
+            }
+            incompleteDeliverable = Optional.of(deliverables.getFirst());
+        }
+
+        return new ListCommand(courseCode, semester, tutorialClass, incompleteDeliverable);
     }
 }
