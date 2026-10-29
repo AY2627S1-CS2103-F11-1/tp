@@ -8,6 +8,14 @@ package "Model" as ModelPackage <<Rectangle>> {
     class "<<interface>>\nModel" as ModelApi
     class ModelManager
     class AddressBook
+    class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
+    class UserPrefs
+    class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
+
+    class UniqueStudentList
+    class UniqueCourseList
+    class UniqueStudentCourseEnrolment
+    class UniqueStudentCourseProgressList
 
     class Student
     class Course
@@ -16,11 +24,23 @@ package "Model" as ModelPackage <<Rectangle>> {
 }
 
 ModelManager .up.|> ModelApi
-ModelManager -down-> "1" AddressBook : manages
+AddressBook .up.|> ReadOnlyAddressBook
+UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *-- "*" Student : stores
-AddressBook *-- "*" Course : stores
-AddressBook *-- "*" StudentCourseEnrolment : stores
-AddressBook *-- "*" StudentCourseProgress : stores
+ModelApi ..> ReadOnlyAddressBook
+ModelApi ..> ReadOnlyUserPrefs
+
+ModelManager -down-> "1" AddressBook
+ModelManager -right-> "1" UserPrefs
+
+AddressBook *-- "1" UniqueStudentList
+AddressBook *-- "1" UniqueCourseList
+AddressBook *-- "1" UniqueStudentCourseEnrolment
+AddressBook *-- "1" UniqueStudentCourseProgressList
+
+UniqueStudentList --> "*" Student
+UniqueCourseList --> "*" Course
+UniqueStudentCourseEnrolment --> "*" StudentCourseEnrolment
+UniqueStudentCourseProgressList --> "*" StudentCourseProgress
 
 @enduml
