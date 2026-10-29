@@ -1,63 +1,82 @@
+
 @startuml
 !include style.puml
-show members
+
+title Student enrolments and progress
+
 skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR_T4
 skinparam objectBackgroundColor MODEL_COLOR
 skinparam objectFontColor white
 skinparam objectBorderColor MODEL_COLOR_T4
 
-object "addressBook:AddressBook" as AddressBook
+object "<u>:AddressBook</u>" as AddressBook
 
-object "students:UniqueStudentList" as Students MODEL_COLOR_T1
-object "courses:UniqueCourseList" as Courses MODEL_COLOR_T1
-object "progresses:UniqueStudentCourseProgressList" as Progresses MODEL_COLOR_T1
+object "<u>:UniqueStudentList</u>" as Students MODEL_COLOR_T1
+object "<u>:UniqueCourseList</u>" as Courses MODEL_COLOR_T1
+object "<u>:UniqueStudentCourseEnrolment</u>" as Enrolments MODEL_COLOR_T1
+object "<u>:UniqueStudentCourseProgressList</u>" as Progresses MODEL_COLOR_T1
 
-object "alex:Student" as Alex {
-  id = A1234567B
-  name = Alex Yeoh
-  email = alexyeoh@u.nus.edu
+object "<u>alex:Student</u>" as Alex {
+    id = A1234567B
+    name = Alex Yeoh
+    email = alexyeoh@u.nus.edu
 }
 
-object "cs2103:Course" as Cs2103 {
-  courseCode = CS2103T
-  semester = AY26/27-S1
-  deliverables = [v1.1, MVP]
+object "<u>cs2103t:Course</u>" as Cs2103 {
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    deliverables = [v1.1, MVP]
 }
 
-object "cs2030:Course" as Cs2030 {
-  courseCode = CS2030S
-  semester = AY26/27-S1
-  deliverables = [Lab 1, Project]
+object "<u>cs2030s:Course</u>" as Cs2030 {
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    deliverables = [Lab 1, Project]
 }
 
-object "cs2103Progress:StudentCourseProgress" as Cs2103Progress {
-  studentId = A1234567B
-  courseCode = CS2103T
-  semester = AY26/27-S1
-  v1.1 = DONE
-  MVP = NOT_DONE
+object "<u>cs2103tEnrolment:StudentCourseEnrolment</u>" as AlexCs2103 {
+    studentId = A1234567B
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    tutorialClass = T07
 }
 
-object "cs2030Progress:StudentCourseProgress" as Cs2030Progress {
-  studentId = A1234567B
-  courseCode = CS2030S
-  semester = AY26/27-S1
-  Lab 1 = DONE
-  Project = DONE
+object "<u>cs2030sEnrolment:StudentCourseEnrolment</u>" as AlexCs2030 {
+    studentId = A1234567B
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    tutorialClass = T02
+}
+
+object "<u>cs2103tProgress:StudentCourseProgress</u>" as Cs2103Progress {
+    studentId = A1234567B
+    courseCode = CS2103T
+    semester = AY26/27-S1
+    deliverableStatuses = {v1.1: DONE, MVP: NOT_DONE}
+}
+
+object "<u>cs2030sProgress:StudentCourseProgress</u>" as Cs2030Progress {
+    studentId = A1234567B
+    courseCode = CS2030S
+    semester = AY26/27-S1
+    deliverableStatuses = {Lab 1: DONE, Project: DONE}
 }
 
 AddressBook *-- Students
 AddressBook *-- Courses
+AddressBook *-- Enrolments
 AddressBook *-- Progresses
 
-Students -- Alex : contains
-Courses -- Cs2103 : contains
-Courses -- Cs2030 : contains
-Progresses -- Cs2103Progress : contains
-Progresses -- Cs2030Progress : contains
+Students -- Alex
 
-Alex -[hidden]right- Cs2103
-Cs2103 -[hidden]right- Cs2030
-Cs2103Progress -[hidden]right- Cs2030Progress
+Courses -- Cs2103
+Courses -- Cs2030
+
+Enrolments -- AlexCs2103
+Enrolments -- AlexCs2030
+
+Progresses -- Cs2103Progress
+Progresses -- Cs2030Progress
+
 @enduml
