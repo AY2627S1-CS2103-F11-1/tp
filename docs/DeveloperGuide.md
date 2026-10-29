@@ -791,6 +791,7 @@ testers are expected to do more *exploratory* testing.
    5. In the folder with `TAssist.jar`, a new data folder is created. Open `addressbook.json` located in the data folder.
    6. Scroll down to enrolments and edit `"studentId" : "A1234567B",` to `"studentId" : ,`
    7. Rerun `java -jar TAssist.jar` in your terminal to launch the app.
-   8. Expected: The app will launch with the sample data loaded instead of the corrupted data. Alex Yeoh's display will now show `1 notes` instead.
-   9. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`.
-   10. Relaunching the app using `java -jar TAssist.jar` in your terminal will load the correct data. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`
+   8. Expected: TAssist displays an **Unable to load saved data** error dialog and does not start the normal application interface. The original `data/addressbook.json` file remains unchanged, and sample data is not written over it.
+   9. Dismiss the dialog. Expected: TAssist exits without accepting commands or saving the invalid address-book data.
+   10. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`, or replace it with a valid backup.
+   11. Relaunching the app using `java -jar TAssist.jar` in your terminal should now load the corrected data normally. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`.
