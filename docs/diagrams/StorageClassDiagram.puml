@@ -14,11 +14,12 @@ Class JsonUserPrefsStorage
 }
 
 package "TAssist data storage" #F4F6F6 {
-Class JsonAddressBookStorage
-Class JsonSerializableAddressBook
-Class JsonAdaptedStudent
-Class JsonAdaptedCourse
-Class JsonAdaptedStudentCourseProgress
+    class JsonAddressBookStorage
+    class JsonSerializableAddressBook
+    class JsonAdaptedStudent
+    class JsonAdaptedCourse
+    class JsonAdaptedStudentCourseEnrolment
+    class JsonAdaptedStudentCourseProgress
 }
 }
 
@@ -29,11 +30,14 @@ StorageManager .up.|> Storage
 StorageManager -down-> "1" JsonUserPrefsStorage
 StorageManager -down-> "1" JsonAddressBookStorage
 
-JsonAddressBookStorage ..> JsonSerializableAddressBook : <<read/write>>
+JsonAddressBookStorage ..> JsonSerializableAddressBook : uses
+
 JsonSerializableAddressBook --> "*" JsonAdaptedStudent
 JsonSerializableAddressBook --> "*" JsonAdaptedCourse
+JsonSerializableAddressBook --> "*" JsonAdaptedStudentCourseEnrolment
 JsonSerializableAddressBook --> "*" JsonAdaptedStudentCourseProgress
 
 JsonAdaptedStudent -[hidden]right- JsonAdaptedCourse
-JsonAdaptedCourse -[hidden]right- JsonAdaptedStudentCourseProgress
+JsonAdaptedCourse -[hidden]right- JsonAdaptedStudentCourseEnrolment
+JsonAdaptedStudentCourseEnrolment -[hidden]right- JsonAdaptedStudentCourseProgress
 @enduml
