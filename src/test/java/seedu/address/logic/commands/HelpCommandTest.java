@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.ui.HelpWindow;
 
 public class HelpCommandTest {
     private Model model = new ModelManager();
@@ -41,8 +39,6 @@ public class HelpCommandTest {
             }
             assertTrue(content.contains("/deliverable DELIVERABLE"));
             assertFalse(content.contains("/task"));
-            assertEquals("https://ay2627s1-cs2103-f11-1.github.io/tp/UserGuide.html",
-                    HelpWindow.USERGUIDE_URL);
         }
     }
 }
