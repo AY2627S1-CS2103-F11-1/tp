@@ -162,6 +162,9 @@ public class ParserUtil {
             }
             parsedDeliverables.add(new Deliverable(deliverableName));
         }
+        if (deliverableNames.size() > Course.MAX_DELIVERABLES) {
+            throw new ParseException(Course.MESSAGE_TOO_MANY_DELIVERABLES);
+        }
         if (!Course.hasUniqueDeliverables(parsedDeliverables)) {
             throw new ParseException(Course.MESSAGE_DELIVERABLES);
         }

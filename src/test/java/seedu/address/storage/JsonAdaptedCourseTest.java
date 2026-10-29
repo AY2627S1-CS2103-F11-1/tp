@@ -25,7 +25,7 @@ public class JsonAdaptedCourseTest {
     @Test
     public void toModelType_duplicateDeliverables_throwsIllegalValueException() {
         JsonAdaptedCourse adaptedCourse = new JsonAdaptedCourse("CS2103T", "AY26/27-S1", List.of("v1.2", "V1.2"));
-        assertThrows(IllegalValueException.class, "A course must contain at least one unique deliverable.",
+        assertThrows(IllegalValueException.class, Course.MESSAGE_DELIVERABLES,
                 adaptedCourse::toModelType);
     }
 }
