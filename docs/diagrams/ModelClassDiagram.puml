@@ -28,7 +28,6 @@ package "Model" as ModelPackage <<Rectangle>> {
 
     class Course {
         CourseCode courseCode
-        Deliverable deliverable
         Semester semester
         List<Deliverable> deliverables
     }
@@ -41,7 +40,12 @@ package "Model" as ModelPackage <<Rectangle>> {
         NotesList
     }
 
-    class StudentCourseProgress
+    class StudentCourseProgress {
+        studentId: Id
+        CourseCode
+        Semester
+        Map<Deliverable, CompletionStatus> deliverableStatuses
+    }
 }
 
 ModelManager .up.|> ModelApi
@@ -64,8 +68,11 @@ UniqueCourseList --> "*" Course
 UniqueStudentCourseEnrolment --> "*" StudentCourseEnrolment
 UniqueStudentCourseProgressList --> "*" StudentCourseProgress
 
-Student "*" -- "*" Course : enrolled in
-(Student, Course) .. StudentCourseEnrolment
+note bottom of StudentCourseProgress
+  Enrolment and progress records identify their related
+  Student and Course by studentId, courseCode, and semester.
+  They do not store direct object references.
+end note
 
 @enduml
 
