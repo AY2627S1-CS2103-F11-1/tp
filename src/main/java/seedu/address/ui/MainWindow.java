@@ -164,18 +164,22 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-            if (commandResult.getStudentDeliverablesView().isPresent()) {
+            if (commandResult.containsStudentDeliverablesView()) {
                 mainContentPane.setDividerPositions(0.48);
-                commandResult.getStudentDeliverablesView()
-                        .ifPresent(deliverablesPanel::showDeliverables);
+                deliverablesPanel.showDeliverables(commandResult.getStudentDeliverablesView());
+            } else if (commandResult.containsStudentNotesListView()) {
+                mainContentPane.setDividerPositions(0.48);
+                deliverablesPanel.showNotesList(commandResult.getStudentNotesListView());
             } else {
                 deliverablesPanel.clear();
                 mainContentPane.setDividerPositions(0.86);
             }
 
             commandResult.getStudentIdToFocus().ifPresent(studentListPanel::scrollToStudentId);
-            commandResult.getStudentDeliverablesView()
-                    .ifPresent(view -> studentListPanel.scrollToStudentId(view.getStudent().getId()));
+            if (commandResult.containsStudentSplitView()) {
+                studentListPanel.scrollToStudentId(
+                        commandResult.getStudentSplitView().getStudent().getId());
+            }
 
             if (commandResult.isShowHelp()) {
                 handleHelp();

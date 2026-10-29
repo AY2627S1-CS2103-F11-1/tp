@@ -13,6 +13,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.student.Id;
 
 /** Tests for {@code ViewNotesCommand}. */
@@ -27,8 +29,9 @@ public class ViewNotesCommandTest {
     public void execute_studentWithNotes_success() {
         ViewNotesCommand command = new ViewNotesCommand(ALICE.getId(), COURSE_CODE, SEMESTER);
 
-        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                ALICE.getName(), ALICE.getId(), "1. MVP: Needs help with testing\n"), false, false, ALICE.getId());
+        CommandResult expectedResult = new CommandResult(String.format(
+                ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS, ALICE.getName(), ALICE.getId(), COURSE_CODE),
+                new StudentNotesListView(ALICE, new NotesList(new Notes("Needs help with testing", "MVP"))));
 
         assertCommandSuccess(command, model, expectedResult, model);
     }
@@ -37,8 +40,8 @@ public class ViewNotesCommandTest {
     public void execute_studentWithoutNotes_success() {
         ViewNotesCommand command = new ViewNotesCommand(BENSON.getId(), COURSE_CODE, SEMESTER);
 
-        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                BENSON.getName(), BENSON.getId(), ViewNotesCommand.MESSAGE_NO_NOTES), false, false, BENSON.getId());
+        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_NO_NOTES,
+                BENSON.getName(), BENSON.getId(), COURSE_CODE));
 
         assertCommandSuccess(command, model, expectedResult, model);
     }

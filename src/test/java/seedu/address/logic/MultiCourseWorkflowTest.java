@@ -62,18 +62,21 @@ public class MultiCourseWorkflowTest {
                 + " /deliverable Assignment 1 /notes Check socket implementation");
         CommandResult notesResult = execute("view notes /id " + ORIGINAL_ID
                 + " /course CS2103T /sem " + SEMESTER);
-        assertTrue(notesResult.getFeedbackToUser().contains("v1.4: Reviewed inheritance design"));
-        assertTrue(notesResult.getFeedbackToUser().contains("v1.5: Follow up on exception handling"));
+        assertTrue(notesResult.getStudentNotesListView().viewNotesList()
+                .contains("v1.4: Reviewed inheritance design"));
+        assertTrue(notesResult.getStudentNotesListView().viewNotesList()
+                .contains("v1.5: Follow up on exception handling"));
         CommandResult secondCourseNotes = execute("view notes /id " + ORIGINAL_ID
                 + " /course CS2105 /sem " + SEMESTER);
-        assertTrue(secondCourseNotes.getFeedbackToUser().contains("Assignment 1: Check socket implementation"));
+        assertTrue(secondCourseNotes.getStudentNotesListView().viewNotesList()
+                .contains("Assignment 1: Check socket implementation"));
 
         execute("mark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /deliverable v1.4");
         execute("mark /id " + ORIGINAL_ID + " /course CS2105 /sem " + SEMESTER + " /deliverable Assignment 1");
         execute("unmark /id " + ORIGINAL_ID + " /course CS2103T /sem " + SEMESTER + " /deliverable v1.4");
         CommandResult viewResult = execute("view /id " + ORIGINAL_ID);
-        assertTrue(viewResult.getStudentDeliverablesView().isPresent());
-        assertEquals(2, viewResult.getStudentDeliverablesView().orElseThrow().getCourseProgresses().size());
+        assertTrue(viewResult.containsStudentDeliverablesView());
+        assertEquals(2, viewResult.getStudentDeliverablesView().getCourseProgresses().size());
 
         execute("edit /id " + ORIGINAL_ID + " /newid " + UPDATED_ID);
         Id updatedId = new Id(UPDATED_ID);
