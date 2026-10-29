@@ -30,7 +30,7 @@ public class ViewNotesCommandTest {
         ViewNotesCommand command = new ViewNotesCommand(ALICE.getId(), COURSE_CODE, SEMESTER);
 
         CommandResult expectedResult = new CommandResult(String.format(
-                ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS, ALICE.getName(), ALICE.getId()),
+                ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS, ALICE.getName(), ALICE.getId(), COURSE_CODE),
                 new StudentNotesListView(ALICE, new NotesList(new Notes("Needs help with testing", "MVP"))));
 
         assertCommandSuccess(command, model, expectedResult, model);
@@ -40,9 +40,8 @@ public class ViewNotesCommandTest {
     public void execute_studentWithoutNotes_success() {
         ViewNotesCommand command = new ViewNotesCommand(BENSON.getId(), COURSE_CODE, SEMESTER);
 
-        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_VIEW_NOTES_SUCCESS,
-                BENSON.getName(), BENSON.getId(), ViewNotesCommand.MESSAGE_NO_NOTES),
-                new StudentNotesListView(BENSON, new NotesList()));
+        CommandResult expectedResult = new CommandResult(String.format(ViewNotesCommand.MESSAGE_NO_NOTES,
+                BENSON.getName(), BENSON.getId(), COURSE_CODE));
 
         assertCommandSuccess(command, model, expectedResult, model);
     }

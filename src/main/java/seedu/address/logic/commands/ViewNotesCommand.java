@@ -18,6 +18,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Semester;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
 import seedu.address.model.student.Id;
 import seedu.address.model.student.Student;
@@ -33,8 +34,8 @@ public class ViewNotesCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + " "
             + PREFIX_COURSE + " " + EXAMPLE_COURSE + " "
             + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER;
-    public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Viewing Notes for student %s (%s):";
-    public static final String MESSAGE_NO_NOTES = "No notes recorded.";
+    public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Viewing Notes for student %s (%s) for course %s:";
+    public static final String MESSAGE_NO_NOTES = "No Notes recorded for student %s (%s) for course %s.";
 
     private final Id studentId;
     private final CourseCode courseCode;
@@ -54,9 +55,16 @@ public class ViewNotesCommand extends Command {
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
         StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolment(
                 model, studentId, courseCode, semester);
-        return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
-                student.getName(), student.getId()),
-                new StudentNotesListView(student, enrolment.getNotes()));
+        NotesList notesList = enrolment.getNotes();
+
+        if (notesList.isEmpty()) {
+            return new CommandResult(String.format(MESSAGE_NO_NOTES, student.getName(),
+                    student.getId(), enrolment.getCourseCode()), false, false);
+        } else {
+            return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
+                    student.getName(), student.getId(), enrolment.getCourseCode()),
+                    new StudentNotesListView(student, notesList));
+        }
     }
 
     @Override
