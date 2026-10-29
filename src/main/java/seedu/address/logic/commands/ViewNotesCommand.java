@@ -33,7 +33,7 @@ public class ViewNotesCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " " + EXAMPLE_ID + " "
             + PREFIX_COURSE + " " + EXAMPLE_COURSE + " "
             + PREFIX_SEMESTER + " " + EXAMPLE_SEMESTER;
-    public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Notes for student %s (%s):\n%s";
+    public static final String MESSAGE_VIEW_NOTES_SUCCESS = "Viewing Notes for student %s (%s):";
     public static final String MESSAGE_NO_NOTES = "No notes recorded.";
 
     private final Id studentId;
@@ -54,10 +54,9 @@ public class ViewNotesCommand extends Command {
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
         StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolment(
                 model, studentId, courseCode, semester);
-        String notes = enrolment.getNotes().isEmpty()
-                ? MESSAGE_NO_NOTES : enrolment.getNotes().viewNotes();
         return new CommandResult(String.format(MESSAGE_VIEW_NOTES_SUCCESS,
-                student.getName(), student.getId(), notes), false, false, studentId);
+                student.getName(), student.getId()),
+                new StudentNotesListView(student, enrolment.getNotes()));
     }
 
     @Override

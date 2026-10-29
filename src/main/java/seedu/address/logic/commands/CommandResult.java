@@ -12,6 +12,12 @@ import seedu.address.model.student.Id;
  * Represents the result of a command execution.
  */
 public class CommandResult {
+    public static final String NO_STUDENT_DELIVERABLES_VIEW_MESSAGE =
+            "Current View is not a StudentDeliverablesListView";
+    public static final String NO_STUDENT_NOTES_LIST_VIEW_MESSAGE =
+            "Current View is not a StudentNotesListView";
+    public static final String NO_STUDENT_ITERABLE_VIEW_MESSAGE =
+            "Does not contain a StudentIterableView";
 
     private final String feedbackToUser;
 
@@ -22,7 +28,7 @@ public class CommandResult {
     private final boolean exit;
 
     private final Id studentIdToFocus;
-    private final StudentDeliverablesView studentDeliverablesView;
+    private final StudentIterableView studentIterableView;
 
     /**
      * Constructs a CommandResult with an optional added student ID.
@@ -32,13 +38,13 @@ public class CommandResult {
         this(feedbackToUser, showHelp, exit, studentIdToFocus, null);
     }
 
-    private CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
-            Id studentIdToFocus, StudentDeliverablesView studentDeliverablesView) {
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
+            Id studentIdToFocus, StudentIterableView studentIterableView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
         this.studentIdToFocus = studentIdToFocus;
-        this.studentDeliverablesView = studentDeliverablesView;
+        this.studentIterableView = studentIterableView;
     }
 
     /**
@@ -56,9 +62,9 @@ public class CommandResult {
     }
 
     /** Constructs a result containing the deliverables view for a student. */
-    public CommandResult(String feedbackToUser, StudentDeliverablesView studentDeliverablesView) {
+    public CommandResult(String feedbackToUser, StudentIterableView studentIterableView) {
         this(feedbackToUser, false, false,
-                requireNonNull(studentDeliverablesView).getStudent().getId(), studentDeliverablesView);
+                requireNonNull(studentIterableView).getStudent().getId(), studentIterableView);
     }
 
     public String getFeedbackToUser() {
@@ -79,7 +85,41 @@ public class CommandResult {
 
     /** Returns the optional deliverables view produced by the command. */
     public Optional<StudentDeliverablesView> getStudentDeliverablesView() {
-        return Optional.ofNullable(studentDeliverablesView);
+        assert containsStudentDeliverablesView()
+                : NO_STUDENT_DELIVERABLES_VIEW_MESSAGE;
+
+        return Optional.ofNullable((StudentDeliverablesView) studentIterableView);
+    }
+
+    /** Returns the optional NotesList view produced by the command. */
+    public Optional<StudentNotesListView> getStudentNotesListView() {
+        assert containsStudentNotesListView()
+                : NO_STUDENT_NOTES_LIST_VIEW_MESSAGE;
+
+        return Optional.ofNullable((StudentNotesListView) studentIterableView);
+    }
+
+    /** Returns the StudentIterableView produced by the command. */
+    public StudentIterableView getStudentIterableListView() {
+        assert containsStudentIterableView()
+                : NO_STUDENT_ITERABLE_VIEW_MESSAGE;
+
+        return studentIterableView;
+    }
+
+    /** Checks if CommandResult contains a StudentIterableView */
+    public boolean containsStudentIterableView() {
+        return studentIterableView != null;
+    }
+
+    /** Checks if CommandResult contains a StudentNotesListView */
+    public boolean containsStudentDeliverablesView() {
+        return studentIterableView instanceof StudentDeliverablesView;
+    }
+
+    /** Checks if CommandResult contains a StudentNotesListView */
+    public boolean containsStudentNotesListView() {
+        return studentIterableView instanceof StudentNotesListView;
     }
 
     @Override
@@ -97,12 +137,12 @@ public class CommandResult {
                 && showHelp == otherCommandResult.showHelp
                 && exit == otherCommandResult.exit
                 && Objects.equals(studentIdToFocus, otherCommandResult.studentIdToFocus)
-                && Objects.equals(studentDeliverablesView, otherCommandResult.studentDeliverablesView);
+                && Objects.equals(studentIterableView, otherCommandResult.studentIterableView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus, studentDeliverablesView);
+        return Objects.hash(feedbackToUser, showHelp, exit, studentIdToFocus, studentIterableView);
     }
 
     @Override
@@ -112,7 +152,7 @@ public class CommandResult {
                 .add("showHelp", showHelp)
                 .add("exit", exit)
                 .add("studentIdToFocus", studentIdToFocus)
-                .add("studentDeliverablesView", studentDeliverablesView)
+                .add("studentIterableView", studentIterableView)
                 .toString();
     }
 

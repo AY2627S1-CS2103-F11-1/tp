@@ -9,6 +9,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import seedu.address.logic.commands.StudentDeliverablesView;
+import seedu.address.logic.commands.StudentNotesListView;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.progress.CompletionStatus;
 import seedu.address.model.progress.StudentCourseProgress;
@@ -43,6 +44,31 @@ public class DeliverablesPanel extends UiPart<Region> {
         for (StudentCourseProgress progress : view.getCourseProgresses()) {
             courses.getChildren().add(createCourseGroup(progress));
         }
+
+        emptyState.setVisible(false);
+        emptyState.setManaged(false);
+        content.setVisible(true);
+        content.setManaged(true);
+    }
+
+    /** Updates this panel to display {@code view}. */
+    public void showNotesList(StudentNotesListView view) {
+        studentName.setText(view.getStudent().getName().fullName);
+        studentId.setText(view.getStudent().getId().toString());
+        courses.getChildren().clear();
+
+        Label notesText = new Label(view.viewNotesList());
+        notesText.getStyleClass().add("deliverable-task-name");
+        notesText.setWrapText(true);
+
+        VBox notesGroup = new VBox(8, notesText);
+        notesGroup.getStyleClass().add("deliverables-course-group");
+        courses.getChildren().add(notesGroup);
+
+        studentName.setVisible(true);
+        studentName.setManaged(true);
+        studentId.setVisible(true);
+        studentId.setManaged(true);
 
         emptyState.setVisible(false);
         emptyState.setManaged(false);

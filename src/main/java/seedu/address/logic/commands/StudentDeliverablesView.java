@@ -13,8 +13,7 @@ import seedu.address.model.student.Student;
 /**
  * Immutable data required to display one student's deliverables in the UI.
  */
-public class StudentDeliverablesView {
-    private final Student student;
+public class StudentDeliverablesView extends StudentIterableView {
     private final List<StudentCourseProgress> courseProgresses;
 
     /**
@@ -29,12 +28,8 @@ public class StudentDeliverablesView {
             }
         });
 
-        this.student = student;
+        super(student);
         this.courseProgresses = List.copyOf(courseProgresses);
-    }
-
-    public Student getStudent() {
-        return student;
     }
 
     public List<StudentCourseProgress> getCourseProgresses() {
@@ -45,19 +40,19 @@ public class StudentDeliverablesView {
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof StudentDeliverablesView otherView
-                && student.equals(otherView.student)
+                && getStudent().equals(otherView.getStudent())
                 && courseProgresses.equals(otherView.courseProgresses));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(student, courseProgresses);
+        return Objects.hash(getStudent(), courseProgresses);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("student", student)
+                .add("student", getStudent())
                 .add("courseProgresses", courseProgresses)
                 .toString();
     }
