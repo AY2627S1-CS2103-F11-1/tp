@@ -4,89 +4,23 @@ skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR_T4
 skinparam classBackgroundColor MODEL_COLOR
 
-package Model <<Rectangle>> {
-Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
-Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
-Class "<<interface>>\nModel" as Model
-Class AddressBook
-Class ModelManager
-Class UserPrefs
+package "Model" as ModelPackage <<Rectangle>> {
+    class "<<interface>>\nModel" as ModelApi
+    class ModelManager
+    class AddressBook
 
-package "Students" #F4F6F6 {
-Class UniqueStudentList
-Class Student
-Class Id
-Class TutorialClass
+    class Student
+    class Course
+    class StudentCourseEnrolment
+    class StudentCourseProgress
 }
 
-package "Enrolments" #F4F6F6 {
-Class UniqueStudentCourseEnrolment
-Class StudentCourseEnrolment
-Class NotesList
-Class Notes
-}
+ModelManager .up.|> ModelApi
+ModelManager -down-> "1" AddressBook : manages
 
-package "Courses" #F4F6F6 {
-Class UniqueCourseList
-Class Course
-Class CourseCode
-Class Semester
-Class Deliverable
-}
+AddressBook *-- "*" Student : stores
+AddressBook *-- "*" Course : stores
+AddressBook *-- "*" StudentCourseEnrolment : stores
+AddressBook *-- "*" StudentCourseProgress : stores
 
-package "Deliverable progress" #F4F6F6 {
-Class UniqueStudentCourseProgressList
-Class StudentCourseProgress
-Class "<<enumeration>>\nCompletionStatus" as CompletionStatus
-}
-}
-
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Model
-
-AddressBook .up.|> ReadOnlyAddressBook
-ModelManager .up.|> Model
-UserPrefs .up.|> ReadOnlyUserPrefs
-
-Model .right.> ReadOnlyUserPrefs
-Model .left.> ReadOnlyAddressBook
-ModelManager -left-> "1" AddressBook
-ModelManager -right-> "1" UserPrefs
-ModelManager --> "~* filtered" Student
-
-AddressBook *-down-> "1" UniqueStudentList
-AddressBook *-down-> "1" UniqueCourseList
-AddressBook *-down-> "1" UniqueStudentCourseEnrolment
-AddressBook *-down-> "1" UniqueStudentCourseProgressList
-
-UniqueStudentList --> "~* all" Student
-UniqueCourseList --> "~* all" Course
-UniqueStudentCourseEnrolment --> "~* all" StudentCourseEnrolment
-UniqueStudentCourseProgressList --> "~* all" StudentCourseProgress
-
-Student *--> "1" Id
-StudentCourseEnrolment --> "1" Id : studentId
-StudentCourseEnrolment --> "1" CourseCode
-StudentCourseEnrolment --> "1" Semester
-StudentCourseEnrolment --> "1" TutorialClass
-StudentCourseEnrolment *--> "1" NotesList
-NotesList *--> "*" Notes
-
-Course *--> "1" CourseCode
-Course *--> "1" Semester
-Course *--> "1..*" Deliverable
-
-StudentCourseProgress --> "1" Id : studentId
-StudentCourseProgress ..> Course : initialises from
-StudentCourseProgress --> "1" CourseCode
-StudentCourseProgress --> "1" Semester
-StudentCourseProgress --> "1..*" Deliverable : status for
-StudentCourseProgress --> CompletionStatus
-
-UniqueStudentList -[hidden]right- UniqueStudentCourseEnrolment
-UniqueStudentCourseEnrolment -[hidden]right- UniqueCourseList
-UniqueCourseList -[hidden]right- UniqueStudentCourseProgressList
-Student -[hidden]right- StudentCourseEnrolment
-StudentCourseEnrolment -[hidden]right- Course
-Course -[hidden]right- StudentCourseProgress
 @enduml

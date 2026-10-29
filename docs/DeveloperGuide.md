@@ -140,8 +140,8 @@ How the parsing works:
 
 The `Model` component,
 
-* stores students, courses, and one deliverable-progress record for each student and course-semester combination.
-* keeps those objects in `UniqueStudentList`, `UniqueCourseList`, and `UniqueStudentCourseProgressList` respectively.
+* stores students, course-semester offerings, student-course enrolments, and deliverable-progress records.
+* keeps those objects in `UniqueStudentList`, `UniqueCourseList`, `UniqueStudentCourseEnrolment`, and `UniqueStudentCourseProgressList` respectively.
 * stores the students selected by the current filter, such as search results, in a separate filtered list. It exposes this list as an unmodifiable `ObservableList<Student>` that the UI can observe and bind to, so the UI updates when the list changes.
 * stores a `UserPrefs` object that represents the user’s preferences (currently, just the GUI settings). This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
