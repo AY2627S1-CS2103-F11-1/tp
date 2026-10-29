@@ -59,7 +59,7 @@ public class SampleDataUtil {
             String tutorialClass, String notes) {
         NotesList enrolmentNotes = notes.isEmpty()
                 ? new NotesList()
-                : new NotesList(new Notes(notes, "MVP"));
+                : new NotesList(new Notes(notes, course.getDeliverables().getFirst().name));
         return new StudentCourseEnrolment(student.getId(), course.getCourseCode(), course.getSemester(),
                 new TutorialClass(tutorialClass), enrolmentNotes);
     }

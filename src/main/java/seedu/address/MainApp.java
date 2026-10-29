@@ -1,15 +1,19 @@
 package seedu.address;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.logic.LogicManager;
@@ -36,11 +40,14 @@ public class MainApp extends Application {
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private static final Path USER_PREFS_FILE_PATH = Paths.get("preferences.json");
     private static final Path ADDRESS_BOOK_FILE_PATH = Paths.get("data", "addressbook.json");
+    private static final String INVALID_COMPLETION_STATUS_MESSAGE =
+            "Invalid completion status. Use DONE or NOT_DONE.";
 
     protected Ui ui;
     protected Logic logic;
     protected Storage storage;
     protected Model model;
+    private RuntimeException startupFailure;
 
     @Override
     public void init() throws Exception {
@@ -52,7 +59,12 @@ public class MainApp extends Application {
         JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(ADDRESS_BOOK_FILE_PATH);
         storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
-        model = initModelManager(storage, userPrefs);
+        try {
+            model = initModelManager(storage, userPrefs);
+        } catch (IllegalStateException e) {
+            startupFailure = e;
+            return;
+        }
 
         logic = new LogicManager(model, storage);
 
@@ -61,8 +73,8 @@ public class MainApp extends Application {
 
     /**
      * Returns a {@code ModelManager} with the data from {@code storage}'s address book and {@code userPrefs}. <br>
-     * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
-     * or the sample address book will be used instead if errors occur when reading {@code storage}'s address book.
+     * The sample address book is used only when {@code storage}'s address book is missing.
+     * Existing but invalid data prevents startup so that it cannot be overwritten by sample data.
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
         logger.info("Using data file : " + storage.getAddressBookFilePath());
@@ -77,7 +89,32 @@ public class MainApp extends Application {
             }
             initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
         } catch (DataLoadingException e) {
-            logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
+            Path addressBookFilePath = storage.getAddressBookFilePath();
+            if (!Files.notExists(addressBookFilePath)) {
+                Throwable cause = e.getCause();
+                String causeMessage = cause == null || cause.getMessage() == null
+                        ? "No further details are available."
+                        : cause.getMessage();
+                int sourcePreviewStart = causeMessage.indexOf(" at [Source:");
+                if (sourcePreviewStart >= 0) {
+                    causeMessage = causeMessage.substring(0, sourcePreviewStart);
+                }
+                causeMessage = causeMessage.trim();
+                if (causeMessage.contains("CompletionStatus")) {
+                    causeMessage = INVALID_COMPLETION_STATUS_MESSAGE;
+                }
+                if (causeMessage.length() > 500) {
+                    causeMessage = causeMessage.substring(0, 500) + "...";
+                }
+                String failureType = cause instanceof IllegalValueException
+                        ? "The saved data is invalid."
+                        : "The saved data could not be read.";
+                throw new IllegalStateException(failureType + "\n\n" + causeMessage
+                        + "\n\nThe original file was not modified. Restore a backup or correct the file,"
+                        + " then restart TAssist.", e);
+            }
+            logger.warning("Data file at " + addressBookFilePath
+                    + " could not be loaded because it is missing."
                     + " Will be starting with sample student data.");
             initialData = SampleDataUtil.getSampleAddressBook();
         }
@@ -120,12 +157,31 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         logger.info("Starting TAssist " + MainApp.VERSION);
+        if (startupFailure != null) {
+            showStartupFailure(startupFailure);
+            return;
+        }
         ui.start(primaryStage);
+    }
+
+    private void showStartupFailure(RuntimeException failure) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Unable to load saved data");
+        alert.setHeaderText("TAssist could not load your existing data file.");
+        alert.setContentText(failure.getMessage());
+        alert.setGraphic(null);
+        alert.getDialogPane().setMinWidth(650);
+        alert.getDialogPane().setPrefWidth(700);
+        alert.showAndWait();
+        Platform.exit();
     }
 
     @Override
     public void stop() {
         logger.info("============================== [ Stopping TAssist ] ===============================");
+        if (model == null) {
+            return;
+        }
         try {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {

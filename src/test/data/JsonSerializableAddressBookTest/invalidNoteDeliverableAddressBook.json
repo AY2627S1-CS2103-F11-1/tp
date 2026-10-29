@@ -1,0 +1,29 @@
+{
+  "students": [
+    { "name": "Alice Pauline", "id": "A1234567Y", "email": "alice@u.nus.edu" }
+  ],
+  "courses": [
+    {
+      "courseCode": "CS2103T",
+      "semester": "AY26/27-S1",
+      "deliverables": ["MVP", "Final"]
+    }
+  ],
+  "enrolments": [
+    {
+      "studentId": "A1234567Y",
+      "courseCode": "CS2103T",
+      "semester": "AY26/27-S1",
+      "tutorialClass": "T07",
+      "notes": "[\"ABC: Invalid note\"]"
+    }
+  ],
+  "studentCourseProgresses": [
+    {
+      "studentId": "A1234567Y",
+      "courseCode": "CS2103T",
+      "semester": "AY26/27-S1",
+      "deliverableStatuses": { "MVP": "NOT_DONE", "Final": "NOT_DONE" }
+    }
+  ]
+}
