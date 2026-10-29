@@ -6,8 +6,8 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":DeleteCommandParser" as DeleteCommandParser LOGIC_COLOR
-participant "d:DeleteCommand" as DeleteCommand LOGIC_COLOR
-participant "r:CommandResult" as CommandResult LOGIC_COLOR
+participant "deleteCommand:DeleteCommand" as DeleteCommand LOGIC_COLOR
+participant "commandResult:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -35,10 +35,10 @@ activate DeleteCommand
 DeleteCommand --> DeleteCommandParser
 deactivate DeleteCommand
 
-DeleteCommandParser --> AddressBookParser : d
+DeleteCommandParser --> AddressBookParser : deleteCommand
 deactivate DeleteCommandParser
 
-AddressBookParser --> LogicManager : d
+AddressBookParser --> LogicManager : deleteCommand
 deactivate AddressBookParser
 
 LogicManager -> DeleteCommand : execute(model)
@@ -53,10 +53,10 @@ deactivate Model
 create CommandResult
 DeleteCommand -> CommandResult : CommandResult(feedback)
 activate CommandResult
-CommandResult --> DeleteCommand : r
+CommandResult --> DeleteCommand : commandResult
 deactivate CommandResult
 
-DeleteCommand --> LogicManager : r
+DeleteCommand --> LogicManager : commandResult
 deactivate DeleteCommand
 
 [<-- LogicManager
