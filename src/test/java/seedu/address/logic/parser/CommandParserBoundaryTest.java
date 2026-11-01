@@ -28,18 +28,21 @@ public class CommandParserBoundaryTest {
 
     @Test
     public void parse_emptyInput_rejectsForEveryParameterizedParser() {
+        // BVA: empty input at the lower boundary of required arguments.
         PARAMETERIZED_PARSERS.forEach(parser ->
                 assertThrows(ParseException.class, () -> parser.parse("")));
     }
 
     @Test
     public void parse_whitespaceOnlyInput_rejectsForEveryParameterizedParser() {
+        // EP: whitespace-only values are invalid parameter input.
         PARAMETERIZED_PARSERS.forEach(parser ->
                 assertThrows(ParseException.class, () -> parser.parse(" \t\n ")));
     }
 
     @Test
     public void parse_unknownPrefix_rejectsForEveryParameterizedParser() {
+        // EP: an unrecognised prefix is outside the supported parameter syntax.
         PARAMETERIZED_PARSERS.forEach(parser ->
                 assertThrows(ParseException.class, () -> parser.parse(" /unknown value")));
     }

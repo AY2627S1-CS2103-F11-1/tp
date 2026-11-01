@@ -54,11 +54,13 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void read_missingFile_emptyResult() throws Exception {
+        // EP: missing storage is distinct from an existing invalid file.
         assertFalse(readAddressBook("NonExistentFile.json").isPresent());
     }
 
     @Test
     public void read_emptyJsonObject_returnsEmptyAddressBook() throws Exception {
+        // BVA: zero records is the lower boundary for a valid address book.
         Path filePath = testFolder.resolve("emptyAddressBook.json");
         Files.writeString(filePath, "{}");
 
@@ -82,6 +84,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void read_nullJsonFile_throwsDataLoadingExceptionWithoutOverwriting() throws Exception {
+        // EP: an existing JSON null is invalid storage, not a missing file.
         Path filePath = testFolder.resolve("nullAddressBook.json");
         String originalContent = "null";
         Files.writeString(filePath, originalContent);
@@ -178,6 +181,7 @@ public class JsonAddressBookStorageTest {
 
     @Test
     public void readAddressBook_multipleReconciliationCases_repairsAndSaves() throws Exception {
+        // EP: reconciliation preserves valid statuses while handling missing and unknown deliverables.
         Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest",
                 "reconciliationAddressBook.json");
         Path filePath = testFolder.resolve("reconciliationAddressBook.json");
