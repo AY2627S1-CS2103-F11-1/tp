@@ -25,6 +25,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/minrui13)]
 
 * Role: Developer
+* Responsibilities: Project Direction
 
 ### Piyaphat Klanprayoon
 
@@ -32,8 +33,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](https://github.com/piyaphat38030)]
 
-- Role: Developer
-- Responsibilities: Documentation
+* Role: Developer
+* Responsibilities: Documentation
 
 ### Arun Baskaran
 
@@ -41,8 +42,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](https://github.com/arun-bas)]
 
-- Role: Developer
-- Responsibilities: UI
+* Role: Developer
+* Responsibilities: UI
 
 ### Indra Bachtiar
 
@@ -50,4 +51,5 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](https://github.com/indraarr)]
 
-- Role: Developer
+* Role: Developer
+* Responsibilities: Project Direction
