@@ -9,7 +9,7 @@ TAssist is designed for university teaching assistants teaching computing module
 
 With many students across different tutorial classes and courses, TAs may not
 remember every student's project context. TAssist keeps course enrolments,
-deliverable progress, and interaction notes together so TAs can offer more
+deliverable progress, and project-work notes together so TAs can offer more
 contextualised support.
 
 ## Features
@@ -19,7 +19,7 @@ contextualised support.
 - Search for students by one or more case-insensitive partial name queries, or by student ID
 - Track project deliverables and completion statuses
 - View project progress across each student's course enrolments
-- Add, view and delete deliverable-specific notes about students’ project work
+- Add, view and delete deliverable-specific notes about students' project work
 - Use commands to perform actions efficiently
 
 ## Example Commands
@@ -31,7 +31,7 @@ list /course CS2103T /sem AY26/27-S1
 list /course CS2103T /sem AY26/27-S1 /class T07
 list /course CS2103T /sem AY26/27-S1 /deliverable MVP
 search /name Alex Yeoh, Bernice Yu
-search /id A2345678X, A1234567Z
+search /id A2345678C, A1234567Z
 add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, CS1231 /sem AY26/27-S1, AY26/27-S1 /class T07, T02
 edit /id A1234567Z /name John Doe /newid A1234567Y /email johndoe@u.nus.edu
 delete /id A1234567Z
@@ -54,5 +54,4 @@ exit
 ```
 
 ## Acknowledgements
-* This project is based on the `AddressBook Level 3` project created by the [SE-EDU initiative](https://se-education.org) and the code template can be found [here](https://github.com/se-edu/addressbook-level3)
-* This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.
+- This project is based on the [AddressBook Level 3](https://github.com/se-edu/addressbook-level3) project created by the [SE-EDU initiative](https://se-education.org).

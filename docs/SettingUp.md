@@ -28,6 +28,16 @@ If you plan to use IntelliJ IDEA (highly recommended):
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Building and verifying the project
+
+From the project root, use the Gradle wrapper so that the project uses the configured Gradle version:
+
+* Windows: `gradlew.bat test checkstyleMain checkstyleTest`
+* macOS/Linux: `./gradlew test checkstyleMain checkstyleTest`
+
+To build the executable JAR, run `gradlew.bat shadowJar` on Windows or `./gradlew shadowJar` on macOS/Linux.
+The generated `TAssist.jar` is placed in `build/libs`.
+
 ## Before writing code
 
 1. **Configure the coding style**
@@ -45,7 +55,7 @@ If you plan to use IntelliJ IDEA (highly recommended):
 
 1. **Learn the design**
 
-   When you are ready to start coding, we recommend that you get some sense of the overall design by reading about [AddressBook’s architecture](DeveloperGuide.md#architecture).
+   When you are ready to start coding, we recommend that you get some sense of the overall design by reading about [TAssist's architecture](DeveloperGuide.md#architecture).
 
 1. **Do the tutorials**
    These tutorials will help you get acquainted with the codebase.
