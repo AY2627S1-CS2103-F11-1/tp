@@ -51,7 +51,7 @@ public class NotesCommand extends Command {
 
     public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";
 
-    private static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
+    public static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
             "The specified deliverable is not part of the course.";
 
     private final Id studentId;
@@ -76,16 +76,17 @@ public class NotesCommand extends Command {
      * Executes the NotesCommand.
      * Finds matching student, matching enrolment, and adds Notes to it.
      * Uses case-insensitive deliverable input to find matched deliverable in Course and use in Notes.
+     *
+     * @param model Model to be operated on.
      * @return CommandResult Command result containing successful user message and student Id to highlight.
      * @throws CommandException If no student with given Id exists, no matching enrolment exists,
-     *     or given deliverable not in course.
+     *                          or given deliverable not in course.
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
         Student student = StudentNotesCommandUtil.findStudentById(model, studentId);
-
         StudentCourseEnrolment enrolment = StudentNotesCommandUtil.findEnrolment(
                 model, studentId, courseCode, semester);
 
