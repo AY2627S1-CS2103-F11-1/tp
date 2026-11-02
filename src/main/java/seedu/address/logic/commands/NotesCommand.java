@@ -78,7 +78,7 @@ public class NotesCommand extends Command {
      * Uses case-insensitive deliverable input to find matched deliverable in Course and use in Notes.
      * @return CommandResult Command result containing successful user message and student Id to highlight.
      * @throws CommandException If no student with given Id exists, no matching enrolment exists,
-     * or given deliverable not in course.
+     *     or given deliverable not in course.
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
