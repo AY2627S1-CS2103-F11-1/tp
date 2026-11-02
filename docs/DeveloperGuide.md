@@ -11,6 +11,13 @@ title: Developer Guide
 
 - This project is based on the [AddressBook Level 3](https://github.com/se-edu/addressbook-level3) project created by the [SE-EDU initiative](https://se-education.org).
 
+### Notable uses of AI
+
+- OpenAI Codex was used by Piyaphat Klanprayoon throughout the project to assist with planning code changes and,
+  in some cases, implementing them. It also assisted with running tests, comparing proposed changes against the
+  existing codebase, and suggesting relevant software-engineering and testing practices. Piyaphat reviewed and
+  adapted proposed changes before raising them for peer review, ran and reviewed relevant tests for submitted
+  changes, and remains responsible for the submitted work.
 
 ## Setting up, getting started
 
