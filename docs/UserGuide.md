@@ -165,29 +165,6 @@ course-semester. Students appear once even if they have other enrolments.
 
 ![list command](images/listCommand.gif)
 
-#### Viewing a course progress overview: `overview`
-
-Shows every student enrolled in a course-semester together with the number of
-completed deliverables out of the total tracked deliverables. Students are
-shown in the same order as the main student list.
-
-Format: `overview /course COURSE /sem SEMESTER`
-
-Example: `overview /course CS2103T /sem AY26/27-S1`
-
-Example output:
-
-```text
-Progress overview for CS2103T (AY26/27-S1):
-Alice Pauline (A1234567Y): 2/5 completed
-Benson Meier (A2345678X): 4/5 completed
-```
-
-The selected course must already be initialised. This command reports progress
-only and does not change students, enrolments, or completion statuses.
-
-![overview command](images/overviewCommand.gif)
-
 #### Editing a student: `edit`
 
 Edits the details of an existing student identified by their current student ID.
@@ -221,29 +198,6 @@ Changes the student's ID from `A1234567Z` to `A7654321B`.
 Updates both the student's ID and email address.
 
 ![edit command](images/editCommand.gif)
-
-#### Enrolment management: `enrol`, `unenrol`
-
-Use `enrol` to add an existing student to another course-semester. The course
-must have been initialised first.
-
-Format: `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`
-
-Example:
-
-* `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
-
-Use `unenrol` to remove one course-semester enrolment. Its deliverable progress
-is removed as well. If it was the student's final enrolment, the student record
-is removed too.
-
-Format: `unenrol /id ID /course COURSE /sem SEMESTER`
-
-Example:
-
-* `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
-
-![enrol command](images/enrolCommand.gif)
 
 #### Searching students by name or ID: `search`
 
@@ -285,6 +239,30 @@ Examples:
 * `delete /name John Doe` deletes John Doe when there is exactly one such student.
 
 ![delete command](images/deleteCommand.gif)
+
+### Enrolment management
+#### Enrolling and unenrolling students: `enrol`, `unenrol`
+
+Use `enrol` to add an existing student to another course-semester. The course
+must have been initialised first.
+
+Format: `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`
+
+Example:
+
+* `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+
+Use `unenrol` to remove one course-semester enrolment. Its deliverable progress
+is removed as well. If it was the student's final enrolment, the student record
+is removed too.
+
+Format: `unenrol /id ID /course COURSE /sem SEMESTER`
+
+Example:
+
+* `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
+
+![enrol command](images/enrolCommand.gif)
 
 ### Student notes
 #### Managing student notes: `notes`, `view notes`, `delete notes`
@@ -356,6 +334,29 @@ Use `/id` when several students have the same name. The result lists each
 deliverable as `Done` or `Not Done` in the order it was initialised.
 
 ![view command](images/viewCommand.gif)
+
+#### Viewing a course progress overview: `overview`
+
+Shows every student enrolled in a course-semester together with the number of
+completed deliverables out of the total tracked deliverables. Students are
+shown in the same order as the main student list.
+
+Format: `overview /course COURSE /sem SEMESTER`
+
+Example: `overview /course CS2103T /sem AY26/27-S1`
+
+Example output:
+
+```text
+Progress overview for CS2103T (AY26/27-S1):
+Alice Pauline (A1234567Y): 2/5 completed
+Benson Meier (A2345678X): 4/5 completed
+```
+
+The selected course must already be initialised. This command reports progress
+only and does not change students, enrolments, or completion statuses.
+
+![overview command](images/overviewCommand.gif)
 
 ### General commands
 #### Clearing all entries: `clear`
