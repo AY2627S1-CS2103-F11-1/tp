@@ -19,6 +19,12 @@ title: Developer Guide
   adapted proposed changes before raising them for peer review, ran and reviewed relevant tests for submitted
   changes, and remains responsible for the submitted work.
 
+- OpenAI Codex was used by Min Rui throughout the project to assist with with evaluating design decisions, 
+identifying documentation inconsistencies, and suggesting relevant coding and testing practices. Additionally, 
+it aided in running tests and comparing proposed modifications against the existing codebase. AI-generated 
+suggestions were reviewed and adapted against the existing codebase and project requirements before incorporation 
+into the submitted work.
+
 ## Setting up, getting started
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
