@@ -105,9 +105,8 @@ Guide.
 Format: `help`
 
 
-### Course and enrolment management
-
-### Initialising a course: `init course`
+### Course management
+#### Initialising a course: `init course`
 
 Initialises one course for a semester and records its project deliverables. A course can be initialised only once
 per semester, regardless of letter case. Provide between one and 20 unique deliverables, and separate deliverable
@@ -120,8 +119,7 @@ Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE
 ![init course command](images/initCourseCommand.gif)
 
 ### Student management
-
-### Adding a student: `add`
+#### Adding a student: `add`
 
 Adds a student to TAssist with at least one course enrolment.
 
@@ -141,7 +139,7 @@ Multiple enrolments can be added in one command:
 
 ![add command](images/addCommand.gif)
 
-### Listing students: `list`
+#### Listing students: `list`
 
 Shows all students, or only students enrolled in a selected course-semester.
 The filtered list can be narrowed further by tutorial class or by a deliverable
@@ -167,7 +165,7 @@ course-semester. Students appear once even if they have other enrolments.
 
 ![list command](images/listCommand.gif)
 
-### Viewing a course progress overview: `overview`
+#### Viewing a course progress overview: `overview`
 
 Shows every student enrolled in a course-semester together with the number of
 completed deliverables out of the total tracked deliverables. Students are
@@ -190,7 +188,7 @@ only and does not change students, enrolments, or completion statuses.
 
 ![overview command](images/overviewCommand.gif)
 
-### Editing a student: `edit`
+#### Editing a student: `edit`
 
 Edits the details of an existing student identified by their current student ID.
 
@@ -224,7 +222,7 @@ Updates both the student's ID and email address.
 
 ![edit command](images/editCommand.gif)
 
-### Enrolment management: `enrol`, `unenrol`
+#### Enrolment management: `enrol`, `unenrol`
 
 Use `enrol` to add an existing student to another course-semester. The course
 must have been initialised first.
@@ -247,7 +245,7 @@ Example:
 
 ![enrol command](images/enrolCommand.gif)
 
-### Searching students by name or ID: `search`
+#### Searching students by name or ID: `search`
 
 Searches student records by one or more names or student IDs. Name queries use
 case-insensitive partial-substring matching with OR semantics: a student is
@@ -272,9 +270,24 @@ lowercase syntax, such as `search` and `/name`.
 
 ![search command](images/searchCommand.gif)
 
-### Student notes
+#### Deleting a student: `delete`
 
-### Managing student notes: `notes`, `view notes`, `delete notes`
+Deletes a student from TAssist.
+
+Format: `delete /id ID` or `delete /name NAME`
+
+* Use `/id` to delete a student by their unique student ID.
+* Use `/name` only when the name identifies one student. If more than one student
+  has that name, use the student's ID instead.
+
+Examples:
+* `delete /id A1234567Z` deletes the student with ID `A1234567Z`.
+* `delete /name John Doe` deletes John Doe when there is exactly one such student.
+
+![delete command](images/deleteCommand.gif)
+
+### Student notes
+#### Managing student notes: `notes`, `view notes`, `delete notes`
 
 Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
 
@@ -296,8 +309,7 @@ Examples:
 ![notes command](images/notesCommand.gif)
 
 ### Deliverable progress
-
-### Marking deliverables as complete: `mark`
+#### Marking deliverables as complete: `mark`
 
 Marks one or more deliverables as complete for a student in a course-semester.
 
@@ -312,7 +324,7 @@ Examples:
 Use `/id` when several students have the same name. Every deliverable must belong to
 the specified course-semester and must currently be Not Done.
 
-### Marking deliverables as incomplete: `unmark`
+#### Marking deliverables as incomplete: `unmark`
 
 Marks one or more completed deliverables as incomplete for a student in a
 course-semester.
@@ -327,7 +339,7 @@ Examples:
 
 ![mark command](images/markCommand.gif)
 
-### Viewing a student's deliverable progress: `view`
+#### Viewing a student's deliverable progress: `view`
 
 Shows every deliverable and its completion status for one student across all
 their course-semester enrolments. The deliverables panel expands to display
@@ -345,31 +357,14 @@ deliverable as `Done` or `Not Done` in the order it was initialised.
 
 ![view command](images/viewCommand.gif)
 
-### Deleting a student: `delete`
-
-Deletes a student from TAssist.
-
-Format: `delete /id ID` or `delete /name NAME`
-
-* Use `/id` to delete a student by their unique student ID.
-* Use `/name` only when the name identifies one student. If more than one student
-  has that name, use the student's ID instead.
-
-Examples:
-* `delete /id A1234567Z` deletes the student with ID `A1234567Z`.
-* `delete /name John Doe` deletes John Doe when there is exactly one such student.
-
-![delete command](images/deleteCommand.gif)
-
 ### General commands
-
-### Clearing all entries: `clear`
+#### Clearing all entries: `clear`
 
 Clears all entries from the address book.
 
 Format: `clear`
 
-### Exiting the program: `exit`
+#### Exiting the program: `exit`
 
 Exits the program.
 
