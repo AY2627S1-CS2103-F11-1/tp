@@ -1,54 +1,15 @@
-
 ---
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-1. [Acknowledgements](#acknowledgements)
-2. [Setting up and getting started](#setting-up-and-getting-started)
-3. [Product Scope](#product-scope)
-   - [Target User Profile](#target-user-profile)
-   - [Value Proposition](#value-proposition)
-   - [User Stories](#user-stories)
-   - [Use Cases](#use-cases)
-   - [Non-Functional Requirements](#non-functional-requirements)
-   - [Glossary](#glossary)
-4. [Design](#design)
-   - [Architecture](#architecture)
-      - [Component interactions](#component-interactions)
-      - [Component interfaces and implementations](#component-interfaces-and-implementations)
-   - [UI Component](#ui-component)
-   - [Logic Component](#logic-component)
-      - [Command execution](#command-execution)
-      - [Command parsing](#command-parsing)
-   - [Model Component](#model-component)
-      - [Multiple course enrolments and independent progress](#multiple-course-enrolments-and-independent-progress)
-   - [Storage Component](#storage-component)
-      - [Loading address-book data](#loading-address-book-data)
-      - [Storage loading outcomes](#storage-loading-outcomes)
-      - [Progress reconciliation](#progress-reconciliation)
-      - [Persistence safety and failure handling](#persistence-safety-and-failure-handling)
-5. [Implementation](#implementation)
-   - [Course initialisation](#course-initialisation)
-   - [Updating deliverable progress](#updating-deliverable-progress)
-   - [Viewing student deliverables](#viewing-student-deliverables)
-     - [Design consideration: structured UI data](#design-consideration-structured-ui-data)
-6. [Common classes](#common-classes)
-7. [Documentation, logging, testing, dev-ops](#documentation-logging-testing-dev-ops)
-8. [Appendix: Requirements](#appendix-requirements)
-   - [Product scope](#product-scope)
-   - [User stories](#user-stories)
-   - [Use cases](#use-cases)
-   - [Non-Functional Requirements](#non-functional-requirements)
-   - [Glossary](#glossary)
-9. [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
 
+* Table of Contents {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
 
-* _{List the sources of reused or adapted ideas, code, documentation, and third-party libraries here, with links to the originals.}_
+- This project is based on the [AddressBook Level 3](https://github.com/se-edu/addressbook-level3) project created by the [SE-EDU initiative](https://se-education.org).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -456,21 +417,10 @@ Keeping shared functionality in Commons avoids duplicating cross-cutting infrast
 ### Product scope
 
 **Target user profile**:
-
-The target users of TAssist are university teaching assistants who:
-
-* supervise a significant number of students across one or more tutorial classes
-* oversee at least one multi-week programming project
-* need to track student information and project progress over an extended period
-* frequently search for and update student records
-* prefer using a desktop application to manage their records
-* are comfortable typing commands and using keyboard-based interactions
+University teaching assistants supporting computing modules with multi-week programming projects, particularly those managing students across multiple courses or tutorial classes.
 
 **Value proposition**:
-
-The platform helps TAs efficiently track students’ attendance, participation, weaknesses, stress levels and past interactions. It also helps TAs monitor students’ project progress and record their design decisions for programming assignments.
-
-By centralising this information, the platform allows TAs to recall previous interactions, monitor project progress and provide more contextualised support to students.
+Managing many students can make it difficult for teaching assistants to keep track of individual progress and previous observations. TAssist centralises student information, course enrolments, project deliverable progress, and project-work notes, enabling TAs to monitor students more efficiently and provide contextualised academic support.
 
 
 ### User stories
@@ -478,223 +428,223 @@ By centralising this information, the platform allows TAs to recall previous int
 Priorities: High (must have) - `***`, Medium (nice to have) - `**`,
 Low (unlikely to have) - `*`
 
+#### Current release user stories
+
 | Priority | As a … | I want to … | So that I can … |
 | -------- | ------ | ------------ | --------------- |
 | `***` | TA | view all students under my supervision | keep track of the students I manage |
-| `***` | TA | add a student with their name, student ID, email address and course enrolments | maintain accurate student records |
-| `***` | TA | search for a student by name or student ID | quickly retrieve the relevant student’s information |
+| `***` | TA | add a student to my records | maintain accurate student records |
+| `***` | TA | search for a student in my records | quickly retrieve their information |
 | `***` | TA | update a student’s details | keep student information up to date |
-| `***` | TA | delete a student who is no longer under my supervision | maintain an up-to-date student list |
-| `***` | TA | initialise a course and its project deliverables for a semester | begin tracking students’ progress for that course |
-| `***` | TA | view students’ project deliverables and completion statuses | understand and compare their progress |
+| `***` | TA | remove a student from my records | keep my student list relevant |
+| `***` | TA | initialise a course and its project deliverables | track progress against the course's milestones |
+| `***` | TA | 	manage a student's course enrolments | keep course registrations accurate |
+| `***` | TA | view students’ progress | identify completed and outstanding deliverables |
+| `***` | TA | view a course progress overview | compare progress across students in a course-semester |
 | `***` | TA | mark a student’s project deliverable as completed | record the student’s progress |
-| `***` | TA | unmark a completed project deliverable | correct the student’s progress record when necessary |
-| `**` | TA | add a note about a student’s project work | record observations about the student’s progress or implementation |
+| `***` | TA | unmark a completed deliverable | correct an inaccurate progress record |
+| `**` | TA | record a note about a student’s project work | remember observations about their progress |
 | `**` | TA | view a student’s project-work notes | recall previous observations and interactions |
-| `**` | TA | edit a student’s project-work note | correct or update information when necessary |
 | `**` | TA | delete an outdated or incorrect project-work note | keep the student’s record accurate |
-| `**` | TA | record a student’s attendance | identify students who may require additional support |
-| `**` | TA | record a student’s participation | monitor the student’s engagement during tutorials |
-| `**` | TA | record a student’s weaknesses | provide more targeted guidance |
-| `**` | TA | record a student’s technical strengths | build on what the student already understands when offering guidance |
-| `**` | TA | record a student’s stress level | identify students who may need additional support |
-| `**` | TA | record my past interactions with a student | provide support based on previous discussions |
 | `**` | TA | view students in a selected tutorial class | prepare for a specific tutorial session |
-| `**` | TA | view a student’s attendance history | identify participation patterns over time |
-| `**` | TA | categorise interaction notes by programming topic | identify a student’s recurring technical difficulties more quickly |
-| `**` | TA | view all students flagged for follow-up | prioritise students who need additional support |
-| `**` | TA | mark a follow-up as completed | know which support actions no longer need attention |
-| `*` | TA | record a student’s important project design decisions | understand the reasoning behind the student’s implementation |
-| `*` | TA | view a student’s project history | understand how the student’s project has developed over time |
-| `*` | student | view my own project progress | understand which deliverables I have completed |
-| `*` | student | update my own personal information | keep my information up to date |
-| `*` | TA | generate a report of student progress | review or share an overview of student performance |
-| `*` | TA | send notifications to students through the application | communicate important information conveniently |
+| `*` | TA | record a student’s attendance | identify students who may require additional support |
+| `*` | TA | track follow-up actions for a student | prioritise and monitor support actions |
+| `*` | TA | generate a progress report | review an overview of student performance |
+
 
 ### Use cases
 
-**Actor** is the `TA`, unless specified otherwise.
+**Actor:** TA (Teaching Assistant), unless otherwise specified.
 
 ---
 
-**Use case: Add a student**
+#### Use case: Add a student
 
-**Preconditions**: Each course-semester in which the student will be enrolled
-has been initialised in TAssist.
-
-**MSS**
-
-1. TA requests to add a student.
-2. TA enters the student's name, student ID, email address, and one or more
-   matching course, semester and tutorial-class values.
-3. TAssist validates the student details and requested course-semester enrolments.
-4. TAssist adds the student record, enrolments and initial deliverable-progress records.
-5. TAssist displays a confirmation message and the updated student list.
-
-   Use case ends.
-
-**Extensions**
-
-* 2a. One or more required fields are missing, or the numbers of courses,
-  semesters and tutorial classes do not match.
-
-  * 2a1. TAssist displays an error message.
-
-  * 2a2. TA enters the corrected information.
-
-    Use case resumes at step 3.
-
-* 3a. The student ID or email address is already in use.
-
-  * 3a1. TAssist displays an error message.
-
-    Use case resumes at step 2.
-
-* 3b. A requested course-semester has not been initialised.
-
-  * 3b1. TAssist displays an error message.
-
-    Use case resumes at step 2.
-
-* 4c. The course for the given semester does not exist.
-
-  * 4c1. TAssist displays error message asking to initialise course for the given semester first.
-
-    Use case resumes at step 3.
-
----
-
-**Use case: Search for a student**
+**Preconditions:** The course-semesters in which the student will be enrolled have been initialised in TAssist.
 
 **MSS**
 
-1. TA requests to search for a student.
-2. TAssist prompts the TA for a student name or student ID.
-3. TA enters a search term.
-4. TAssist searches the student records.
-5. TAssist displays the matching student records.
-
-   Use case ends.
-
-**Extensions**
-
-* 4a. No matching student is found.
-
-  * 4a1. TAssist displays an appropriate message.
-
-    Use case ends.
-
-* 4b. Multiple students have the same name.
-
-  * 4b1. TAssist displays all matching students and their student IDs.
-
-    Use case ends.
-
----
-
-**Use case: Initialise a course and its project deliverables**
-
-**MSS**
-
-1. TA requests to initialise a course for a specified semester with a list of project deliverables.
-2. TAssist validates the course, semester and deliverable details.
-3. TAssist creates the course record and its project deliverables.
+1. TA requests to add a student, providing their details and one or more course enrolments.
+2. TAssist validates the supplied information.
+3. TAssist adds the student, their enrolments, and corresponding initial deliverable-progress records.
 4. TAssist displays a confirmation.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. One or more supplied details are invalid.
+- 2a. The supplied information is missing or invalid.
 
-  * 2a1. TAssist displays an error message.
+  - 2a1. TAssist displays an error message.
 
-    Use case resumes at step 1.
+    Use case ends.
 
-* 3a. A record for the same course and semester already exists.
+- 2b. The student ID or email address conflicts with an existing student.
 
-  * 3a1. TAssist displays an error message.
+  - 2b1. TAssist displays an error message.
+
+    Use case ends.
+
+- 2c. A requested course-semester has not been initialised.
+
+  - 2c1. TAssist displays an error message.
 
     Use case ends.
 
 ---
 
-**Use case: Record a project-work note**
-
-**Preconditions**: The student is enrolled in the specified course-semester,
-and the specified deliverable belongs to that course-semester.
+#### Use case: Search for a student
 
 **MSS**
 
-1. TA requests to add a project-work note for a specific student.
-2. TA supplies the student's ID, course, semester, deliverable and note text.
-3. TAssist validates the student, course-semester enrolment, deliverable and note details.
-4. TAssist saves the note against the student's course-semester enrolment and deliverable.
-5. TAssist displays a confirmation.
+1. TA requests to search for students using a name or student ID.
+2. TAssist searches the student records.
+3. TAssist displays the matching students.
 
    Use case ends.
 
 **Extensions**
 
-* 3a. The student, course-semester enrolment or deliverable cannot be found,
-  or the note is invalid.
+- 2a. No matching students are found.
+  - 2a1. TAssist displays an empty result or appropriate feedback.
 
-  * 3a1. TAssist displays an error message.
-
-    Use case resumes at step 2.
+    Use case ends.
 
 ---
 
-**Use case: Update a student's deliverable completion status**
-
-**Preconditions**: The student, course, semester, and specified deliverables are
-recorded in TAssist.
+#### Use case: Initialise a course and its project deliverables
 
 **MSS**
 
-1. TA requests to mark or unmark specified project deliverables for a student in
-   a course and semester.
-2. TAssist validates the student, course, semester, and deliverable details.
-3. TAssist finds the student's deliverable-progress record for the specified
-   course and semester.
-4. TAssist updates the deliverables' completion statuses.
-5. TAssist displays the updated completion statuses.
+1. TA requests to initialise a course for a specified semester with its project deliverables.
+2. TAssist validates the supplied information.
+3. TAssist creates the course record and its deliverables.
+4. TAssist displays a confirmation.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The student, course, semester, or deliverable cannot be found.
+- 2a. The supplied information is missing or invalid.
 
-  * 2a1. TAssist displays an error message.
+  - 2a1. TAssist displays an error message.
 
-    Use case resumes at step 1.
+    Use case ends.
 
-* 3a. No deliverable-progress record exists for the student, course, and semester.
+- 2b. A course record for the same course-semester already exists.
 
-  * 3a1. TAssist displays an error message.
+  - 2b1. TAssist displays an error message.
 
-    Use case resumes at step 1.
+    Use case ends.
 
-* 4a. A requested completion status is already recorded.
+---
 
-  * 4a1. TAssist informs the TA that no change was made.
+#### Use case: Manage a student's course enrolments
+
+**Preconditions:** The student and relevant course-semester records exist in TAssist.
+
+**MSS**
+
+1. TA requests to enrol a student in an additional course-semester, providing the student's ID and enrolment details.
+2. TAssist validates the student, course-semester, and enrolment details.
+3. TAssist adds the enrolment and initialises the student's deliverable progress for that course-semester.
+4. TAssist displays a confirmation.
+
+   Use case ends.
+
+**Extensions**
+
+- 2a. The student or course-semester cannot be found, or the supplied enrolment details are invalid.
+
+  - 2a1. TAssist displays an error message.
+
+    Use case ends.
+
+- 2b. The student is already enrolled in the specified course-semester.
+
+  - 2b1. TAssist displays an error message.
+
+    Use case ends.
+
+**Related operation:** The `unenrol` command removes an existing course-semester enrolment and its associated progress. If the student has no remaining enrolments, TAssist also removes the student record.
+
+---
+
+#### Use case: Add a project-work note
+
+**Preconditions:** The student is enrolled in the specified course-semester, and the selected deliverable belongs to that course-semester.
+
+**MSS**
+
+1. TA requests to record a project-work note, providing the student ID, course-semester, deliverable, and note text.
+2. TAssist validates the supplied information.
+3. TAssist records the note for the student's course-semester enrolment and selected deliverable.
+4. TAssist displays a confirmation.
+
+   Use case ends.
+
+**Extensions**
+
+- 2a. The supplied information is missing or invalid.
+
+  - 2a1. TAssist displays an error message.
+
+    Use case ends.
+
+- 2b. The student, enrolment, or deliverable cannot be found.
+
+  - 2b1. TAssist displays an error message.
+
+    Use case ends.
+
+---
+
+#### Use case: Update a student's deliverable completion status
+
+**Preconditions:** The student is enrolled in the specified course-semester, and the requested deliverables belong to that course.
+
+**MSS**
+
+1. TA requests to mark or unmark one or more deliverables for a student in a specified course-semester.
+2. TAssist validates the student, course-semester, requested deliverables, and their current completion statuses.
+3. TAssist updates the requested completion statuses.
+4. TAssist displays the updated progress.
+
+   Use case ends.
+
+**Extensions**
+
+- 2a. The student, course-semester, or requested deliverable cannot be found.
+
+  - 2a1. TAssist displays an error message.
+
+    Use case ends.
+
+- 2b. A requested deliverable is already in the target completion status.
+
+  - 2b1. TAssist displays an error message without updating the progress record.
+
+    Use case ends.
+
+- 2c. The supplied information is missing or invalid.
+
+  - 2c1. TAssist displays an error message.
 
     Use case ends.
 
 ### Non-Functional Requirements
 
-1.  TAssist should work on Windows, macOS and Linux, as long as Java `25` or above is installed.
-2.  TAssist should support up to 1,000 student records without noticeable sluggishness during typical usage.
-3.  For up to 1,000 student records, TAssist should display student search results and a selected course's deliverable completion statuses within two seconds.
-4.  A TA with above-average typing speed for regular English text should be able to accomplish frequent deliverables faster using commands than using the mouse.
-5.  An invalid command should not modify existing student records, project-work notes or deliverable completion statuses.
-6.  Student records, project-work notes and deliverable completion statuses should be preserved after a normal application exit and restart.
+1. **Compatibility:** TAssist should run on Windows, macOS, and Linux with Java 25 installed.
+
+2. **Responsiveness:** TAssist should display student search results and deliverable-progress information within two seconds when managing up to 1,000 student records.
+
+3. **Data integrity:** Invalid commands should not partially modify student records, course enrolments, project-work notes, or deliverable completion statuses.
+
+4. **Persistence:** Student records, course enrolments, project-work notes, and deliverable completion statuses should remain available after a normal application exit and restart.
+
+5. **Storage safety:** If an existing data file is invalid or unreadable, TAssist should prevent normal startup without overwriting the file with sample data.
 
 ### Glossary
-
-* **Attendance record**: A record of whether a student attended a
-  particular tutorial session.
 
 * **Completion status**: Whether a student has completed a particular
   project deliverable.
@@ -702,41 +652,26 @@ recorded in TAssist.
 * **Course**: A university course tracked in TAssist for a specified
   semester.
 
-* **Follow-up**: A support action a TA intends to take for a student,
-  which can be marked as completed after it is addressed.
+* **Course-semester**: A course identified together with the academic
+  semester in which it is being tracked.
 
-* **Interaction note**: A record of a past discussion or interaction
-  between a TA and a student.
+* **Student-course enrolment**: A student's registration in one
+  course-semester, including their tutorial class and project-work notes.
 
-* **Participation record**: A record of a student's engagement during a
-  tutorial session.
-
-* **Project design decision**: A recorded decision about how a student
-  chose to design or implement part of their project.
+* **Student-course progress**: The completion status of each deliverable for
+  one student and course-semester.
 
 * **Project deliverable**: A required part or milestone of a course
   project that a student is expected to complete.
 
-* **Project history**: A chronological record of a student's progress,
-  notes, and relevant changes made during a course project.
-
 * **Project-work note**: A note recorded by a TA about a student's
   project progress, implementation, or difficulties.
-
-* **Stress level**: A TA's recorded assessment of a student's apparent
-  level of stress. The team should later define the allowed levels.
 
 * **Student record**: The information TAssist stores for one student,
   including their personal details and associated course enrolments.
 
 * **TA**: A university teaching assistant who uses TAssist to manage
   students and monitor their project progress.
-
-* **Technical strength**: A programming-related area in which a student
-  demonstrates competence.
-
-* **Technical weakness**: A programming-related area in which a student
-  needs additional support.
 
 * **Tutorial class**: A class group in which a student is enrolled for a
   particular course-semester.
@@ -769,7 +704,7 @@ testers are expected to do more *exploratory* testing.
    1. Relaunch the app using `java -jar TAssist.jar`.<br>
        Expected: The most recent window size and location are retained.
 
-1. _{ more test cases …​ }_
+1. Continue with the representative feature scenarios below after confirming that the application launches and the sample data is present.
 
 ### Deleting a student
 
@@ -786,21 +721,61 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete /id`, and `delete /unknown value`.<br>
       Expected: No student is deleted. The status message shows the relevant error details.
 
-1. _{ more test cases …​ }_
+1. Use a disposable data folder for the storage scenarios below so that real user data is not modified.
 
-### Saving data
+### Course, enrolment, and progress workflow
 
-1. Dealing with corrupted data files
+1. Start with the sample data, or use `clear` and recreate a disposable data set.
 
-   1. Prerequisites: Place `TAssist.jar` in an empty folder. Ensure there is no data folder inside this folder.
-   2. Open a terminal and navigate to the folder containing `TAssist.jar`.
-   3. Run `java -jar TAssist.jar` to launch the app.
-   4. Add a project-work notes using
-   `notes /id A1234567B /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Implemented add and delete but not edit`. Alex Yeoh's display should now say `2 notes`.
-   5. In the folder with `TAssist.jar`, a new data folder is created. Open `addressbook.json` located in the data folder.
-   6. Scroll down to enrolments and edit `"studentId" : "A1234567B",` to `"studentId" : ,`
-   7. Rerun `java -jar TAssist.jar` in your terminal to launch the app.
-   8. Expected: TAssist displays an **Unable to load saved data** error dialog and does not start the normal application interface. The original `data/addressbook.json` file remains unchanged, and sample data is not written over it.
-   9. Dismiss the dialog. Expected: TAssist exits without accepting commands or saving the invalid address-book data.
-   10. Restore the data file by editing `"studentId" : ,` back to `"studentId" : "A1234567B",`, or replace it with a valid backup.
-   11. Relaunching the app using `java -jar TAssist.jar` in your terminal should now load the corrected data normally. You can verify this by running `view notes /id A1234567B /course CS2103T /sem AY26/27-S1`.
+1. Initialise a course:
+   `init course /course CS2040S /sem AY26/27-S1 /deliverable MVP, Final`.<br>
+   Expected: TAssist confirms the course was initialised. Repeating the command for the same course-semester is rejected.
+
+1. Add a student with that enrolment:
+   `add /name Test Student /id A1111111A /email test@example.com /course CS2040S /sem AY26/27-S1 /class T01`.<br>
+   Expected: the student appears in the list with an initial progress record for `MVP` and `Final`.
+
+1. Update and inspect progress using:
+   `mark /id A1111111A /course CS2040S /sem AY26/27-S1 /deliverable MVP`,
+   `unmark /id A1111111A /course CS2040S /sem AY26/27-S1 /deliverable MVP`,
+   `view /id A1111111A`, and
+   `overview /course CS2040S /sem AY26/27-S1`.<br>
+   Expected: the relevant status changes, the individual view shows the student's progress, and the overview shows the course's students.
+
+1. Initialise another course with
+   `init course /course CS2040C /sem AY26/27-S1 /deliverable Proposal, Final`,
+   then enrol and unenrol the student in it using the `enrol` and `unenrol` commands.<br>
+   Expected: the enrolment and its progress record are added or removed together.
+
+### Notes, search, listing, and editing
+
+1. Add a project-work note:
+   `notes /id A1111111A /course CS2040S /sem AY26/27-S1 /deliverable MVP /notes Tested the project scope`.<br>
+   Expected: TAssist confirms the note was added.
+
+1. Run `view notes /id A1111111A /course CS2040S /sem AY26/27-S1`, then
+   `delete notes /id A1111111A /course CS2040S /sem AY26/27-S1`.<br>
+   Expected: the note is displayed, then all notes for that enrolment are deleted.
+
+1. Try `search /name Test` and `search /id A1111111A`, followed by
+   `list /course CS2040S /sem AY26/27-S1 /class T01`.<br>
+   Expected: matching students are shown, and the list filter shows the expected tutorial class.
+
+1. Edit the student with `edit /id A1111111A /name Updated Student`.<br>
+   Expected: the student's name changes while the ID, enrolments, notes, and progress remain associated with the student.
+
+### Clearing and persistence
+
+1. Before destructive testing, make a copy of the `data` folder. Run `clear` and confirm that students, courses, enrolments, notes, and progress are removed from the application.
+
+1. Restart TAssist and verify that the cleared state persists. Restore the copied data folder if further testing is required.
+
+### Invalid existing storage
+
+1. Use a disposable folder and make a backup of `data/addressbook.json` before editing it.
+
+1. Introduce one invalid value, such as a note referring to a deliverable that is not defined by its course, then launch TAssist.<br>
+   Expected: TAssist displays an **Unable to load saved data** dialog, does not load sample data, does not accept normal commands, and preserves the original file.
+
+1. Dismiss the dialog, restore the backup or correct the invalid value, and restart TAssist.<br>
+   Expected: TAssist loads normally after the file is valid again.
