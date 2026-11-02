@@ -18,35 +18,33 @@ import seedu.address.model.student.Id;
  */
 public class DeleteNotesCommandParser implements Parser<DeleteNotesCommand> {
 
-
+    /**
+     * Parses arguments for {@code DeleteNotesCommand}.
+     *
+     * @param args String containing parameters Id, Course, Semester with prefixes.
+     * @return DeleteNotesCommand using parsed parameters.
+     * @throws ParseException If parameters are missing, empty, duplicated,
+     *         or contains unexpected text or other parameters.
+     */
     @Override
     public DeleteNotesCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        ParserUtil.rejectUnknownParameters(
-                args, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
+        ParserUtil.rejectUnknownParameters(args, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
-        ArgumentMultimap arguments = ArgumentTokenizer.tokenize(
-                args, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
+        ArgumentMultimap arguments = ArgumentTokenizer.tokenize(args, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
         if (!arguments.getPreamble().isEmpty()) {
             throw new ParseException(Messages.MESSAGE_UNEXPECTED_TEXT);
         }
 
-        arguments.verifyNoDuplicatePrefixesFor(
-                PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
+        arguments.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
-        ParserUtil.validateRequiredParameters(
-                arguments, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
+        ParserUtil.validateRequiredParameters(arguments, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
-        Id studentId = ParserUtil.parseId(
-                arguments.getValue(PREFIX_ID).orElseThrow());
-
-        CourseCode courseCode = ParserUtil.parseCourseCode(
-                arguments.getValue(PREFIX_COURSE).orElseThrow());
-
-        Semester semester = ParserUtil.parseSemester(
-                arguments.getValue(PREFIX_SEMESTER).orElseThrow());
+        Id studentId = ParserUtil.parseId(arguments.getValue(PREFIX_ID).orElseThrow());
+        CourseCode courseCode = ParserUtil.parseCourseCode(arguments.getValue(PREFIX_COURSE).orElseThrow());
+        Semester semester = ParserUtil.parseSemester(arguments.getValue(PREFIX_SEMESTER).orElseThrow());
 
         return new DeleteNotesCommand(studentId, courseCode, semester);
     }

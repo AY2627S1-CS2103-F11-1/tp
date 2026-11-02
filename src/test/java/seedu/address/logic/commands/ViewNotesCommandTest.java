@@ -1,3 +1,4 @@
+//@@author mizzfain
 package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -21,7 +22,9 @@ import seedu.address.model.student.Id;
 public class ViewNotesCommandTest {
 
     private static final CourseCode COURSE_CODE = new CourseCode("CS2103T");
+    private static final CourseCode INVALID_COURSE_CODE = new CourseCode("CS2100");
     private static final Semester SEMESTER = new Semester("AY26/27-S1");
+    private static final Semester INVALID_SEMESTER = new Semester("AY26/27-S2");
 
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -52,5 +55,18 @@ public class ViewNotesCommandTest {
 
         assertCommandFailure(command, model,
                 String.format(StudentNotesCommandUtil.MESSAGE_STUDENT_ID_NOT_FOUND, "A9999999Z"));
+    }
+
+    @Test
+    public void execute_notEnrolled_throwsCommandException() {
+        ViewNotesCommand invalid_course_command = new ViewNotesCommand(ALICE.getId(),
+                INVALID_COURSE_CODE, SEMESTER);
+        ViewNotesCommand invalid_semester_command = new ViewNotesCommand(ALICE.getId(),
+                COURSE_CODE, INVALID_SEMESTER);
+
+        assertCommandFailure(invalid_course_command, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), INVALID_COURSE_CODE, SEMESTER));
+        assertCommandFailure(invalid_semester_command, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), COURSE_CODE, INVALID_SEMESTER));
     }
 }

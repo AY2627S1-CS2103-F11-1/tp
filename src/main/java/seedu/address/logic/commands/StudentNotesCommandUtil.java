@@ -17,7 +17,7 @@ final class StudentNotesCommandUtil {
     static final String MESSAGE_STUDENT_ID_NOT_FOUND = "No student found with ID '%s'. "
             + "Please check the student ID and try again.";
 
-    public static final String MESSAGE_ENROLMENT_NOT_FOUND = "Student %s is not enrolled in %s (%s).";
+    static final String MESSAGE_ENROLMENT_NOT_FOUND = "Student %s is not enrolled in %s (%s).";
 
     private StudentNotesCommandUtil() {
     }
