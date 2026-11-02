@@ -448,6 +448,11 @@ Low (unlikely to have) - `*`
 | `**` | TA | view a student’s project-work notes | recall previous observations and interactions |
 | `**` | TA | delete an outdated or incorrect project-work note | keep the student’s record accurate |
 | `**` | TA | view students in a selected tutorial class | prepare for a specific tutorial session |
+
+#### Future user stories
+
+| Priority | As a … | I want to … | So that I can … |
+| -------- | ------ | ------------ | --------------- |
 | `*` | TA | record a student’s attendance | identify students who may require additional support |
 | `*` | TA | track follow-up actions for a student | prioritise and monitor support actions |
 | `*` | TA | generate a progress report | review an overview of student performance |
@@ -743,10 +748,13 @@ testers are expected to do more *exploratory* testing.
    `overview /course CS2040S /sem AY26/27-S1`.<br>
    Expected: the relevant status changes, the individual view shows the student's progress, and the overview shows the course's students.
 
-1. Initialise another course with
-   `init course /course CS2040C /sem AY26/27-S1 /deliverable Proposal, Final`,
-   then enrol and unenrol the student in it using the `enrol` and `unenrol` commands.<br>
-   Expected: the enrolment and its progress record are added or removed together.
+1. Initialise another course using `init course /course CS2040C /sem AY26/27-S1 /deliverable Proposal, Final`.
+
+   Enrol the student using `enrol /id A1111111A /course CS2040C /sem AY26/27-S1 /class T02`.
+
+   Unenrol the student using `unenrol /id A1111111A /course CS2040C /sem AY26/27-S1`.
+
+   Expected: The additional enrolment and its initial progress record are created, then both are removed. The student's original CS2040S enrolment remains unchanged.
 
 ### Notes, search, listing, and editing
 
