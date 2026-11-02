@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_TEXT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
 import java.util.logging.Logger;
@@ -83,7 +84,12 @@ public class AddressBookParser {
             case EnrolCommand.COMMAND_WORD -> new EnrolCommandParser().parse(arguments);
             case EditCommand.COMMAND_WORD -> new EditCommandParser().parse(arguments);
             case DeleteCommand.COMMAND_WORD -> new DeleteCommandParser().parse(arguments);
-            case ClearCommand.COMMAND_WORD -> new ClearCommand();
+            case ClearCommand.COMMAND_WORD -> {
+                if (!arguments.isBlank()) {
+                    throw new ParseException(MESSAGE_UNEXPECTED_TEXT);
+                }
+                yield new ClearCommand();
+            }
             case ListCommand.COMMAND_WORD -> new ListCommandParser().parse(arguments);
             case CourseProgressOverviewCommand.COMMAND_WORD ->
                 new CourseProgressOverviewCommandParser().parse(arguments);
