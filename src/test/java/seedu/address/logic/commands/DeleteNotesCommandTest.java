@@ -53,14 +53,14 @@ public class DeleteNotesCommandTest {
 
     @Test
     public void execute_notEnrolled_throwsCommandException() {
-        DeleteNotesCommand invalid_course_command = new DeleteNotesCommand(ALICE.getId(),
+        DeleteNotesCommand invalidCourseCommand = new DeleteNotesCommand(ALICE.getId(),
                 INVALID_COURSE, SEMESTER);
-        DeleteNotesCommand invalid_semester_command = new DeleteNotesCommand(ALICE.getId(),
+        DeleteNotesCommand invalidSemesterCommand = new DeleteNotesCommand(ALICE.getId(),
                 COURSE, INVALID_SEMESTER);
 
-        assertCommandFailure(invalid_course_command, model, String.format(
+        assertCommandFailure(invalidCourseCommand, model, String.format(
                 StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), INVALID_COURSE, SEMESTER));
-        assertCommandFailure(invalid_semester_command, model, String.format(
+        assertCommandFailure(invalidSemesterCommand, model, String.format(
                 StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), COURSE, INVALID_SEMESTER));
     }
 }

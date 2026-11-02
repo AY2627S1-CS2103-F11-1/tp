@@ -65,22 +65,23 @@ public class NotesCommandTest {
 
     @Test
     public void execute_notEnrolled_throwsCommandException() {
-        NotesCommand invalid_course_command = new NotesCommand(ALICE.getId(), INVALID_COURSE, SEMESTER,
+        NotesCommand invalidCourseCommand = new NotesCommand(ALICE.getId(), INVALID_COURSE, SEMESTER,
                 new Notes("Any note", "MVP"));
-        NotesCommand invalid_semester_command = new NotesCommand(ALICE.getId(), COURSE, INVALID_SEMESTER,
+        NotesCommand invalidSemesterCommand = new NotesCommand(ALICE.getId(), COURSE, INVALID_SEMESTER,
                 new Notes("Any note", "MVP"));
 
-        assertCommandFailure(invalid_course_command, model, String.format(StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND,
-                ALICE.getId(), INVALID_COURSE, SEMESTER));
-        assertCommandFailure(invalid_semester_command, model, String.format(StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND,
-                ALICE.getId(), COURSE, INVALID_SEMESTER));
+        assertCommandFailure(invalidCourseCommand, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), INVALID_COURSE, SEMESTER));
+        assertCommandFailure(invalidSemesterCommand, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), COURSE, INVALID_SEMESTER));
     }
 
     @Test
     public void execute_invalidDeliverable_throwsCommandException() {
-        NotesCommand invalid_deliverable_command = new NotesCommand(ALICE.getId(), COURSE, SEMESTER,
+        NotesCommand invalidDeliverableCommand = new NotesCommand(ALICE.getId(), COURSE, SEMESTER,
                 new Notes("Any note", "Level 1"));
 
-        assertCommandFailure(invalid_deliverable_command, model, String.format(NotesCommand.MESSAGE_DELIVERABLE_NOT_IN_COURSE));
+        assertCommandFailure(invalidDeliverableCommand, model,
+                String.format(NotesCommand.MESSAGE_DELIVERABLE_NOT_IN_COURSE));
     }
 }

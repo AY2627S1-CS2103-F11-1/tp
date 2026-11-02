@@ -59,14 +59,14 @@ public class ViewNotesCommandTest {
 
     @Test
     public void execute_notEnrolled_throwsCommandException() {
-        ViewNotesCommand invalid_course_command = new ViewNotesCommand(ALICE.getId(),
+        ViewNotesCommand invalidCourseCommand = new ViewNotesCommand(ALICE.getId(),
                 INVALID_COURSE_CODE, SEMESTER);
-        ViewNotesCommand invalid_semester_command = new ViewNotesCommand(ALICE.getId(),
+        ViewNotesCommand invalidSemesterCommand = new ViewNotesCommand(ALICE.getId(),
                 COURSE_CODE, INVALID_SEMESTER);
 
-        assertCommandFailure(invalid_course_command, model, String.format(
+        assertCommandFailure(invalidCourseCommand, model, String.format(
                 StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), INVALID_COURSE_CODE, SEMESTER));
-        assertCommandFailure(invalid_semester_command, model, String.format(
+        assertCommandFailure(invalidSemesterCommand, model, String.format(
                 StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), COURSE_CODE, INVALID_SEMESTER));
     }
 }
