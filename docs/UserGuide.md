@@ -54,7 +54,7 @@ notes, and project-deliverable progress.
 
 <div markdown="block" class="alert alert-info">
 
- **Notes about the command format:**
+**:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   For example, in `add /name NAME`, replace `NAME` with a value such as `John Doe`.
@@ -384,7 +384,7 @@ TAssist automatically saves data after every successful command. You do not need
 TAssist data is saved automatically as `[JAR file location]/data/addressbook.json`.
 Advanced users may update the JSON file directly, but should make a backup first.
 
-<div markdown="span" class="alert alert-warning"> 
+<div markdown="span" class="alert alert-warning">:exclamation:
 **Caution:**
 Do not edit or replace the data file unless you have made a backup first. If
 TAssist cannot load an existing file, it stops normal startup and does not
