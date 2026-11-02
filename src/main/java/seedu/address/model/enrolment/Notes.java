@@ -56,7 +56,7 @@ public class Notes {
      * @param matchedDeliverable Matched course Deliverable to be attached to the notes.
      */
     public Notes changeToMatchedDeliverable(Deliverable matchedDeliverable) {
-        return new Notes(this.notes, deliverable.toString());
+        return new Notes(this.notes, matchedDeliverable.toString());
     }
 
     /**
