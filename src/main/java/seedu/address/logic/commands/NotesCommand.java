@@ -20,6 +20,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseCode;
+import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.enrolment.Notes;
 import seedu.address.model.enrolment.NotesList;
@@ -50,8 +51,6 @@ public class NotesCommand extends Command {
 
     public static final String MESSAGE_UPDATE_NOTES_SUCCESS = "Updated notes for student %s (%s).";
 
-    public static final String MESSAGE_COURSE_NOT_FOUND = "Course %s for semester %s does not exist. "
-            + "Initialise it first.";
     private static final String MESSAGE_DELIVERABLE_NOT_IN_COURSE =
             "The specified deliverable is not part of the course.";
 
@@ -73,6 +72,14 @@ public class NotesCommand extends Command {
         this.notes = notes;
     }
 
+    /**
+     * Executes the NotesCommand.
+     * Finds matching student, matching enrolment, and adds Notes to it.
+     * Uses case-insensitive deliverable input to find matched deliverable in Course and use in Notes.
+     * @return CommandResult Command result containing successful user message and student Id to highlight.
+     * @throws CommandException If no student with given Id exists, no matching enrolment exists,
+     * or given deliverable not in course.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -83,12 +90,12 @@ public class NotesCommand extends Command {
                 model, studentId, courseCode, semester);
 
         Course course = model.getCourse(courseCode, semester).orElseThrow();
-        if (course.getDeliverables().stream()
-                .noneMatch(deliverable -> deliverable.equals(notes.getDeliverable()))) {
-            throw new CommandException(MESSAGE_DELIVERABLE_NOT_IN_COURSE);
-        }
+        Deliverable matchedDeliverable = course.getDeliverables().stream()
+                .filter(deliverable -> deliverable.equals(notes.getDeliverable()))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(MESSAGE_DELIVERABLE_NOT_IN_COURSE));
 
-        NotesList updatedNotes = enrolment.getNotes().add(notes);
+        NotesList updatedNotes = enrolment.getNotes().add(notes.changeToMatchedDeliverable(matchedDeliverable));
 
         model.setEnrolment(enrolment, enrolment.withNotes(updatedNotes));
 

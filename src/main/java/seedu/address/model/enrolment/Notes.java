@@ -52,6 +52,14 @@ public class Notes {
     }
 
     /**
+     * Returns a new Notes with the same notes but the matched course Deliverable.
+     * @param matchedDeliverable Matched course Deliverable to be attached to the notes.
+     */
+    public Notes changeToMatchedDeliverable(Deliverable matchedDeliverable) {
+        return new Notes(this.notes, deliverable.toString());
+    }
+
+    /**
      * Checks if Notes is valid.
      * Returns false if only contains whitespaces or exceeds 500 characters.
      * @param notes Notes to be validated.
