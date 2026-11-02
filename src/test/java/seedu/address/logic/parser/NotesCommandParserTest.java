@@ -18,8 +18,8 @@ public class NotesCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        assertParseSuccess(parser, " /id A1234567Z /course CS2103T /sem AY26/27-S1"
-                        + " /deliverable MVP /notes Implemented inheritance",
+        assertParseSuccess(parser, " /id A1234567Z /course CS2103T  /sem AY26/27-S1"
+                        + " /deliverable MVP   /notes Implemented inheritance",
                 new NotesCommand(new Id("A1234567Z"), new CourseCode("CS2103T"),
                         new Semester("AY26/27-S1"), new Notes("Implemented inheritance", "MVP")));
     }

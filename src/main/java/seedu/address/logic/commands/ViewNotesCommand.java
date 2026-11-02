@@ -50,6 +50,13 @@ public class ViewNotesCommand extends Command {
         this.semester = semester;
     }
 
+    /**
+     * Executes view notes command.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return CommandResult containing user message. Contains StudentNotesListView if NotesList not empty.
+     * @throws CommandException If no matching student or enrolment exists.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

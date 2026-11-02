@@ -18,7 +18,7 @@ public class Notes {
     public static final String MESSAGE_CONSTRAINTS = "Student notes cannot be empty string, only whitespaces"
             + " or exceed 500 characters.";
     public static final String CORRUPTED_NOTES_ERROR_MESSAGE =
-            "Student notes is corrupted.";
+            "Student notes is corrupted. Must be of the form - Deliverable: Note";
 
     private final String notes;
     private final Deliverable deliverable;
@@ -36,6 +36,7 @@ public class Notes {
     /**
      * Creates Notes from the String representation.
      * Used when loading from JSON file of loading Notes.
+     *
      * @param notesAsString Notes as String representation
      */
     public Notes(String notesAsString) {
@@ -52,8 +53,18 @@ public class Notes {
     }
 
     /**
+     * Returns a new Notes with the same notes but the matched course Deliverable.
+     *
+     * @param matchedDeliverable Matched course Deliverable to be attached to the notes.
+     */
+    public Notes changeToMatchedDeliverable(Deliverable matchedDeliverable) {
+        return new Notes(this.notes, matchedDeliverable.toString());
+    }
+
+    /**
      * Checks if Notes is valid.
      * Returns false if only contains whitespaces or exceeds 500 characters.
+     *
      * @param notes Notes to be validated.
      */
     public static boolean isValidNotes(String notes) {
@@ -63,6 +74,7 @@ public class Notes {
     /**
      * Checks if String representation of Notes is valid.
      * Returns true if follows format of Deliverable: Notes and returns false otherwise.
+     *
      * @param notesAsString String representation of Notes.
      */
     public static boolean isNotesAsStringValid(String notesAsString) {

@@ -20,7 +20,9 @@ import seedu.address.model.student.Id;
 /** Tests for {@code DeleteNotesCommand}. */
 public class DeleteNotesCommandTest {
     private static final CourseCode COURSE = new CourseCode("CS2103T");
+    private static final CourseCode INVALID_COURSE = new CourseCode("CS2100");
     private static final Semester SEMESTER = new Semester("AY26/27-S1");
+    private static final Semester INVALID_SEMESTER = new Semester("AY26/27-S2");
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
@@ -46,5 +48,18 @@ public class DeleteNotesCommandTest {
         DeleteNotesCommand command = new DeleteNotesCommand(new Id("A9999999Z"), COURSE, SEMESTER);
         assertCommandFailure(command, model,
                 String.format(StudentNotesCommandUtil.MESSAGE_STUDENT_ID_NOT_FOUND, "A9999999Z"));
+    }
+
+    @Test
+    public void execute_notEnrolled_throwsCommandException() {
+        DeleteNotesCommand invalidCourseCommand = new DeleteNotesCommand(ALICE.getId(),
+                INVALID_COURSE, SEMESTER);
+        DeleteNotesCommand invalidSemesterCommand = new DeleteNotesCommand(ALICE.getId(),
+                COURSE, INVALID_SEMESTER);
+
+        assertCommandFailure(invalidCourseCommand, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), INVALID_COURSE, SEMESTER));
+        assertCommandFailure(invalidSemesterCommand, model, String.format(
+                StudentNotesCommandUtil.MESSAGE_ENROLMENT_NOT_FOUND, ALICE.getId(), COURSE, INVALID_SEMESTER));
     }
 }

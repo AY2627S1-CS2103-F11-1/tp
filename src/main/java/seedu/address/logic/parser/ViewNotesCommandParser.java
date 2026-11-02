@@ -16,8 +16,14 @@ import seedu.address.model.student.Id;
 /** Parses arguments for a {@code ViewNotesCommand}. */
 public class ViewNotesCommandParser implements Parser<ViewNotesCommand> {
 
-
-    /** Parses arguments identifying one student-course-semester enrolment. */
+    /**
+     * Parses arguments for {@code ViewNotesCommand}.
+     *
+     * @param args String containing parameters Id, Course, Semester with prefixes.
+     * @return ViewNotesCommand using parsed parameters.
+     * @throws ParseException If parameters are missing, empty, duplicated,
+     *         or contains unexpected text or other parameters.
+     */
     public ViewNotesCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
@@ -32,12 +38,12 @@ public class ViewNotesCommandParser implements Parser<ViewNotesCommand> {
 
         arguments.verifyNoDuplicatePrefixesFor(PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
-        ParserUtil.validateRequiredParameters(
-                arguments, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
+        ParserUtil.validateRequiredParameters(arguments, PREFIX_ID, PREFIX_COURSE, PREFIX_SEMESTER);
 
         Id id = ParserUtil.parseId(arguments.getValue(PREFIX_ID).orElseThrow());
         CourseCode course = ParserUtil.parseCourseCode(arguments.getValue(PREFIX_COURSE).orElseThrow());
         Semester semester = ParserUtil.parseSemester(arguments.getValue(PREFIX_SEMESTER).orElseThrow());
+
         return new ViewNotesCommand(id, course, semester);
 
     }

@@ -48,6 +48,13 @@ public class DeleteNotesCommand extends Command {
         this.semester = requireNonNull(semester);
     }
 
+    /**
+     * Executes delete notes command and deletes all notes for given student's enrolment.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return
+     * @throws CommandException If student has no notes, or if no matching student or enrolment exists.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Student studentToEdit = StudentNotesCommandUtil.findStudentById(model, studentId);
