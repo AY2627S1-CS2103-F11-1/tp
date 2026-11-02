@@ -1,4 +1,3 @@
-//@@author mizzfain
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
