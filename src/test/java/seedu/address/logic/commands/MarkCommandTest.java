@@ -61,6 +61,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_deliverableWithDifferentCasing_usesCanonicalDeliverableInFeedback() {
+        // EP: deliverable matching is case-insensitive while feedback uses the stored spelling.
         Model model = modelWithCourse();
         MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(new Deliverable("mvp")));
@@ -77,6 +78,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_unknownDeliverable_throwsCommandException() {
+        // EP: a deliverable outside the course definition is rejected.
         Model model = modelWithCourse();
         MarkCommand command = new MarkCommand(ALICE.getId(), COURSE.getCourseCode(), COURSE.getSemester(),
                 List.of(new Deliverable("PE-D")));
@@ -86,6 +88,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_alreadyComplete_throwsCommandException() {
+        // EP: updating an already DONE deliverable is an invalid progress transition.
         Model model = modelWithCourse();
         StudentCourseProgress originalProgress = findAliceProgress(model);
         model.setStudentCourseProgress(originalProgress, originalProgress.withStatus(MVP, CompletionStatus.DONE));

@@ -32,7 +32,13 @@ notes, and project-deliverable progress.
 
    * `list` : Lists all students.
 
+   * `init course /course CS2103T /sem AY26/27-S1 /deliverable MVP, Final` : Initializes a course before it is used in an enrolment.
+
    * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T /sem AY26/27-S1 /class T07` : Adds a student with an initial course enrolment.
+
+   * `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP` : Marks a deliverable as complete.
+
+   * `view /id A1234567Z` : Displays the student's progress.
 
    * `delete /id A1234567Z` : Deletes the student with the specified ID.
 
@@ -67,8 +73,26 @@ notes, and project-deliverable progress.
 * Commands reject unsupported or extraneous parameters with an error message. Commands such as `help`, `exit`, and
   `clear` do not take parameters, while `list` also rejects unexpected text or parameters.
 
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
+
+### Case sensitivity and normalization
+
+The following rules apply to command input:
+
+| Input | Behaviour |
+| --- | --- |
+| Command words | Case-sensitive. Use lowercase commands such as `search`, `mark`, and `view`. |
+| Parameter prefixes | Case-sensitive. Use lowercase prefixes such as `/id`, `/course`, and `/deliverable`. |
+| Student names | Stored and compared case-sensitively for identity, but name-based command lookups and name searches are case-insensitive. Searches use partial-substring matching. |
+| Student IDs | Normalized to uppercase when parsed and matched exactly. For example, `a1234567z` refers to `A1234567Z`. |
+| Course codes | Compared case-insensitively. Input capitalization is preserved in displayed values where applicable. |
+| Semesters | Compared case-insensitively. Input capitalization is preserved in displayed values where applicable. |
+| Tutorial classes | Validated without case normalization and compared case-sensitively. |
+| Deliverables | Compared case-insensitively. Matching preserves the course's deliverable spelling. |
+| Notes text | Preserved as entered and matched as text; it is not case-normalized. |
+
+These rules describe matching and validation behavior; they do not mean that every
+stored value is rewritten to a single capitalization.
 
 ### Viewing help: `help`
 
@@ -80,6 +104,22 @@ Guide.
 
 Format: `help`
 
+
+### Course and enrolment management
+
+### Initialising a course: `init course`
+
+Initialises one course for a semester and records its project deliverables. A course can be initialised only once
+per semester, regardless of letter case. Provide between one and 20 unique deliverables, and separate deliverable
+names with commas.
+
+Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
+
+Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
+
+![init course command](images/initCourseCommand.gif)
+
+### Student management
 
 ### Adding a student: `add`
 
@@ -99,15 +139,7 @@ Multiple enrolments can be added in one command:
 
 * `add /name John Doe /id A1234567Z /email johndoe@u.nus.edu /course CS2103T, IS2108 /sem AY26/27-S1, AY26/27-S1 /class T07, T02`
 
-### Initialising a course: `init course`
-
-Initialises one course for a semester and records its project deliverables. A course can be initialised only once
-per semester, regardless of letter case. Provide between one and 20 unique deliverables, and separate deliverable
-names with commas.
-
-Format: `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`
-
-Example: `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP, PE-D`
+![add command](images/addCommand.gif)
 
 ### Listing students: `list`
 
@@ -133,6 +165,8 @@ Examples:
 only with both of them. `/deliverable` accepts exactly one deliverable tracked by that
 course-semester. Students appear once even if they have other enrolments.
 
+![list command](images/listCommand.gif)
+
 ### Viewing a course progress overview: `overview`
 
 Shows every student enrolled in a course-semester together with the number of
@@ -153,6 +187,8 @@ Benson Meier (A2345678X): 4/5 completed
 
 The selected course must already be initialised. This command reports progress
 only and does not change students, enrolments, or completion statuses.
+
+![overview command](images/overviewCommand.gif)
 
 ### Editing a student: `edit`
 
@@ -186,7 +222,9 @@ Changes the student's ID from `A1234567Z` to `A7654321B`.
 * `edit /id A1234567Z /newid A7654321B /email johntan@u.nus.edu`
 Updates both the student's ID and email address.
 
-### Managing course enrolments: `enrol`, `unenrol`
+![edit command](images/editCommand.gif)
+
+### Enrolment management: `enrol`, `unenrol`
 
 Use `enrol` to add an existing student to another course-semester. The course
 must have been initialised first.
@@ -206,6 +244,8 @@ Format: `unenrol /id ID /course COURSE /sem SEMESTER`
 Example:
 
 * `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
+
+![enrol command](images/enrolCommand.gif)
 
 ### Searching students by name or ID: `search`
 
@@ -230,6 +270,10 @@ Student ID matching is exact after the supplied IDs are trimmed and normalized t
 Command words and parameter prefixes are case-sensitive. Use the documented
 lowercase syntax, such as `search` and `/name`.
 
+![search command](images/searchCommand.gif)
+
+### Student notes
+
 ### Managing student notes: `notes`, `view notes`, `delete notes`
 
 Add, view, or delete the notes recorded for a student. Use the student's unique ID to avoid ambiguity.
@@ -248,6 +292,10 @@ Examples:
 * `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Struggled with inheritance during consultation` adds a note to the selected enrolment.
 * `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1` displays notes for the selected enrolment.
 * `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1` deletes all notes for the selected enrolment.
+
+![notes command](images/notesCommand.gif)
+
+### Deliverable progress
 
 ### Marking deliverables as complete: `mark`
 
@@ -277,6 +325,8 @@ Examples:
 * `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 * `unmark /name John Doe /course CS2103T /sem AY26/27-S1 /deliverable v1.1, MVP`
 
+![mark command](images/markCommand.gif)
+
 ### Viewing a student's deliverable progress: `view`
 
 Shows every deliverable and its completion status for one student across all
@@ -293,6 +343,8 @@ Examples:
 Use `/id` when several students have the same name. The result lists each
 deliverable as `Done` or `Not Done` in the order it was initialised.
 
+![view command](images/viewCommand.gif)
+
 ### Deleting a student: `delete`
 
 Deletes a student from TAssist.
@@ -306,6 +358,10 @@ Format: `delete /id ID` or `delete /name NAME`
 Examples:
 * `delete /id A1234567Z` deletes the student with ID `A1234567Z`.
 * `delete /name John Doe` deletes John Doe when there is exactly one such student.
+
+![delete command](images/deleteCommand.gif)
+
+### General commands
 
 ### Clearing all entries: `clear`
 
@@ -328,9 +384,8 @@ TAssist automatically saves data after every successful command. You do not need
 TAssist data is saved automatically as `[JAR file location]/data/addressbook.json`.
 Advanced users may update the JSON file directly, but should make a backup first.
 
-**Legacy save files:** The enrolment-based data format is not compatible with older save files that stored tutorial classes or notes directly on students. If TAssist reports that an old save format was detected, first back up the file, then delete or replace `data/addressbook.json` with a compatible backup before restarting. This avoids silently losing course-specific data.
-
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">:exclamation:
+**Caution:**
 Do not edit or replace the data file unless you have made a backup first. If
 TAssist cannot load an existing file, it stops normal startup and does not
 replace the file with sample data. This protects your saved student records.<br>
@@ -365,10 +420,6 @@ A valid but empty address book is different from a missing file: it is loaded as
 your saved data and is not replaced with sample data. Do not delete or
 overwrite the existing file unless you intentionally want to reset your data.
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -390,21 +441,21 @@ with the `data/addressbook.json` file from your previous TAssist home folder.
 
 Action | Format, Examples
 --------|------------------
+**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
 **Add** | `add /name NAME /id ID /email EMAIL /course COURSE[, COURSE]... /sem SEMESTER[, SEMESTER]... /class CLASS[, CLASS]...`
-**Clear** | `clear`
-**Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
-**Delete notes** | `delete notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **Edit** | `edit /id CURRENT_ID [/name NEW_NAME] [/newid NEW_ID] [/email NEW_EMAIL]`
-**Exit** | `exit`
+**Delete** | `delete /id ID` or `delete /name NAME`<br> e.g., `delete /id A1234567Z`
 **Search** | `search /name NAME[, NAME]...` or `search /id ID[, ID]...`<br> e.g., `search /name Alex Yeoh, Bernice Yu`
+**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
+**Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
+**Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
 **Notes** | `notes /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE /notes NOTES`<br> e.g., `notes /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP /notes Discussed inheritance`
+**View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
+**Delete notes** | `delete notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `delete notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
 **Mark** | `mark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `mark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **Unmark** | `unmark /id ID /course COURSE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `unmark /id A1234567Z /course CS2103T /sem AY26/27-S1 /deliverable MVP`
 **View progress** | `view /id ID` or `view /name NAME`<br> e.g., `view /id A1234567Z`
 **Course progress overview** | `overview /course COURSE /sem SEMESTER`<br> e.g., `overview /course CS2103T /sem AY26/27-S1`
-**View notes** | `view notes /id ID /course COURSE /sem SEMESTER`<br> e.g., `view notes /id A1234567Z /course CS2103T /sem AY26/27-S1`
-**List** | `list` or `list /course COURSE /sem SEMESTER [/class CLASS] [/deliverable DELIVERABLE]`<br> e.g., `list /course CS2103T /sem AY26/27-S1 /deliverable MVP`
-**Initialise course** | `init course /course COURSE_CODE /sem SEMESTER /deliverable DELIVERABLE[, DELIVERABLE]...`<br> e.g., `init course /course CS2103T /sem AY26/27-S1 /deliverable v1.2, MVP`
-**Enrol** | `enrol /id ID /course COURSE /sem SEMESTER /class CLASS`<br> e.g., `enrol /id A1234567Z /course IS2108 /sem AY26/27-S1 /class T02`
-**Unenrol** | `unenrol /id ID /course COURSE /sem SEMESTER`<br> e.g., `unenrol /id A1234567Z /course IS2108 /sem AY26/27-S1`
+**Clear** | `clear`
 **Help** | `help`
+**Exit** | `exit`
