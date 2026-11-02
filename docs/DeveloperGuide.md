@@ -6,27 +6,24 @@ title: Developer Guide
 * Table of Contents 
 {:toc}
 
---------------------------------------------------------------------------------------------------------------------
 
-## **Acknowledgements**
+## Acknowledgements
 
 - This project is based on the [AddressBook Level 3](https://github.com/se-edu/addressbook-level3) project created by the [SE-EDU initiative](https://se-education.org).
 
---------------------------------------------------------------------------------------------------------------------
 
-## **Setting up, getting started**
+## Setting up, getting started
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
---------------------------------------------------------------------------------------------------------------------
 
-# Design
+## Design
 
 This section describes TAssist's architecture and the responsibilities of its main components. It also explains how the components collaborate to support student management, course enrolments, deliverable tracking, and data persistence.
 
 The PlantUML source files for the diagrams are located in `docs/diagrams`.
 
-## Architecture
+### Architecture
 
 TAssist follows a component-based architecture comprising `Main`, `UI`, `Logic`, `Model`, and `Storage`. The `Commons` package provides shared utilities used across components.
 
@@ -47,7 +44,7 @@ The four main components have distinct responsibilities:
 
 `Commons` contains shared functionality, including logging, file utilities, and common exceptions.
 
-### Component interactions
+#### Component interactions
 
 The following sequence diagram illustrates how the main components collaborate when executing `delete /id A1234567B`.
 
@@ -57,7 +54,7 @@ The `UI` forwards the command to `Logic`, which executes the corresponding opera
 
 The diagram intentionally abstracts the internal parsing, command execution, and JSON serialization steps. These are explained in the component-specific sections.
 
-### Component interfaces and implementations
+#### Component interfaces and implementations
 
 Each major component exposes its functionality through an interface and provides a concrete manager implementation.
 
@@ -67,7 +64,7 @@ For example, `LogicManager` implements the `Logic` interface, while `ModelManage
 
 This separation allows components to depend on public APIs rather than the internal implementation of another component. It also supports testing by allowing alternative implementations of component interfaces.
 
-## UI component
+### UI component
 
 **API:** `Ui.java`
 
@@ -94,7 +91,7 @@ UI layouts are defined using FXML resources, while their corresponding Java clas
 
 The `UI` component communicates with `Logic` to execute commands and retrieve application data. It also uses Model types when rendering students and deliverable-progress information.
 
-## Logic component
+### Logic component
 
 **API:** `Logic.java`
 
@@ -110,7 +107,7 @@ It uses `AddressBookParser` to convert command text into a `Command` object. The
 
 `LogicManager` also interacts with `Storage` to persist the address book after successful command execution.
 
-### Command execution
+#### Command execution
 
 The following sequence diagram illustrates the execution of `delete /id A1234567B`.
 
@@ -127,7 +124,7 @@ The command execution proceeds as follows:
 
 The diagram focuses on the internal Logic execution path. Student lookup details, exception handling, and persistence are omitted to keep the interaction focused. Persistence is represented in the architecture sequence diagram.
 
-### Command parsing
+#### Command parsing
 
 The parser subsystem separates command identification from command-specific argument parsing.
 
@@ -150,7 +147,7 @@ The diagram intentionally omits specialized parser inheritance relationships. Fo
 
 This design allows common parsing and validation behavior to be reused while retaining command-specific parsing responsibilities.
 
-## Model component
+### Model component
 
 **API:** `Model.java`
 
@@ -177,7 +174,7 @@ The `Model` interface exposes read-only interfaces such as `ReadOnlyAddressBook`
 
 The Model also maintains a filtered student list, exposed through an unmodifiable observable list. This allows the UI to observe changes without directly modifying the underlying student collection.
 
-### Multiple course enrolments and independent progress
+#### Multiple course enrolments and independent progress
 
 TAssist separates student identity from course enrolment and deliverable progress.
 
@@ -198,7 +195,7 @@ The model uses identifying values such as student ID, course code, and semester 
 
 This separation avoids duplicating student information across courses and allows progress to be maintained independently for each enrolment.
 
-## Storage component
+### Storage component
 
 **API:** `Storage.java`
 
@@ -217,7 +214,7 @@ The following class diagram illustrates its structure.
 
 The JSON representation includes adapters for students, courses, enrolments, and progress records.
 
-### Loading address-book data
+#### Loading address-book data
 
 When TAssist starts, `MainApp` requests the saved address book through `StorageManager`.
 
@@ -231,7 +228,7 @@ The deserialized data is then converted into an `AddressBook` through `toModelTy
 
 The sequence diagram intentionally focuses on successful object collaboration. Missing files, invalid data, and startup failure handling are explained separately below.
 
-### Storage loading outcomes
+#### Storage loading outcomes
 
 TAssist distinguishes a missing data file from an existing file that cannot be loaded safely.
 
@@ -253,7 +250,7 @@ This distinction prevents TAssist from silently replacing user data with sample 
 
 When loading fails, TAssist displays a JavaFX error dialog and exits after the user dismisses it. Normal command execution is not initialized, preventing subsequent commands from overwriting the invalid address-book file.
 
-### Progress reconciliation
+#### Progress reconciliation
 
 TAssist applies a limited reconciliation policy to progress records whose deliverables differ from those currently defined by their course.
 
@@ -297,7 +294,7 @@ The activity diagram separates validation and reconciliation into conceptual act
 
 **Reconciliation is not a general corruption-recovery mechanism.** Invalid references, duplicate records, invalid notes, and malformed data are rejected rather than silently corrected.
 
-### Persistence safety and failure handling
+#### Persistence safety and failure handling
 
 Reconciled data is saved only after successful model conversion and validation.
 
@@ -318,11 +315,11 @@ These behaviors are deliberate storage policies that future developers should pr
 
 ---
 
-# Implementation
+## Implementation
 
 This section explains noteworthy TAssist-specific workflows and the design decisions behind them.
 
-## Course initialisation
+### Course initialisation
 
 The `init course` command establishes the course-semester and deliverable definitions used by subsequent enrolment and progress-tracking operations.
 
@@ -334,7 +331,7 @@ A course is identified by its `CourseCode` and `Semester`. Its deliverables defi
 
 Persisting course definitions alongside the other address-book records ensures that course information remains available after restarting TAssist.
 
-## Updating deliverable progress
+### Updating deliverable progress
 
 `MarkCommand` and `UnmarkCommand` share their execution workflow through `StudentProgressCommand`.
 
@@ -357,7 +354,7 @@ This ensures that failed validation does not leave a partially updated progress 
 
 The diagram combines the validation outcomes into a single decision for readability. In the actual implementation, a failed lookup or validation throws `CommandException` immediately.
 
-## Viewing student deliverables
+### Viewing student deliverables
 
 The `view` command retrieves the deliverable progress associated with a selected student across their enrolled course-semesters.
 
@@ -377,7 +374,7 @@ When the payload is present, `MainWindow` passes it to `DeliverablesPanel` throu
 
 The diagram illustrates a successful view operation with progress records. Parser interactions, Model lookups, Storage persistence, student-list scrolling, and the empty-progress case are intentionally omitted to focus on the structured-result handoff.
 
-### Design consideration: structured UI data
+#### Design consideration: structured UI data
 
 Two approaches were considered for passing deliverable information to the UI.
 
@@ -394,7 +391,7 @@ As a result, changes to feedback wording do not require the panel to change how 
 
 ---
 
-# Common classes
+## Common classes
 
 Classes shared by multiple components are located in the `seedu.address.commons` package.
 
@@ -402,18 +399,16 @@ These include utilities and common types supporting logging, file operations, ex
 
 Keeping shared functionality in Commons avoids duplicating cross-cutting infrastructure within the individual components. 
 
---------------------------------------------------------------------------------------------------------------------
 
-## **Documentation, logging, testing, dev-ops**
+## Documentation, logging, testing, dev-ops
 
 * [Documentation guide](Documentation.md)
 * [Testing guide](Testing.md)
 * [Logging guide](Logging.md)
 * [DevOps guide](DevOps.md)
 
---------------------------------------------------------------------------------------------------------------------
 
-## **Appendix: Requirements**
+## Appendix: Requirements
 
 ### Product scope
 
@@ -682,9 +677,8 @@ Low (unlikely to have) - `*`
 * **Tutorial class**: A class group in which a student is enrolled for a
   particular course-semester.
 
---------------------------------------------------------------------------------------------------------------------
 
-## **Appendix: Instructions for manual testing**
+## Appendix: Instructions for manual testing
 
 Given below are instructions to test the app manually.
 
