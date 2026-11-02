@@ -1,6 +1,6 @@
 # TAssist
 
-[![Java CI](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103T-F11-1/tp/actions/workflows/gradle.yml)
+[![Java CI](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103-F11-1/tp/actions/workflows/gradle.yml)
 ![Ui](docs/images/Ui.png)
 
 ## Introduction
