@@ -86,6 +86,19 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_noChanges_failure() {
+        Student student = findStudent(new Id("A1234567Y"));
+        EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
+                .withName(student.getName().fullName)
+                .withId(student.getId().id)
+                .withEmail(student.getEmail().email)
+                .build();
+
+        assertCommandFailure(new EditCommand(student.getId(), descriptor), model,
+                "No changes made. The provided values are identical to the existing student details.");
+    }
+
+    @Test
     public void equals() {
         EditCommand standardCommand = new EditCommand(new Id(VALID_ID_AMY), DESC_AMY);
         EditCommand commandWithSameValues = new EditCommand(new Id(VALID_ID_AMY),

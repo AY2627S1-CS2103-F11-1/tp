@@ -1,5 +1,8 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.ALICE;
@@ -67,5 +70,24 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(ALICE.getName().fullName);
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_MULTIPLE_STUDENTS_WITH_NAME);
+    }
+
+    @Test
+    public void equals() {
+        DeleteCommand byId = new DeleteCommand(ALICE.getId());
+
+        assertTrue(byId.equals(new DeleteCommand(ALICE.getId())));
+        assertFalse(byId.equals(new DeleteCommand(new Id("A9999999Z"))));
+        assertFalse(byId.equals(new DeleteCommand(ALICE.getName().fullName)));
+        assertFalse(byId.equals(null));
+    }
+
+    @Test
+    public void toStringMethod() {
+        DeleteCommand command = new DeleteCommand(ALICE.getId());
+
+        String expected = DeleteCommand.class.getCanonicalName()
+                + "{studentId=Optional[" + ALICE.getId() + "], studentName=Optional.empty}";
+        assertEquals(expected, command.toString());
     }
 }

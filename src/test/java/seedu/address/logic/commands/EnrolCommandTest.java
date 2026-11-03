@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalStudents.BENSON;
@@ -57,5 +58,16 @@ public class EnrolCommandTest {
                 new TutorialClass("T08"));
         assertCommandFailure(command, model,
                 String.format(EnrolCommand.MESSAGE_DUPLICATE_ENROLMENT, BENSON.getId(), COURSE, SEMESTER));
+    }
+
+    @Test
+    public void toStringMethod() {
+        TutorialClass tutorialClass = new TutorialClass("T08");
+        EnrolCommand command = new EnrolCommand(BENSON.getId(), COURSE, SEMESTER, tutorialClass);
+
+        String expected = EnrolCommand.class.getCanonicalName() + "{studentId=" + BENSON.getId()
+                + ", courseCode=" + COURSE + ", semester=" + SEMESTER
+                + ", tutorialClass=" + tutorialClass + "}";
+        assertEquals(expected, command.toString());
     }
 }

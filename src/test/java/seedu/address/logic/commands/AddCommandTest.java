@@ -49,6 +49,15 @@ public class AddCommandTest {
     }
 
     @Test
+    public void constructor_emptyEnrolments_throwsIllegalArgumentException() {
+        Student validStudent = new StudentBuilder().build();
+
+        assertThrows(IllegalArgumentException.class,
+                "A student must have at least one enrolment.", (
+                ) -> new AddCommand(validStudent, List.of()));
+    }
+
+    @Test
     public void execute_studentAcceptedByModel_addSuccessful() throws Exception {
         ModelStubAcceptingStudentAdded modelStub = new ModelStubAcceptingStudentAdded();
         Student validStudent = new StudentBuilder().build();
@@ -67,6 +76,16 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithStudent(validStudent);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_uninitialisedCourse_throwsCommandException() {
+        Student validStudent = new StudentBuilder().build();
+        AddCommand addCommand = new AddCommand(validStudent, List.of(enrolment(validStudent)));
+
+        assertThrows(CommandException.class,
+                String.format(AddCommand.MESSAGE_COURSE_NOT_FOUND, "CS2103T", "AY26/27-S1"), (
+                ) -> addCommand.execute(new ModelStubMissingCourse()));
     }
 
     @Test
@@ -91,6 +110,12 @@ public class AddCommandTest {
 
         // different student -> returns false
         assertFalse(addAliceCommand.equals(addBobCommand));
+
+        // same student with different enrolments -> returns false
+        StudentCourseEnrolment differentEnrolment = new StudentCourseEnrolment(
+                alice.getId(), new CourseCode("CS2103T"), new Semester("AY26/27-S1"),
+                new TutorialClass("T08"), new NotesList());
+        assertFalse(addAliceCommand.equals(new AddCommand(alice, List.of(differentEnrolment))));
     }
 
     @Test
@@ -299,6 +324,19 @@ public class AddCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+    }
+
+    /** A model stub that reports that the enrolment course is not initialised. */
+    private class ModelStubMissingCourse extends ModelStub {
+        @Override
+        public boolean hasStudent(Student student) {
+            return false;
+        }
+
+        @Override
+        public Optional<Course> getCourse(CourseCode courseCode, Semester semester) {
+            return Optional.empty();
         }
     }
 
