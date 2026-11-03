@@ -1,5 +1,6 @@
 package seedu.address.storage;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -197,6 +198,26 @@ public class JsonAddressBookStorageTest {
         assertFalse(savedContent.contains("\"Obsolete\""));
         assertFalse(savedContent.contains("\"Old\""));
         assertFalse(savedContent.contains("\"mvp\""));
+    }
+
+    @Test
+    public void readAddressBook_reconciliationSaveFails_throwsDataLoadingExceptionWithoutOverwriting()
+            throws Exception {
+        Path sourcePath = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest",
+                "mismatchedProgressAddressBook.json");
+        Path filePath = testFolder.resolve("reconciliationSaveFailureAddressBook.json");
+        Files.copy(sourcePath, filePath);
+        byte[] originalContent = Files.readAllBytes(filePath);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath) {
+            @Override
+            public void saveAddressBook(ReadOnlyAddressBook addressBook, Path path) throws IOException {
+                throw new IOException("simulated write failure");
+            }
+        };
+
+        assertThrows(DataLoadingException.class, storage::readAddressBook);
+        assertArrayEquals(originalContent, Files.readAllBytes(filePath));
     }
 
     @Test
