@@ -54,6 +54,13 @@ public class EditCommandParserTest {
     }
 
     @Test
+    public void parse_blankOptionalParameters_failure() {
+        assertParseFailure(parser,
+                " /id " + VALID_ID_AMY + " /name   /newid   /email ",
+                String.format(Messages.MESSAGE_EMPTY_PARAMETERS, "/name, /newid, /email"));
+    }
+
+    @Test
     public void parse_unknownParameter_failure() {
         assertParseFailure(parser, " /id " + VALID_ID_AMY + " /notes old note",
                 "Unknown parameter: /notes");

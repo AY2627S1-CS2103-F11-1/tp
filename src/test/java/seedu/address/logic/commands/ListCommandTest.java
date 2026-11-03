@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 
@@ -36,6 +38,26 @@ public class ListCommandTest {
 
     private Model model;
     private Model expectedModel;
+
+    @Test
+    public void equalsAndHashCode_sameValues_areEqual() {
+        ListCommand first = new ListCommand();
+        ListCommand second = new ListCommand();
+
+        assertEquals(first, second);
+        assertEquals(first.hashCode(), second.hashCode());
+        assertNotEquals(first, new ClearCommand());
+    }
+
+    @Test
+    public void equals_differentFilters_areNotEqual() {
+        ListCommand first = new ListCommand(new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1"), Optional.empty());
+        ListCommand second = new ListCommand(new CourseCode("CS2103T"),
+                new Semester("AY26/27-S1"), Optional.of(new TutorialClass("T07")));
+
+        assertNotEquals(first, second);
+    }
 
     @BeforeEach
     public void setUp() {
