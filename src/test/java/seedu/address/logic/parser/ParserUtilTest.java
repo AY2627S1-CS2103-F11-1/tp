@@ -162,4 +162,14 @@ public class ParserUtilTest {
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
     }
 
+    @Test
+    public void parseCourseCode_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseCourseCode("   "));
+    }
+
+    @Test
+    public void parseSemester_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseSemester("   "));
+    }
+
 }

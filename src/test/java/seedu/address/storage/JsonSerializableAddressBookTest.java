@@ -135,6 +135,12 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
+    public void toModelType_enrolmentReferencesMissingProgress_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = readTestFile("missingProgressAddressBook.json");
+        assertThrows(IllegalValueException.class, dataFromFile::toModelType);
+    }
+
+    @Test
     public void toModelType_progressReferencesMissingCourse_throwsSpecificIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = readTestFile("invalidProgressCourseAddressBook.json");
         assertThrows(IllegalValueException.class, dataFromFile::toModelType);
