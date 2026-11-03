@@ -7,6 +7,7 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 
@@ -93,5 +94,17 @@ public class CommandResultTest {
         assertTrue(notesResult.containsStudentNotesListView());
         assertEquals(notesView, notesResult.getStudentNotesListView());
         assertFalse(deliverablesResult.equals(notesResult));
+    }
+
+    @Test
+    public void viewGetters_withoutView_throwAssertionError() {
+        CommandResult commandResult = new CommandResult("feedback");
+
+        assertFalse(commandResult.containsStudentSplitView());
+        assertFalse(commandResult.containsStudentDeliverablesView());
+        assertFalse(commandResult.containsStudentNotesListView());
+        assertThrows(AssertionError.class, commandResult::getStudentSplitView);
+        assertThrows(AssertionError.class, commandResult::getStudentDeliverablesView);
+        assertThrows(AssertionError.class, commandResult::getStudentNotesListView);
     }
 }

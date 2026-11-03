@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showStudentAtIndex;
@@ -52,6 +53,23 @@ public class ListCommandTest {
                 new Semester("AY26/27-S1"), Optional.of(new TutorialClass("T07")));
 
         assertNotEquals(first, second);
+    }
+
+    @Test
+    public void equals_eachFilterDifference_isDetected() {
+        CourseCode courseCode = new CourseCode("CS2103T");
+        Semester semester = new Semester("AY26/27-S1");
+        ListCommand base = new ListCommand(courseCode, semester, Optional.empty(), Optional.empty());
+
+        assertNotEquals(base, new ListCommand(new CourseCode("CS2105"), semester,
+                Optional.empty(), Optional.empty()));
+        assertNotEquals(base, new ListCommand(courseCode, new Semester("AY25/26-S2"),
+                Optional.empty(), Optional.empty()));
+        assertNotEquals(base, new ListCommand(courseCode, semester,
+                Optional.of(new TutorialClass("T07")), Optional.empty()));
+        assertNotEquals(base, new ListCommand(courseCode, semester,
+                Optional.empty(), Optional.of(new Deliverable("MVP"))));
+        assertTrue(base.equals(base));
     }
 
     @BeforeEach

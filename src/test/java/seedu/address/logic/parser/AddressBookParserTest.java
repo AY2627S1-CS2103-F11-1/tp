@@ -150,6 +150,12 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_notesWithoutArguments_entersNotesParsers() {
+        assertThrows(ParseException.class, () -> parser.parseCommand(ViewNotesCommand.COMMAND_WORD));
+        assertThrows(ParseException.class, () -> parser.parseCommand(DeleteNotesCommand.COMMAND_WORD));
+    }
+
+    @Test
     public void parseCommand_search() throws Exception {
         SearchCommand command = (SearchCommand) parser.parseCommand("search /id A1234567Z");
         assertEquals(new SearchCommand(new StudentMatchesQueryPredicate(new Id("A1234567Z"))), command);

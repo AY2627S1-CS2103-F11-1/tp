@@ -66,6 +66,20 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_changedAndUnchangedFields_reportsBoth() throws CommandException {
+        Student studentToEdit = findStudent(new Id("A1234567Y"));
+        EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
+                .withName("Updated Name")
+                .withEmail(studentToEdit.getEmail().email)
+                .build();
+
+        CommandResult result = new EditCommand(studentToEdit.getId(), descriptor).execute(model);
+
+        assertTrue(result.getFeedbackToUser().contains("Name: Updated Name"));
+        assertTrue(result.getFeedbackToUser().contains("Fields already match current values: Email"));
+    }
+
+    @Test
     public void execute_unknownStudent_failure() {
         EditStudentDescriptor descriptor = new EditStudentDescriptorBuilder()
                 .withName(VALID_NAME_BOB).build();

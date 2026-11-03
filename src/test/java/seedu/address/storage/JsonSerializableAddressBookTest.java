@@ -59,6 +59,13 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
+    public void toModelType_duplicateCoursesIgnoringCase_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = readTestFile("duplicateCourseAddressBook.json");
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_COURSE,
+                dataFromFile::toModelType);
+    }
+
+    @Test
     public void toModelType_progressDeliverableNotInCourse_reconcilesProgress() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(MISMATCHED_PROGRESS_FILE,
                 JsonSerializableAddressBook.class).get();

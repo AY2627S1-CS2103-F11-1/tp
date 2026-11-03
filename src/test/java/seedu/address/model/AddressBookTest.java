@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalStudents.ALICE;
+import static seedu.address.testutil.TypicalStudents.BENSON;
 import static seedu.address.testutil.TypicalStudents.getTypicalAddressBook;
 
 import java.util.Collection;
@@ -19,7 +20,11 @@ import seedu.address.model.course.CourseCode;
 import seedu.address.model.course.Deliverable;
 import seedu.address.model.course.Semester;
 import seedu.address.model.course.exceptions.DuplicateCourseException;
+import seedu.address.model.enrolment.Notes;
+import seedu.address.model.enrolment.NotesList;
 import seedu.address.model.enrolment.StudentCourseEnrolment;
+import seedu.address.model.enrolment.exceptions.DuplicateStudentCourseEnrolmentException;
+import seedu.address.model.enrolment.exceptions.StudentCourseEnrolmentNotFoundException;
 import seedu.address.model.progress.StudentCourseProgress;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.TutorialClass;
@@ -158,6 +163,89 @@ public class AddressBookTest {
     }
 
     @Test
+    public void setStudentCourseProgresses_withoutEnrolment_throwsIllegalArgumentException() {
+        addressBook.addCourse(CS2103);
+        StudentCourseProgress progress = new StudentCourseProgress(ALICE.getId(), CS2103);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook
+                .setStudentCourseProgresses(List.of(progress)));
+    }
+
+    @Test
+    public void addEnrolment_missingStudent_throwsIllegalArgumentException() {
+        StudentCourseEnrolment enrolment = enrolment(ALICE, CS2103);
+        addressBook.addCourse(CS2103);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook.addEnrolment(enrolment));
+    }
+
+    @Test
+    public void addEnrolment_missingCourse_throwsIllegalArgumentException() {
+        addressBook.addStudent(ALICE);
+        StudentCourseEnrolment enrolment = enrolment(ALICE, CS2103);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook.addEnrolment(enrolment));
+    }
+
+    @Test
+    public void addEnrolment_duplicate_throwsDuplicateStudentCourseEnrolmentException() {
+        addressBook.addCourse(CS2103);
+        addressBook.addStudentWithEnrolment(ALICE, enrolment(ALICE, CS2103));
+
+        assertThrows(DuplicateStudentCourseEnrolmentException.class, () -> addressBook
+                .addEnrolment(enrolment(ALICE, CS2103)));
+    }
+
+    @Test
+    public void addStudentWithEnrolments_emptyList_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> addressBook
+                .addStudentWithEnrolments(ALICE, List.of()));
+    }
+
+    @Test
+    public void addStudentWithEnrolments_mismatchedStudent_throwsIllegalArgumentException() {
+        addressBook.addCourse(CS2103);
+        StudentCourseEnrolment enrolment = enrolment(BENSON, CS2103);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook
+                .addStudentWithEnrolments(ALICE, List.of(enrolment)));
+    }
+
+    @Test
+    public void setEnrolment_identityChange_throwsIllegalArgumentException() {
+        addressBook.addCourse(CS2103);
+        addressBook.addStudentWithEnrolment(ALICE, enrolment(ALICE, CS2103));
+        StudentCourseEnrolment target = addressBook.getEnrolmentList().getFirst();
+        StudentCourseEnrolment changed = target.withStudentId(BENSON.getId());
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook.setEnrolment(target, changed));
+    }
+
+    @Test
+    public void removeEnrolment_missingEnrolment_throwsNotFoundException() {
+        assertThrows(StudentCourseEnrolmentNotFoundException.class, () -> addressBook
+                .removeEnrolment(ALICE.getId(), CS2103.getCourseCode(), CS2103.getSemester()));
+    }
+
+    @Test
+    public void setEnrolments_invalidReferences_throwsIllegalArgumentException() {
+        StudentCourseEnrolment enrolment = enrolment(ALICE, CS2103);
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook.setEnrolments(List.of(enrolment)));
+    }
+
+    @Test
+    public void setEnrolments_invalidNoteDeliverable_throwsIllegalArgumentException() {
+        addressBook.addStudent(ALICE);
+        addressBook.addCourse(CS2103);
+        StudentCourseEnrolment enrolment = new StudentCourseEnrolment(ALICE.getId(), CS2103.getCourseCode(),
+                CS2103.getSemester(), new TutorialClass("T07"),
+                new NotesList(new Notes("Unrelated note", "Unknown")));
+
+        assertThrows(IllegalArgumentException.class, () -> addressBook.setEnrolments(List.of(enrolment)));
+    }
+
+    @Test
     public void removeStudent_removesStudentProgress() {
         addressBook.addStudent(ALICE);
         addressBook.addCourse(CS2103);
@@ -179,6 +267,20 @@ public class AddressBookTest {
                 + addressBook.getEnrolmentList() + ", studentCourseProgresses="
                 + addressBook.getStudentCourseProgressList() + "}";
         assertEquals(expected, addressBook.toString());
+    }
+
+    @Test
+    public void equals_sameData_areEqual() {
+        AddressBook copy = getTypicalAddressBook();
+
+        assertEquals(copy, new AddressBook(copy));
+        assertEquals(copy.hashCode(), new AddressBook(copy).hashCode());
+        assertFalse(copy.equals(new Object()));
+    }
+
+    private static StudentCourseEnrolment enrolment(Student student, Course course) {
+        return new StudentCourseEnrolment(student.getId(), course.getCourseCode(), course.getSemester(),
+                new TutorialClass("T07"), new NotesList());
     }
 
     /**

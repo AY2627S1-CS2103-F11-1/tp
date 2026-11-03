@@ -96,6 +96,9 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
                         + " /course CS2103T,CS2106 /sem AY26/27-S1" + CLASS_DESC_BOB,
                 AddCommandParser.MESSAGE_MISMATCHED_ENROLMENTS);
+        assertParseFailure(parser, NAME_DESC_BOB + ID_DESC_BOB + EMAIL_DESC_BOB
+                        + " /course CS2103T /sem AY26/27-S1,AY26/27-S2" + CLASS_DESC_BOB,
+                AddCommandParser.MESSAGE_MISMATCHED_ENROLMENTS);
     }
 
     @Test
