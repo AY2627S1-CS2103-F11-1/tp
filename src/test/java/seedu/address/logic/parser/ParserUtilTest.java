@@ -37,6 +37,8 @@ public class ParserUtilTest {
     public void parseIndex_outOfRangeInput_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, (
             ) -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
+        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, (
+            ) -> ParserUtil.parseIndex("999999999999999999999999"));
     }
 
     @Test

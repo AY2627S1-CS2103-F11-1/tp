@@ -8,8 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.testutil.TypicalStudents.ALICE;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import seedu.address.model.enrolment.NotesList;
 
 public class CommandResultTest {
     @Test
@@ -64,5 +69,29 @@ public class CommandResultTest {
                 + ", exit=" + commandResult.isExit() + ", studentIdToFocus=null"
                 + ", studentSplitView=null}";
         assertEquals(expected, commandResult.toString());
+    }
+
+    @Test
+    public void studentSplitView_present_returnsView() {
+        StudentDeliverablesView view = new StudentDeliverablesView(ALICE, List.of());
+        CommandResult commandResult = new CommandResult("feedback", view);
+
+        assertTrue(commandResult.containsStudentSplitView());
+        assertEquals(view, commandResult.getStudentSplitView());
+    }
+
+    @Test
+    public void studentViews_areTypedAndExposeStudentId() {
+        StudentDeliverablesView deliverablesView = new StudentDeliverablesView(ALICE, List.of());
+        CommandResult deliverablesResult = new CommandResult("deliverables", deliverablesView);
+        StudentNotesListView notesView = new StudentNotesListView(ALICE, new NotesList());
+        CommandResult notesResult = new CommandResult("notes", notesView);
+
+        assertEquals(ALICE.getId(), deliverablesResult.getStudentIdToFocus().orElseThrow());
+        assertTrue(deliverablesResult.containsStudentDeliverablesView());
+        assertEquals(deliverablesView, deliverablesResult.getStudentDeliverablesView());
+        assertTrue(notesResult.containsStudentNotesListView());
+        assertEquals(notesView, notesResult.getStudentNotesListView());
+        assertFalse(deliverablesResult.equals(notesResult));
     }
 }

@@ -95,6 +95,31 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void getStudentsEnrolledIn_nullArgument_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.getStudentsEnrolledIn(null,
+                new Semester("AY26/27-S1")));
+        assertThrows(NullPointerException.class, () -> modelManager.getStudentsEnrolledIn(
+                new CourseCode("CS2103T"), null));
+    }
+
+    @Test
+    public void getCourse_existingAndMissingCourse_returnsExpectedResult() {
+        modelManager = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Semester semester = new Semester("AY26/27-S1");
+
+        assertTrue(modelManager.getCourse(new CourseCode("CS2103T"), semester).isPresent());
+        assertTrue(modelManager.getCourse(new CourseCode("CS2105"), semester).isEmpty());
+    }
+
+    @Test
+    public void getCourse_nullArgument_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.getCourse(null,
+                new Semester("AY26/27-S1")));
+        assertThrows(NullPointerException.class, () -> modelManager.getCourse(
+                new CourseCode("CS2103T"), null));
+    }
+
+    @Test
     public void getCourseProgressOverview_returnsStudentCountsInMainListOrder() {
         modelManager = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         CourseCode courseCode = new CourseCode("CS2103T");
