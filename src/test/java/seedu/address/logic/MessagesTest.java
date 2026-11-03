@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalStudents.ALICE;
 
@@ -28,5 +29,10 @@ public class MessagesTest {
         assertTrue(message.startsWith(Messages.MESSAGE_DUPLICATE_FIELDS));
         assertTrue(message.contains("/id"));
         assertTrue(message.contains("/course"));
+    }
+
+    @Test
+    public void getErrorMessageForDuplicatePrefixes_emptyInput_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> Messages.getErrorMessageForDuplicatePrefixes());
     }
 }
